@@ -1,5 +1,8 @@
 # HTTP clients in Gleam
 
+> [!NOTE]
+> **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
+
 Need to call an API, scrape a page, or stream a download from Gleam?
 This article maps out what's available.
 

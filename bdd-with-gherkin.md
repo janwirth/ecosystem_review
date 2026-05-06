@@ -1,5 +1,8 @@
 # BDD with Gherkin across ecosystems
 
+> [!NOTE]
+> **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
+
 > Cross-ecosystem survey of Cucumber-family tooling for teams choosing a BDD path.
 
 **Snapshot 2026-04-22** — metrics from live GitHub web UI only (no API, no clone). Star counts, last-commit dates, and open-issue counts reflect what a logged-out visitor sees today.

@@ -1,5 +1,8 @@
 # Authentication in Gleam
 
+> [!NOTE]
+> **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
+
 So you want to log users in, hash their passwords, gate routes, and not get woken up at 3am because someone shipped `==` against a stored password — written in Gleam?
 
 The Gleam side of authentication is **a strong floor of primitives, a thin middle, and a near-empty top**. Password hashing, JWT/JOSE, OAuth2 clients, TOTP, and Fernet/Branca tokens are all covered — sometimes with three independent implementations. Sessions, magic links, identity providers, SAML, LDAP, and OIDC servers are largely absent. You assemble auth from parts; you don't install a "framework" (with one fresh exception).
@@ -26,7 +29,11 @@ This article surveys what exists, what's idiomatic, and what to avoid.
    - [Batteries-included](#batteries-included) — [glimr_auth](#glimr_auth)
    - [What's missing](#whats-missing)
 5. [Composing the pieces — practical recipes](#composing-the-pieces--practical-recipes)
-6. [Leaderboard](#leaderboard)
+6. [Cookbook](#cookbook)
+   - [Single hard-coded password + cookie session (Wisp)](#recipe--single-hard-coded-password--cookie-session-wisp)
+   - [Limitations & when NOT to use this](#limitations--when-not-to-use-this)
+   - [Verification — sources consulted](#verification--sources-consulted)
+7. [Leaderboard](#leaderboard)
 
 ## Summary
 
@@ -538,6 +545,247 @@ Auth in Gleam is a build-your-own-stack proposition. The four most common stacks
 ### Glimr shortcut
 
 If you're starting greenfield and don't have framework constraints, **[glimr](web-and-http/web-apps.md#glimr) + [glimr_auth](#glimr_auth)** is the only point in the ecosystem where login-out-of-the-box exists today. New, single-vendor, but the most consolidated story.
+
+
+## Cookbook
+
+Concrete copy-pasteable recipes. The [recipes above](#composing-the-pieces--practical-recipes) pick a stack; this section shows the wiring.
+
+### Recipe — Single hard-coded password + cookie session (Wisp)
+
+> [!CAUTION]
+> **Read [Limitations & when NOT to use this](#limitations--when-not-to-use-this) first.** A single shared password has no per-user audit trail, no per-account rate-limit, and no revocation short of a redeploy. It is correct for **internal admin tools, side-project gates, and "shut the door" deployments** — and only those. For anything user-facing, escalate to [Recipe 1](#recipe-1--wisp--emailpassword--sessions-self-hosted).
+
+The shape:
+
+1. **At startup**, read the password from `ADMIN_PASSWORD` env var, hash it once with [argus](#argus), throw the plaintext away. Stash the hash in app state.
+2. **On `POST /login`**, verify the submitted password against the hash with `argus.verify` (constant-time). On success, generate a 32-byte random session ID with `gleam/crypto.strong_random_bytes`, store it server-side, and set a `__Host-`-prefixed cookie with `HttpOnly`, `Secure`, `SameSite=Strict`, `Path=/`.
+3. **On every protected request**, read the cookie, look up the session ID server-side, deny if missing or expired.
+4. **On `POST /logout`**, delete the server-side entry and overwrite the cookie with `Max-Age=0`.
+
+**Why these choices** (verified against [the sources](#verification--sources-consulted)):
+
+- `HttpOnly` blocks JS access — XSS can't read the session cookie. (OWASP, MDN)
+- `Secure` blocks transmission over plain HTTP — MITM can't sniff it. (OWASP, MDN)
+- `SameSite=Strict` blocks the cookie from being sent on any cross-site request, including top-level GET navigations from external sites — this is the right default for a session that authorises destructive actions on an internal tool. Use `Lax` only if you genuinely need cross-site GET nav (e.g. external email links into the app). (OWASP, MDN)
+- `__Host-` prefix forces `Secure`, forbids `Domain`, and requires `Path=/`. The browser refuses to set the cookie if any of those are violated, so a misconfiguration fails loudly instead of silently widening scope to subdomains. (MDN, RFC 6265bis)
+- **Random opaque session ID, not a JWT and not the password.** OWASP requires ≥ 64 bits of entropy from a CSPRNG; we use 32 bytes (256 bits) from `gleam/crypto.strong_random_bytes` (OpenSSL `RAND_bytes` on BEAM, WebCrypto on JS). (OWASP)
+- **Server-side session table.** The cookie carries only an opaque ID; the "is logged in" fact lives in app state. Logout invalidates the entry instantly — a stateless JWT can't do that without a separate denylist.
+- **`argus.verify` is constant-time** — it delegates to the Argon2 reference C implementation, which compares the derived key in constant time. Don't roll your own `==` against a stored hash.
+
+**Caveat on `__Host-` and Wisp.** Wisp's [`wisp.set_cookie`](https://hexdocs.pm/wisp/wisp.html#set_cookie) uses `gleam_http`'s [`cookie.defaults`](https://github.com/gleam-lang/http/blob/main/src/gleam/http/cookie.gleam) — which sets `Secure` (off HTTPS), `HttpOnly`, `Path=/`, and `SameSite=Lax` — and does **not** expose `SameSite=Strict` or the `__Host-` name as parameters. To get those, either (a) drop to `gleam_http`'s `response.set_cookie` with a hand-built `cookie.Attributes` record, or (b) accept the Wisp default of `SameSite=Lax` and skip the `__Host-` prefix. The recipe below shows the explicit-attributes path because the security delta matters.
+
+```gleam
+// app/state.gleam — built once at startup, threaded through Wisp's context.
+
+import argus
+import gleam/dict.{type Dict}
+import gleam/erlang/os
+import gleam/erlang/process.{type Subject}
+import gleam/option.{type Option}
+
+/// In-memory session table. For multi-node deploys, swap for `kv_sessions` or
+/// any KV with TTL (Redis/Postgres). The shape stays identical.
+pub type SessionStore =
+  Subject(StoreMsg)
+
+pub type StoreMsg {
+  Insert(id: String, expires_unix: Int)
+  Lookup(id: String, reply_to: Subject(Bool))
+  Remove(id: String)
+}
+
+pub type AppState {
+  AppState(password_hash: String, sessions: SessionStore)
+}
+
+pub fn boot() -> Result(AppState, String) {
+  use plaintext <- result.try(
+    os.get_env("ADMIN_PASSWORD")
+    |> result.replace_error("ADMIN_PASSWORD not set"),
+  )
+
+  // Hash ONCE at startup with OWASP-recommended Argon2id parameters
+  // (m=19456 KiB, t=2, p=1 — the lower-RAM profile from the Password
+  // Storage Cheat Sheet). Drop the plaintext.
+  let assert Ok(hashes) =
+    argus.hasher()
+    |> argus.algorithm(argus.Argon2id)
+    |> argus.memory_cost(19_456)
+    |> argus.time_cost(2)
+    |> argus.parallelism(1)
+    |> argus.hash_length(32)
+    |> argus.hash(plaintext, argus.gen_salt())
+
+  let sessions = start_session_actor()
+  Ok(AppState(password_hash: hashes.encoded_hash, sessions:))
+}
+```
+
+```gleam
+// app/auth.gleam — login, logout, middleware.
+
+import app/state.{type AppState}
+import argus
+import gleam/bit_array
+import gleam/crypto
+import gleam/erlang/process
+import gleam/http/cookie
+import gleam/http/response
+import gleam/int
+import gleam/option
+import gleam/result
+import gleam/string
+import wisp.{type Request, type Response}
+
+const cookie_name = "__Host-session"
+
+const session_ttl_seconds = 28_800
+// 8 hours
+
+/// POST /login — body is form-encoded with a single `password` field.
+pub fn login(req: Request, state: AppState) -> Response {
+  use form <- wisp.require_form(req)
+  let submitted =
+    form.values
+    |> list.key_find("password")
+    |> result.unwrap("")
+
+  // Constant-time verify against the startup-computed Argon2id hash.
+  case argus.verify(state.password_hash, submitted) {
+    Ok(True) -> grant_session(state)
+    _ -> wisp.response(401) |> wisp.string_body("Invalid credentials")
+  }
+}
+
+fn grant_session(state: AppState) -> Response {
+  // 32 bytes = 256 bits of entropy from a CSPRNG.
+  // OWASP requires ≥ 64 bits; we exceed that comfortably.
+  let session_id =
+    crypto.strong_random_bytes(32)
+    |> bit_array.base64_url_encode(False)
+
+  let now = system_time_seconds()
+  process.send(state.sessions, state.Insert(session_id, now + session_ttl_seconds))
+
+  wisp.redirect(to: "/")
+  |> set_session_cookie(session_id, max_age: session_ttl_seconds)
+}
+
+/// POST /logout
+pub fn logout(state: AppState, session_id: String) -> Response {
+  process.send(state.sessions, state.Remove(session_id))
+  wisp.redirect(to: "/login")
+  // Overwrite the cookie with an immediate-expiry empty value.
+  |> set_session_cookie("", max_age: 0)
+}
+
+/// Middleware: gate `inner` behind a valid session cookie.
+pub fn require_session(
+  req: Request,
+  state: AppState,
+  inner: fn(String) -> Response,
+) -> Response {
+  case read_cookie(req) {
+    Ok(session_id) -> {
+      let reply = process.new_subject()
+      process.send(state.sessions, state.Lookup(session_id, reply))
+      case process.receive(reply, 50) {
+        Ok(True) -> inner(session_id)
+        _ -> wisp.redirect(to: "/login")
+      }
+    }
+    Error(_) -> wisp.redirect(to: "/login")
+  }
+}
+
+// --- Cookie helpers (hand-rolled because Wisp's set_cookie hard-codes
+// SameSite=Lax via gleam_http's cookie.defaults). ---
+
+fn set_session_cookie(
+  resp: Response,
+  value: String,
+  max_age max_age: Int,
+) -> Response {
+  let attrs =
+    cookie.Attributes(
+      max_age: option.Some(max_age),
+      // __Host- prefix REQUIRES no Domain attribute and Path="/"
+      domain: option.None,
+      path: option.Some("/"),
+      secure: True,
+      http_only: True,
+      same_site: option.Some(cookie.Strict),
+    )
+  response.set_cookie(resp, cookie_name, value, attrs)
+}
+
+fn read_cookie(req: Request) -> Result(String, Nil) {
+  // Wisp's get_cookie expects a Wisp-set cookie (base64 / signed).
+  // We rolled our own set above, so parse the raw header instead.
+  use header <- result.try(wisp.get_header(req, "cookie"))
+  cookie.parse(header)
+  |> list.key_find(cookie_name)
+}
+
+@external(erlang, "erlang", "system_time")
+fn system_time_seconds() -> Int
+```
+
+```gleam
+// app/router.gleam — wiring it together.
+
+import app/auth
+import app/state.{type AppState}
+import wisp.{type Request, type Response}
+
+pub fn handle(req: Request, st: AppState) -> Response {
+  case wisp.path_segments(req), req.method {
+    ["login"], http.Post -> auth.login(req, st)
+    ["logout"], http.Post -> {
+      use session_id <- auth.require_session(req, st)
+      auth.logout(st, session_id)
+    }
+    // Everything else requires a session.
+    _, _ -> {
+      use _session_id <- auth.require_session(req, st)
+      protected_handler(req)
+    }
+  }
+}
+```
+
+**On CSRF.** `SameSite=Strict` blocks the browser from including the session cookie on requests originating from another site, which is the typical CSRF attack vector. That removes the need for an explicit CSRF token for the **specific case** of an internal tool whose session cookie is `Strict` and whose state-changing endpoints accept only `POST`/`PUT`/`DELETE`. If you ever need `SameSite=Lax` (e.g. you want users to follow an emailed link into a logged-in page), CSRF tokens come back into scope — issue a per-session token on login, embed it in forms as a hidden field, verify on every state-changing request. There is no first-class CSRF token library in the Gleam ecosystem at snapshot; roll one with `gleam/crypto.strong_random_bytes` + `gleam/crypto.secure_compare`.
+
+**On rotating the session ID.** OWASP requires session-ID renewal on privilege change. With a single hard-coded password there is only one privilege level (in/out), so the natural moment is **on every successful login** — the snippet above already issues a fresh 256-bit ID per login. Don't reuse a logged-out session's ID.
+
+### Limitations & when NOT to use this
+
+A single shared password is a deliberately small hammer. Honest list of what it does **not** give you:
+
+- **No per-user identity.** Audit logs say "someone with the password did X" — you can't attribute actions to individuals, can't kick one user out without rotating the password for everyone, can't disable an account on offboarding.
+- **No password reset, no rotation flow.** Rotating means: change the env var → redeploy → all existing sessions still work (because they only store an opaque ID, not the password). That's actually fine for the common case, but it means you can't *force* a logout fleet-wide without also flushing the session table. Add a "kill all sessions" admin action if you need it.
+- **Brute-force exposure scales linearly with password strength.** With a single password and an attacker who can guess at network speed, the only thing standing between them and the door is the password's entropy and your rate-limiter. **Add a rate-limit on `/login`** — IP-based + global, with exponential back-off, per [OWASP's authentication guidance](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html#protect-against-automated-attacks). The Gleam ecosystem has no first-class rate-limiter at snapshot; bolt one on with a `dict` or `ets` table keyed by IP, or terminate at a reverse proxy (`nginx`'s `limit_req`, Caddy's `rate_limit`).
+- **No MFA.** Pair with [totally](#totally) for TOTP if the deployment is sensitive enough — but at that point you're closer to per-user accounts than this recipe pretends to be.
+- **Password leak = total compromise.** If the env var is exfiltrated (logs, CI, screen-share, phishing the operator), every session is forfeit until you rotate. Use [cowl](https://github.com/lupodevelop/cowl) to mask it in logs.
+- **In-memory session table = sessions die on restart and don't span nodes.** Acceptable for a single-instance internal tool; for anything multi-node or restart-sensitive, swap in [kv_sessions](#kv_sessions) (verify the open stdlib-bump issue first) or a Redis/Postgres-backed store with the same `Insert`/`Lookup`/`Remove` shape.
+
+**Suitable for:** internal admin dashboards, staging-environment gates, on-call runbook UIs, hobby-project shut-the-door auth, ops dashboards behind a VPN.
+
+**NOT suitable for:** anything user-facing, multi-tenant, regulated (SOC2/HIPAA/PCI), public on the open internet without IP allowlisting, or anywhere "who did this" is a compliance question. Escalate to [Recipe 1](#recipe-1--wisp--emailpassword--sessions-self-hosted).
+
+### Verification — sources consulted
+
+The cookie attributes, session-ID entropy, hashing parameters, and CSRF reasoning above were verified against:
+
+- **OWASP Session Management Cheat Sheet** — [`Set-Cookie` attribute requirements (Secure, HttpOnly, SameSite, Domain, Path), session-ID entropy ≥ 64 bits, CSPRNG requirement, session fixation / renewal on privilege change](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html).
+- **OWASP Authentication Cheat Sheet** — [constant-time password comparison, rate-limiting / brute-force protection, MFA guidance](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html).
+- **OWASP Password Storage Cheat Sheet** — [Argon2id recommended parameters: m=19456 KiB / t=2 / p=1 (low-RAM) or m=47104 KiB / t=1 / p=1 (standard)](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html).
+- **MDN — `Set-Cookie` header** — [attribute syntax and semantics; `__Host-` and `__Secure-` prefix rules; `SameSite=Strict` vs `Lax` vs `None` behaviour](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie).
+- **IETF RFC 6265bis** — *Cookies: HTTP State Management Mechanism (bis)* — [the `__Host-` prefix definition, `SameSite` semantics, and the cookie model the modern browsers actually implement](https://datatracker.ietf.org/doc/draft-ietf-httpbis-rfc6265bis/).
+- **Wisp source** — [`set_cookie` in `wisp.gleam`](https://github.com/gleam-wisp/wisp/blob/main/src/wisp.gleam) and [`gleam_http`'s `cookie.defaults`](https://github.com/gleam-lang/http/blob/main/src/gleam/http/cookie.gleam) — verified that Wisp's helper sets `HttpOnly`, `Secure` (off HTTPS), `Path=/`, `SameSite=Lax` and that overriding to `SameSite=Strict` requires dropping to `gleam_http`'s `response.set_cookie`.
+- **argus README** — [`argus.hasher()` builder, `argus.hash`, `argus.verify` (Argon2 reference C impl via `jargon` NIF — comparison is constant-time)](https://github.com/Pevensie/argus).
+- **`gleam/crypto`** — [`strong_random_bytes` (CSPRNG: OpenSSL `RAND_bytes` on BEAM, WebCrypto on JS) and `secure_compare` (constant-time)](https://hexdocs.pm/gleam_crypto/gleam/crypto.html).
 
 
 ## Leaderboard

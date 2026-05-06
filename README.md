@@ -39,41 +39,53 @@ Coverage starts where the author's own projects demand answers, then widens outw
 - [Mobile apps](gleam/mobile-apps.md) — JS-compile-then-shell paths (Lustre + Capacitor / Tauri Mobile / RN-as-logic-only / PWA / bare WebView). Honest about the gaps.
 - [Guides & learning resources](gleam/guides.md) — interactive tour, Exercism, CodeCrafters, awesome-gleam, framework-shipped guides (Lustre, Wisp), YouTube, newsletter, Discord. 15 resources scored. Honest about the no-book / no-paid-course gap.
 
+### Application types
+
+- [Application types — what kind of thing are you building?](application-types.md) — the orientation step *before* picking a framework: website vs web app vs PWA vs desktop vs mobile. Distribution, install friction, offline expectations, native-API access, and a decision matrix. Parent of the [mobile-app survey](building-mobile-apps.md) below.
+
 ### Mobile
 
-- [Building mobile apps — cross-ecosystem survey](mobile/building-mobile-apps.md) — native (Kotlin/Swift), Flutter, React Native / Expo, Capacitor, Tauri Mobile, Compose Multiplatform / KMP, .NET MAUI, NativeScript, Lynx, Quasar, Solito, PWA. 14 frameworks reviewed + 7 disregarded/EOL.
+- [Building mobile apps — cross-ecosystem survey](building-mobile-apps.md) — native (Kotlin/Swift), Flutter, React Native / Expo, Capacitor, Tauri Mobile, Compose Multiplatform / KMP, .NET MAUI, NativeScript, Lynx, Quasar, Solito, PWA. 14 frameworks reviewed + 7 disregarded/EOL. Sub-article of [Application types](application-types.md).
 
 ### Testing
 
-- [BDD with Gherkin](testing/bdd-with-gherkin.md) — cross-ecosystem Cucumber-family survey across Ruby, JS, JVM, Python, .NET, Go, Rust, PHP, Elixir, Gleam, Haskell.
+- [BDD with Gherkin](bdd-with-gherkin.md) — cross-ecosystem Cucumber-family survey across Ruby, JS, JVM, Python, .NET, Go, Rust, PHP, Elixir, Gleam, Haskell.
 
 ### UX
 
-- [UX resources & tools](ux/resources-and-tools.md) — curated review of UX (not visual design) resources: Laws of UX, NN/g heuristics + training, dogfooding practice, PostHog instrumentation, and the BDD/Gherkin connection.
+- [UX resources & tools](ux-resources-and-tools.md) — curated review of UX (not visual design) resources: Laws of UX, NN/g heuristics + training, dogfooding practice, PostHog instrumentation, and the BDD/Gherkin connection.
 
 ### Diagramming
 
-- [Diagramming tools — cross-ecosystem survey](diagramming/README.md) — Mermaid, PlantUML, D2, Graphviz/DOT, LaTeX/TikZ, Kroki, mingrammer/diagrams, Structurizr, WaveDrom, Excalidraw, plus 20+ ASCII renderers and terminal-chart tools. ~40 tools reviewed.
+- [Diagramming tools — cross-ecosystem survey](diagramming.md) — Mermaid, PlantUML, D2, Graphviz/DOT, LaTeX/TikZ, Kroki, mingrammer/diagrams, Structurizr, WaveDrom, Excalidraw, plus 20+ ASCII renderers and terminal-chart tools. ~40 tools reviewed.
 
 ### OpenAPI
 
-- [Postman → OpenAPI converters](openapi/postman-to-openapi-converters.md) — converting Postman collections to OpenAPI specs.
+- [Postman → OpenAPI converters](postman-to-openapi-converters.md) — converting Postman collections to OpenAPI specs.
 
 ### Shell
 
-- [Browser-based SSH terminals](shell/browser-ssh-terminals.md) — embeddable web SSH clients for iframe / Notion use.
+- [Browser-based SSH terminals](browser-ssh-terminals.md) — embeddable web SSH clients for iframe / Notion use.
 
 ### Security
 
-- [Recent incidents in major technologies](security/recent-incidents-in-major-technologies.md) — 2024-2026 CVE and supply-chain highlights across Next.js, WordPress, Python, npm, and others.
+- [Recent incidents in major technologies](recent-incidents-in-major-technologies.md) — 2024-2026 CVE and supply-chain highlights across Next.js, WordPress, Python, npm, and others.
+
+### Authentication
+
+- [Authentication — a high-level primer](authentication.md) — what authentication is, how it works on the web, the practical security floor, common pitfalls, and a glossary. Cross-cutting / language-agnostic; pairs with [Gleam authentication](gleam/authentication.md) for ecosystem-specific picks.
+
+### Software Design
+
+- [Domain-Driven Design](domain-driven-design.md) — opinionated orientation: why DDD is hard, where it earns its keep (Ubiquitous Language + Bounded Contexts), how it maps onto Ash (Elixir), and the author's evolving "adjusted approach."
 
 ### Languages
 
-- [Programming language popularity & desire](languages/programming-languages-popularity-and-desire.md) — Stack Overflow 2025 rankings: what's used vs what's loved.
+- [Programming language popularity & desire](programming-languages-popularity-and-desire.md) — Stack Overflow 2025 rankings: what's used vs what's loved.
 
 ### Meta
 
-- [Navigating software ecosystems](meta/navigating-ecosystems.md) — meta-review of the discovery toolkit itself: awesome lists, friends & experts, bundlephobia and friends, ossinsight, comparison pages, and how to combine them with this repo's structured-review approach.
+- [Navigating software ecosystems](navigating-ecosystems.md) — meta-review of the discovery toolkit itself: awesome lists, friends & experts, bundlephobia and friends, ossinsight, comparison pages, and how to combine them with this repo's structured-review approach.
 
 ### Upcoming
 

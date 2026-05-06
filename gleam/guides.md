@@ -1,5 +1,8 @@
 # Learning Gleam — guides, books, courses, and other resources
 
+> [!NOTE]
+> **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
+
 So you want to learn Gleam.
 The honest answer in 2026: **there is no Gleam book** (no Manning, no O'Reilly, no Pragmatic) and no university course. What exists instead is a single very-good interactive language tour, an excellent Exercism track, a paid CodeCrafters track, framework-shipped guides for the main libraries, and a thin smear of YouTube talks from the maintainer + a few community creators. The official position from the maintainers — recorded in [a 2024 GitHub discussion](https://github.com/gleam-lang/gleam/discussions/2622) — is "no one has made a book yet, the language tour is the substitute."
 

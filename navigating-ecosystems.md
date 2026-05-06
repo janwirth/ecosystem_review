@@ -1,10 +1,13 @@
 # Navigating software ecosystems — a meta-review
 
+> [!NOTE]
+> **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
+
 > *"How do you decide which library to use?"* This article is the long answer.
 
 **Snapshot 2026-04-29** — taglines and existence checks captured live from each tool's web UI. URLs were verified at snapshot; expect link rot to start its work the day after.
 
-This repo — [ecosystem-review](../README.md) — is **one** approach to library evaluation: snapshot-dated, public-web-UI-only, scored on the [same 7-dim rubric](../formalization.md#scoring-dimensions-per-repo) every time. That approach is opinionated. It's slow, manual, and trades coverage for reproducibility. There are many other ways to do this work, and most readers will mix several of them.
+This repo — [ecosystem-review](README.md) — is **one** approach to library evaluation: snapshot-dated, public-web-UI-only, scored on the [same 7-dim rubric](formalization.md#scoring-dimensions-per-repo) every time. That approach is opinionated. It's slow, manual, and trades coverage for reproducibility. There are many other ways to do this work, and most readers will mix several of them.
 
 This article is a **meta-review of the discovery toolkit itself**: the broader landscape of techniques, sites, and habits that experienced engineers use to navigate a new ecosystem. The goal is not to crown a winner — most of these tools complement each other — but to map the field so you can pick the right combination for the question in front of you.
 
@@ -39,7 +42,7 @@ When a new project lands on your desk and you need a logger / web framework / CS
 | **Will it survive?** | Maintenance velocity, contributor count, issue triage cadence, license. | [ossinsight](#ossinsightio--deep-dive), [Snyk Advisor](#maintenance--health), [Libraries.io](#maintenance--health), GitHub Insights. |
 | **Is it safe to ship?** | Vulnerability data, supply-chain audits, install-script behaviour. | [Socket](#security), [OSV](#security), [npm audit](#security), [GitHub Advisories](#security). |
 
-The honest answer is that no single source covers all four. Star count alone (the laziest signal) is famously gameable — see e.g. [the dagster-io/dagster vs Airflow star-bombing patterns](https://docs.gitstar-ranking.com/) — and recent supply-chain incidents ([cross-link to security review](../security/recent-incidents-in-major-technologies.md)) have shown that *high stars + active commits + popular CI* are not sufficient signals on their own. A multi-source check is the reproducible defence.
+The honest answer is that no single source covers all four. Star count alone (the laziest signal) is famously gameable — see e.g. [the dagster-io/dagster vs Airflow star-bombing patterns](https://docs.gitstar-ranking.com/) — and recent supply-chain incidents ([cross-link to security review](recent-incidents-in-major-technologies.md)) have shown that *high stars + active commits + popular CI* are not sufficient signals on their own. A multi-source check is the reproducible defence.
 
 The remaining sections walk the toolkit by category, with verdicts (what each tool is good for and what it isn't) and worked examples for the deep-data ones.
 
@@ -146,11 +149,11 @@ A category of focused, single-purpose tools that answer one question well. Most 
 | --- | --- | --- |
 | **deps.dev (Open Source Insights)** | [deps.dev](https://deps.dev) | Google-built service that maps dependency graphs across **Cargo, Go, Maven, npm, NuGet, PyPI, RubyGems**, plus GitHub/GitLab/Bitbucket repo metadata. Provides HTTP + gRPC API, vulnerability cross-references, license info, and transitive-dependency lookup. Verdict: best free option for cross-language dep-graph analysis. Good for: *"what does this package's transitive tree look like, and does any of it have known CVEs?"* Not good for: package categories beyond the seven registries listed. |
 | **Snyk Advisor** | [snyk.io/advisor](https://snyk.io/advisor) (redirects to [security.snyk.io](https://security.snyk.io)) ² | Per-package health score combining popularity, security, maintenance, and community signals across npm, PyPI, Go, Maven. Verdict: fastest one-page summary card for an npm package; the score is opinionated but transparent (each input is shown). Good for: 30-second triage. Not good for: deep historical data. |
-| **Socket.dev** | [socket.dev](https://socket.dev) — *"Redefining Supply Chain Security"* | Static analysis of package install behaviour — flags suspicious `postinstall` scripts, network calls, filesystem access. Covers JavaScript, Python, Go. Verdict: the best *behavioural* dep-analysis tool in 2026, especially after the 2025 Shai-Hulud worm ([security cross-link](../security/recent-incidents-in-major-technologies.md#npm--javascript)). Good for: catching install-time supply-chain attacks before they execute. Not good for: pure popularity / health signal. |
+| **Socket.dev** | [socket.dev](https://socket.dev) — *"Redefining Supply Chain Security"* | Static analysis of package install behaviour — flags suspicious `postinstall` scripts, network calls, filesystem access. Covers JavaScript, Python, Go. Verdict: the best *behavioural* dep-analysis tool in 2026, especially after the 2025 Shai-Hulud worm ([security cross-link](recent-incidents-in-major-technologies.md#npm--javascript)). Good for: catching install-time supply-chain attacks before they execute. Not good for: pure popularity / health signal. |
 
 > ² Snyk consolidated Advisor into [security.snyk.io](https://security.snyk.io) ("the leading database for open source vulnerabilities and cloud misconfigurations"). The legacy `/advisor/` URL still resolves via 301; the per-package score card is now under `security.snyk.io/package/<ecosystem>/<name>`.
 
-**Worked example — *"is `litellm` safe to install?"*** This is not hypothetical — `litellm` had a March 2026 supply-chain compromise ([security cross-link](../security/recent-incidents-in-major-technologies.md#python--pypi)). On deps.dev: 30+ direct deps, license clean. On Socket: post-March-2026 versions clean, but the compromised `1.77.7.dev*` versions would have shown up as **install-time network exfiltration** flags. Decision pattern: pin to known-clean versions and recheck Socket after every update.
+**Worked example — *"is `litellm` safe to install?"*** This is not hypothetical — `litellm` had a March 2026 supply-chain compromise ([security cross-link](recent-incidents-in-major-technologies.md#python--pypi)). On deps.dev: 30+ direct deps, license clean. On Socket: post-March-2026 versions clean, but the compromised `1.77.7.dev*` versions would have shown up as **install-time network exfiltration** flags. Decision pattern: pin to known-clean versions and recheck Socket after every update.
 
 ### Maintenance / health
 
@@ -292,7 +295,7 @@ Decision shape: Lustre is in the "early breakout" phase; LiveView is in the "mat
 
 ### Limitations
 
-- **GitHub-only.** GitLab, Codeberg, Sourcehut, Forgejo, Bitbucket projects are invisible. For Gleam this is mostly fine; for some C/Linux ecosystem projects (Graphviz on GitLab — see [diagramming review](../diagramming/README.md#graphviz--dot)) it materially undercounts.
+- **GitHub-only.** GitLab, Codeberg, Sourcehut, Forgejo, Bitbucket projects are invisible. For Gleam this is mostly fine; for some C/Linux ecosystem projects (Graphviz on GitLab — see [diagramming review](diagramming.md#graphviz--dot)) it materially undercounts.
 - **Public repos only.** Private repos, forks of private repos, and self-hosted Git instances don't exist for OSSInsight.
 - **Bot filter is best-effort.** Star-bombing campaigns (cf. [tldraw's launch spike](https://github.com/tldraw/tldraw)) and CI-account commits can still distort the picture.
 - **Velocity ≠ quality.** OSSInsight is a *quantitative* lens. It tells you a repo is active; it does not tell you the code is good.
@@ -303,7 +306,7 @@ Decision shape: Lustre is in the "early breakout" phase; LiveView is in the "mat
 
 ## Scoring scaffold for discovery tools
 
-The repo's [main 7-dim rubric](../formalization.md#scoring-dimensions-per-repo) doesn't translate cleanly to discovery tools (you can't measure README maturity of a SaaS site the same way as a library). Here's a discovery-tool-specific scaffold.
+The repo's [main 7-dim rubric](formalization.md#scoring-dimensions-per-repo) doesn't translate cleanly to discovery tools (you can't measure README maturity of a SaaS site the same way as a library). Here's a discovery-tool-specific scaffold.
 
 ### Dimensions
 
@@ -362,24 +365,24 @@ A practical evaluation flow for picking a candidate library, ordered cheapest-fi
 6. **Socket.dev / OSV** for security baseline — any known CVEs, any install-script weirdness? ([Security](#security)) · 5 minutes.
 7. **GitHub Code Search / Sourcegraph** for usage patterns — how do real production codebases actually use this library? Look for 50+ examples of the API you care about. ([Code search](#code-search)) · 10 minutes.
 8. **Ask one expert** — the maintainer, a Discord regular, a friend who shipped this library at scale. Format the question per [Friends and experts](#friends-and-experts) > [How to ask well](#how-to-ask-well). · async — usually answered in hours.
-9. **Write the structured review** — apply the [REVIEW_METHODOLOGY](../workflows/REVIEW_METHODOLOGY.md), produce the snapshot-dated artifact. This step is what makes the decision *defensible* later when you (or the next CTO) need to justify it. · 30-60 minutes.
+9. **Write the structured review** — apply the [REVIEW_METHODOLOGY](workflows/REVIEW_METHODOLOGY.md), produce the snapshot-dated artifact. This step is what makes the decision *defensible* later when you (or the next CTO) need to justify it. · 30-60 minutes.
 
 Total: ~1-2 hours for a high-stakes library decision, maybe 15 minutes for a low-stakes utility pick. The key is **not to skip step 9 for the high-stakes decisions** — most failed library bets are failures of *not having documented why we picked this*, not failures of having picked badly.
 
 > [!IMPORTANT]
-> The structured review (step 9) is the differentiator of this repo's approach. Awesome lists, ossinsight, deps.dev, and friends are *inputs* — they tell you what's true *now*. The structured review captures *why we decided what we decided* in a way that survives the inputs going stale. See [formalization.md](../formalization.md) for the dimensions and [workflows/REVIEW_METHODOLOGY.md](../workflows/REVIEW_METHODOLOGY.md) for the process.
+> The structured review (step 9) is the differentiator of this repo's approach. Awesome lists, ossinsight, deps.dev, and friends are *inputs* — they tell you what's true *now*. The structured review captures *why we decided what we decided* in a way that survives the inputs going stale. See [formalization.md](formalization.md) for the dimensions and [workflows/REVIEW_METHODOLOGY.md](workflows/REVIEW_METHODOLOGY.md) for the process.
 
 ## Related reviews in this repo
 
 This article references the toolkit; the rest of the repo applies it. Examples of the methodology in action:
 
-- [Gleam web apps](../gleam/web-and-http/web-apps.md) — first worked example of the 7-dim rubric.
-- [Diagramming tools cross-ecosystem survey](../diagramming/README.md) — broad cross-language survey using the same rubric.
-- [Mobile apps cross-ecosystem](../mobile/building-mobile-apps.md) — comparing 14 mobile frameworks side-by-side.
-- [Recent security incidents](../security/recent-incidents-in-major-technologies.md) — companion article showing what happens when the discovery filter misses supply-chain risk.
-- [Programming language popularity](../languages/programming-languages-popularity-and-desire.md) — Stack Overflow survey data as a meta-popularity signal.
-- [Formalization](../formalization.md) — the scoring rubric and discovery pipeline used across all reviews.
-- [REVIEW_METHODOLOGY](../workflows/REVIEW_METHODOLOGY.md) — the per-review process checklist.
+- [Gleam web apps](gleam/web-and-http/web-apps.md) — first worked example of the 7-dim rubric.
+- [Diagramming tools cross-ecosystem survey](diagramming.md) — broad cross-language survey using the same rubric.
+- [Mobile apps cross-ecosystem](building-mobile-apps.md) — comparing 14 mobile frameworks side-by-side.
+- [Recent security incidents](recent-incidents-in-major-technologies.md) — companion article showing what happens when the discovery filter misses supply-chain risk.
+- [Programming language popularity](programming-languages-popularity-and-desire.md) — Stack Overflow survey data as a meta-popularity signal.
+- [Formalization](formalization.md) — the scoring rubric and discovery pipeline used across all reviews.
+- [REVIEW_METHODOLOGY](workflows/REVIEW_METHODOLOGY.md) — the per-review process checklist.
 
 ---
 

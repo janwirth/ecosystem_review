@@ -1,5 +1,8 @@
 # Code generators in Gleam
 
+> [!NOTE]
+> **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
+
 Build-time tools that take an input artifact (Gleam source, SQL, OpenAPI, JSON Schema, etc.) and **emit Gleam source code**. Two shapes:
 
 1. **Gleam → Gleam** — a Gleam DSL describes the code you want and the tool prints it. ([gleamgen](#gleamgen), [glue](#glue), [derived](#derived), [gserde](#gserde), [json_typedef](#json_typedef), [trick](#trick).)

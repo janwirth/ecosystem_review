@@ -1,5 +1,8 @@
 # Logging in Gleam
 
+> [!NOTE]
+> **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
+
 Need to emit logs from your Gleam app — pretty in development, structured JSON in production, maybe on BEAM, maybe on JS?
 This article maps out what's available.
 

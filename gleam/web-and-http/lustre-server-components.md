@@ -1,5 +1,8 @@
 # Lustre Server Components
 
+> [!NOTE]
+> **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
+
 A guided tour through every example in [`lustre-labs/lustre/examples/06-server-components`](https://github.com/lustre-labs/lustre/tree/main/examples/06-server-components) so you don't have to clone the repo and `cd` into six directories to figure out which one shows the trick you need.
 
 **Snapshot: 2026-04-24.**

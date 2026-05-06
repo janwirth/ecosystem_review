@@ -1,9 +1,12 @@
 # Testing libraries in Gleam
 
+> [!NOTE]
+> **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
+
 You want to test a Gleam project — unit tests, property tests, snapshots, doc tests, maybe a mock HTTP server or a mocked Erlang module.
 This article maps out what's available on [packages.gleam.run](https://packages.gleam.run/) and hex at snapshot.
 
-BDD/Gherkin (`dream_test`) has its own cross-ecosystem write-up: see [BDD with Gherkin](../../testing/bdd-with-gherkin.md).
+BDD/Gherkin (`dream_test`) has its own cross-ecosystem write-up: see [BDD with Gherkin](../../bdd-with-gherkin.md).
 Browser drivers and end-to-end frameworks live in [Browser automation & testing tools](./browser-automation.md).
 
 ## Table of Contents
@@ -87,7 +90,7 @@ Discovery query (user-specified): **`test`**. Searched [packages.gleam.run](http
 > - **[patrik-kuehl/melon](https://hex.pm/packages/melon)** — "A Gleam library for running test containers via Docker." Docker container orchestration for integration tests. The browser-automation article covers [testcontainers_gleam](./browser-automation.md#testcontainers_gleam) for the same shape of need; melon is an alternative wrapper, last published 2024-10-17. Infra, not a test library.
 > - **[presentable_soup](https://hex.pm/packages/presentable_soup)** — "HTML parsing … good for snapshot testing too!" Primary purpose is HTML querying; snapshot-testing utility is secondary. Belongs in an HTML-parsing review.
 >
-> **Covered in [BDD with Gherkin](../../testing/bdd-with-gherkin.md):**
+> **Covered in [BDD with Gherkin](../../bdd-with-gherkin.md):**
 > - **[TrustBound/dream_test](https://github.com/TrustBound/dream_test)** — BDD/Gherkin runner for Gleam. Full review in the sibling article; mentioned briefly [below](#dream_test).
 >
 > **Topic mismatch:**
@@ -412,7 +415,7 @@ Test runners scoped to a single downstream use case.
 ### Adjacent (linked out)
 
 #### dream_test
-[repo](https://github.com/TrustBound/dream_test) · also see [BDD with Gherkin](../../testing/bdd-with-gherkin.md)
+[repo](https://github.com/TrustBound/dream_test) · also see [BDD with Gherkin](../../bdd-with-gherkin.md)
 
 "A testing framework for Gleam that gets out of your way." Covers unit testing (describe/group/it), Gherkin-style BDD scenarios (either `.feature` files or inline DSL), parallel execution, multiple reporters (BDD, progress, JSON), and snapshot testing. If you want a one-stop "bigger than gleeunit" framework that also gives you Gherkin specs, dream_test is the Gleam-native option. 5★ at the last snapshot; most of the BDD discussion lives in the sibling article.
 

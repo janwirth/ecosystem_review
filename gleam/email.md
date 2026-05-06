@@ -1,5 +1,8 @@
 # Sending email from Gleam
 
+> [!NOTE]
+> **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
+
 So you want to ship a "Welcome", a password reset, or a receipt — written in Gleam?
 
 Don't reach for IMAP and a custom MIME parser yet. The Gleam side of email is small, and almost all of it is **outbound only**: SMTP clients and thin wrappers around transactional email vendor APIs.

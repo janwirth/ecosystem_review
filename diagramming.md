@@ -1,5 +1,8 @@
 # Diagramming Tools — Cross-Ecosystem Survey
 
+> [!NOTE]
+> **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
+
 > Pen and paper is ideal but hard to digitalise. You want something machine-parseable. This is the map.
 
 **Snapshot 2026-04-27** — metrics from live GitHub / GitLab web UI only (no API for stars, no clones). Star counts, last-commit dates, and open-issue counts reflect what a logged-out visitor sees today.

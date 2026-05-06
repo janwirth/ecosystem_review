@@ -1,5 +1,8 @@
 # Syntax highlighting in Gleam
 
+> [!NOTE]
+> **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
+
 So you want to show pretty code on your blog, in your CLI, or inside a Lustre app?
 Pick the right highlighter here.
 

@@ -1,5 +1,8 @@
 # Tools for spawning subprocesses with Gleam
 
+> [!NOTE]
+> **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
+
 Need to shell out from Gleam? Run `tailwindcss -w`, pipe into `cat`, or just capture `ls`?
 This is the shortlist.
 

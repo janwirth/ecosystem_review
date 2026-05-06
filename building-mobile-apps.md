@@ -1,5 +1,8 @@
 # Building Mobile Apps — Cross-Ecosystem Survey
 
+> [!NOTE]
+> **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
+
 > The state of "ship one app to two app stores" in 2026, scored side-by-side.
 
 **Snapshot 2026-04-29** — metrics from live GitHub web UI only (no API, no clones). Star counts, last-commit dates, and open-issue counts reflect what a logged-out visitor sees today.
@@ -464,13 +467,13 @@ The 7-dim score is comparable within an archetype, not across — a Capacitor ap
 
 ## Cross-link
 
-> See also: **[Building mobile apps with Gleam](../gleam/mobile-apps.md)** — how Gleam (a BEAM/JS-target language) reaches mobile via JS-compile + Capacitor / Tauri rather than via a native compile target. The Gleam → JS pipeline produces a TypeScript-shaped output that any of the **Capacitor**, **Tauri**, **Expo** (with caveats) or **Quasar** routes in this article can wrap. There is no native Gleam-on-iOS or Gleam-on-Android compile target; the route is always *Gleam → JS → web shell → native packaging*.
+> See also: **[Building mobile apps with Gleam](gleam/mobile-apps.md)** — how Gleam (a BEAM/JS-target language) reaches mobile via JS-compile + Capacitor / Tauri rather than via a native compile target. The Gleam → JS pipeline produces a TypeScript-shaped output that any of the **Capacitor**, **Tauri**, **Expo** (with caveats) or **Quasar** routes in this article can wrap. There is no native Gleam-on-iOS or Gleam-on-Android compile target; the route is always *Gleam → JS → web shell → native packaging*.
 
 Other adjacent ecosystem reviews:
 
-- [Web apps in Gleam](../gleam/web-and-http/web-apps.md) — full-stack frameworks, the input side of any Gleam-on-mobile pipeline.
-- [Diagramming tools](../diagramming/README.md) — sister cross-ecosystem survey under a top-level dir, same style.
-- [BDD with Gherkin](../testing/bdd-with-gherkin.md) — sister cross-ecosystem survey for testing.
+- [Web apps in Gleam](gleam/web-and-http/web-apps.md) — full-stack frameworks, the input side of any Gleam-on-mobile pipeline.
+- [Diagramming tools](diagramming.md) — sister cross-ecosystem survey under a top-level dir, same style.
+- [BDD with Gherkin](bdd-with-gherkin.md) — sister cross-ecosystem survey for testing.
 
 ## Discovery — search queries
 

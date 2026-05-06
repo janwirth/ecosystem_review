@@ -1,5 +1,8 @@
 # Serializers in Gleam
 
+> [!NOTE]
+> **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
+
 Runtime translation from a typed Gleam value into a wire format (JSON / CBOR / MsgPack / etc.) or a spec document (OpenAPI, JSON Schema). The structural inverse of [decode.md](decode.md).
 
 This article also covers the **biggest current gap** in the Gleam ecosystem: **Gleam → OpenAPI (code-first)**. No package introspects mist/wisp routes and emits a spec.

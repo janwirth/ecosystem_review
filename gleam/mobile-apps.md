@@ -1,12 +1,15 @@
 # Building mobile apps with Gleam
 
+> [!NOTE]
+> **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
+
 So you want to ship an iOS or Android app and you'd like to write Gleam.
 The honest answer in 2026: **Gleam has no first-class mobile target**, and every realistic path goes through Gleam's JavaScript backend, then plugs into a JS-based mobile shell borrowed wholesale from the JavaScript ecosystem. The "Gleam-on-BEAM mobile" story does not exist in any practical 2026 form.
 
-This article reviews the *paths* (Lustre+Capacitor, Lustre+Tauri, Gleam-as-business-logic+RN, PWA, bare WebView) — not the shells themselves. The shells are reviewed once in [Building Mobile Apps — Cross-Ecosystem Survey](../mobile/building-mobile-apps.md); link out to that for any shell-internal detail.
+This article reviews the *paths* (Lustre+Capacitor, Lustre+Tauri, Gleam-as-business-logic+RN, PWA, bare WebView) — not the shells themselves. The shells are reviewed once in [Building Mobile Apps — Cross-Ecosystem Survey](../building-mobile-apps.md); link out to that for any shell-internal detail.
 
 > [!IMPORTANT]
-> **See also:** [Building Mobile Apps — Cross-Ecosystem Survey](../mobile/building-mobile-apps.md) — full review of every mobile framework Gleam piggybacks on (Capacitor, Tauri Mobile, React Native / Expo, PWA, native WebView).
+> **See also:** [Building Mobile Apps — Cross-Ecosystem Survey](../building-mobile-apps.md) — full review of every mobile framework Gleam piggybacks on (Capacitor, Tauri Mobile, React Native / Expo, PWA, native WebView).
 
 **Snapshot: 2026-04-29.**
 
@@ -183,7 +186,7 @@ pub fn get_position() -> Promise(Position)
 - The Capacitor shell ships hot-reload for development (live-reload from `localhost`), which works fine alongside `lustre/dev start`.
 
 > [!NOTE]
-> Full Capacitor review (architecture, plugin model, alternatives) lives in [../mobile/building-mobile-apps.md](../mobile/building-mobile-apps.md). This article only covers what changes when you bring Gleam.
+> Full Capacitor review (architecture, plugin model, alternatives) lives in [../building-mobile-apps.md](../building-mobile-apps.md). This article only covers what changes when you bring Gleam.
 
 ### Path B — Lustre + Tauri Mobile
 
@@ -462,7 +465,7 @@ What does **not** exist for Gleam mobile, as of 2026-04-29:
 - **No Gleam bindings to Tauri Mobile commands.** The two existing Tauri shims (`tauri`, `lustre_tauri`) predate Tauri Mobile and one is explicitly retired. You will write `@external` calls to `@tauri-apps/api`.
 - **No Gleam bindings to React Native components.** Path C exists for shared logic, not for UI. There is no Gleam-on-RN equivalent to `redraw` (which is web-React only).
 - **No Gleam packages for `mobile`, `ios`, `android`, `expo`, `webview`, `pwa`, `service worker`, `swift`, `kotlin`, or `flutter`.** The Gleam ecosystem treats mobile as a JS-ecosystem problem.
-- **No "Gleam mobile" guide on `gleam.run` or anywhere on Hex.** This article and the [cross-ecosystem mobile survey](../mobile/building-mobile-apps.md) are the closest references.
+- **No "Gleam mobile" guide on `gleam.run` or anywhere on Hex.** This article and the [cross-ecosystem mobile survey](../building-mobile-apps.md) are the closest references.
 
 If you go deep on any of A/B/C/E, **plan to write the JS interop layer yourself.** It is small, but it is yours to maintain.
 
@@ -487,15 +490,15 @@ Scored against the [7-dim rubric](#scoring-dimensions), with the *path* (not any
 5. **Lustre + Tauri Mobile** — works mechanically, but the Gleam-side bindings (`tauri`, `lustre_tauri`) are stale or retired, and Tauri Mobile's plugin ecosystem is younger than Capacitor's. Pick this if you want Rust in the shell anyway (security policy, native crate reuse) and are comfortable maintaining your own `invoke()` wrapper.
 
 > [!IMPORTANT]
-> **None of these scores are about the shells themselves.** Capacitor, Tauri, and Expo are all excellent products. The rubric here scores the *Gleam-side* path — what exists in Hex, what's documented, what you write vs. what you import. For shell-internal comparisons (native plugin ecosystem depth, build performance, App Store review experience), see the [cross-ecosystem mobile survey](../mobile/building-mobile-apps.md).
+> **None of these scores are about the shells themselves.** Capacitor, Tauri, and Expo are all excellent products. The rubric here scores the *Gleam-side* path — what exists in Hex, what's documented, what you write vs. what you import. For shell-internal comparisons (native plugin ecosystem depth, build performance, App Store review experience), see the [cross-ecosystem mobile survey](../building-mobile-apps.md).
 
 ## Related reviews
 
-- **[../mobile/building-mobile-apps.md](../mobile/building-mobile-apps.md)** — full review of every mobile framework Gleam piggybacks on (Capacitor, Tauri, RN/Expo, PWA, native WebView). Read this for shell-internal detail.
+- **[../building-mobile-apps.md](../building-mobile-apps.md)** — full review of every mobile framework Gleam piggybacks on (Capacitor, Tauri, RN/Expo, PWA, native WebView). Read this for shell-internal detail.
 - **[web-and-http/web-apps.md](web-and-http/web-apps.md)** — Lustre, mist, wisp, and the rest of the Gleam web stack. Path A/B/D/E all assume you're comfortable building a Lustre SPA first.
 - **[web-and-http/lustre-server-components.md](web-and-http/lustre-server-components.md)** — server-driven Lustre (BEAM-side state, WebSocket DOM patches). **Not directly mobile-applicable** — server components require a live BEAM, which you don't have on the device — but useful context for how Lustre splits client/server responsibilities.
 - **[web-and-http/ui-development.md](web-and-http/ui-development.md)** — component libraries, layout primitives, animations, and form helpers above the Lustre choice. All apply to mobile WebView paths (A/B/D/E).
 - **[web-and-http/hot-reloading.md](web-and-http/hot-reloading.md)** — JS dev servers and file watchers. Capacitor's live-reload composes cleanly with `lustre/dev start`.
 
 > [!IMPORTANT]
-> **See also:** [Building Mobile Apps — Cross-Ecosystem Survey](../mobile/building-mobile-apps.md) — the per-shell deep dives live there. This article only covers what changes when you bring Gleam.
+> **See also:** [Building Mobile Apps — Cross-Ecosystem Survey](../building-mobile-apps.md) — the per-shell deep dives live there. This article only covers what changes when you bring Gleam.

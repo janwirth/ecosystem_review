@@ -1,5 +1,8 @@
 # Tools for talking to databases in Gleam
 
+> [!NOTE]
+> **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
+
 Need to query a database, run migrations, or pool connections from Gleam?
 This article maps out what's available.
 
@@ -481,6 +484,18 @@ pub fn main() {
   // user.name, user.email are fully typed
 }
 ```
+
+**Field report (parrot → marmot migration).** Posted by the marmot author on the Gleam Discord ([source](https://discord.com/channels/768594524158427167/1495928534240071760/1495928534240071760)):
+
+> Marmot is a code generator for Gleam that turns plain `.sql` files into type-safe functions for SQLite. Write your queries in SQL, point Marmot at your database, and it generates the Gleam functions, row types, and decoders you need. No ORM, no query builder, no manual decoder boilerplate. HEAVILY inspired by Squirrel (which does the same for Postgres).
+>
+> We were using Parrot, which served us well and is a solid choice, but it wraps `sqlc` (an external Go binary) and generates one monolithic `sql.gleam` file that hit ~25k lines in our codebase. Marmot is pure Gleam, generates per-entity modules, has first-class named parameters, and lets queries share row types via a simple `-- returns: EntityRow` annotation. Dropped ~500 lines of adapter boilerplate in the migration.
+
+Concrete trade-offs surfaced by this report:
+
+- **Module granularity** — parrot's single-file output (`sql.gleam`) reaches ~25k lines on a real codebase; marmot emits per-entity modules.
+- **Build dependency** — parrot wraps `sqlc` (Go binary, auto-downloaded); marmot is pure Gleam, no external toolchain.
+- **Shared row types** — marmot's `-- returns: EntityRow` annotation lets multiple queries reuse a typed row, removing the per-query decoder duplication that motivated the ~500-line adapter cut.
 
 > [!NOTE]
 > Marmot is also reviewed in [parsers-and-generators/generate.md → marmot](./parsers-and-generators/generate.md#marmot) under the broader codegen rubric. The score here uses this article's database-context rubric.

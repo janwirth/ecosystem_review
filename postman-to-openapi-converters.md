@@ -1,5 +1,8 @@
 # Postman → OpenAPI converters
 
+> [!NOTE]
+> **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
+
 You have a Postman collection.
 You want an OpenAPI spec.
 None of the tools that promise to do this are actively maintained — but some still produce useful output. This document tests them on a real-world collection and ranks the results.
@@ -45,7 +48,7 @@ None of the tools that promise to do this are actively maintained — but some s
 
 ```sh
 mkdir -p /tmp/p2o-test && cd /tmp/p2o-test
-cp "<repo>/openapi/Notion API.postman_collection.json" notion.json
+cp "<repo>/Notion API.postman_collection.json" notion.json
 npm install postman-to-openapi postman-to-swagger @redocly/cli
 cargo install postman2openapi-cli
 python3 -m pip install --user openman 'flask<2.3'  # openman has a Flask incompatibility on 2.3+
@@ -136,7 +139,7 @@ p2o ./collection.json -f ./openapi.yaml
 
 [repo](https://github.com/kevinswiber/postman2openapi) · [browser version](https://kevinswiber.github.io/postman2openapi/) · Apache-2.0 · 419★ · last commit 2024-07-03
 
-The only tool that runs the request/response examples through schema inference and emits `properties` inline (not just `example:`). Also emits `operationId`, `summary`, and `description` per operation. Makes the output substantially more useful as a contract for codegen tools (e.g. [oaspec](../gleam/parsers-and-generators/generate.md#oaspec) or openapi-generator).
+The only tool that runs the request/response examples through schema inference and emits `properties` inline (not just `example:`). Also emits `operationId`, `summary`, and `description` per operation. Makes the output substantially more useful as a contract for codegen tools (e.g. [oaspec](gleam/parsers-and-generators/generate.md#oaspec) or openapi-generator).
 
 **Trade-off:** 71 lint errors. The largest cluster is `nullable-type-sibling` — `nullable: true` is emitted without an accompanying `type:`, which OpenAPI 3.0 explicitly forbids and which most validators reject. Generated code from strict generators will refuse this output until you fix it (sed-able). Also: array-item examples occasionally violate the inferred type (`type: integer` with a string example).
 

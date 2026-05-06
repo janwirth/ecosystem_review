@@ -1,5 +1,8 @@
 # Parsers in Gleam
 
+> [!NOTE]
+> **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
+
 Runtime translation from text (or token stream) into a typed Gleam value. Three sub-shapes: parser combinators, format-specific parsers, and parsers for **other languages** consumed inside Gleam (`glance` for Gleam source, `oas` for OpenAPI specs).
 
 For build-time codegen that consumes these parser outputs, see [generate.md](generate.md). For wire-format decoders where the grammar is fixed and trivial (JSON, CBOR), see [decode.md](decode.md).

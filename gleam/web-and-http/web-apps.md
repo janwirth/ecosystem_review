@@ -1,5 +1,8 @@
 # Tools for building web applications with Gleam
 
+> [!NOTE]
+> **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
+
 So you want to ~~become a pokemon trainer~~ build a web app in gleam?
 Don't know where to start?
 Start here.

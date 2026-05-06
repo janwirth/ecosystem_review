@@ -1,5 +1,8 @@
 # UI Development in Gleam
 
+> [!NOTE]
+> **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
+
 You picked Gleam and [Lustre](./web-apps.md#lustre) (or [redraw](./web-apps.md#redraw)).
 Now you actually have to *build a UI*. What component libraries, layout primitives,
 icon sets, drag-and-drop kits, animations, and form helpers does the ecosystem

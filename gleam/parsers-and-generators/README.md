@@ -60,4 +60,4 @@ Each sub-article runs **its own discovery** (search queries + snapshot date + re
 - **[../syntax-highlighting.md](../syntax-highlighting.md)** — per-language lexers (contour, just, pearl, tear, smalto) and tree-sitter NIFs (glimra). Overlaps with parsing role-difference: tokenisation for colourisation vs AST for analysis.
 - **[../web-and-http/web-apps.md](../web-and-http/web-apps.md)** — mist, wisp, server frameworks; relevant context for the [Gleam → OpenAPI](serialize.md#gleam--openapi-code-first-spec-generation) gap.
 - **[../web-and-http/http-clients.md](../web-and-http/http-clients.md)** — HTTP transports the OpenAPI-generated SDKs plug into.
-- **[../../openapi/postman-to-openapi-converters.md](../../openapi/postman-to-openapi-converters.md)** — converting Postman collections into OpenAPI specs that feed [generate.md](generate.md) tools.
+- **[../../postman-to-openapi-converters.md](../../postman-to-openapi-converters.md)** — converting Postman collections into OpenAPI specs that feed [generate.md](generate.md) tools.

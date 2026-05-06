@@ -1,5 +1,8 @@
 # Browser automation & testing tools in Gleam
 
+> [!NOTE]
+> **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
+
 So you want to drive a real browser from Gleam? Take screenshots, scrape a page, write an end-to-end test, generate a PDF?
 
 The ecosystem is smaller than "web apps" — but there is real tooling here, and one gem worth knowing about.

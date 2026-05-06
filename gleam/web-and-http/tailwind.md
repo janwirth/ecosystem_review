@@ -1,5 +1,8 @@
 # Adding Tailwind to a Gleam App
 
+> [!NOTE]
+> **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
+
 You picked Gleam and Lustre (or Wisp). Now you want utility classes. What does
 the ecosystem actually offer for [Tailwind CSS](https://tailwindcss.com/) — and
 what's just "download the standalone CLI yourself"?

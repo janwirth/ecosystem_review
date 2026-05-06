@@ -1,5 +1,8 @@
 # Recent security incidents in major technologies
 
+> [!NOTE]
+> **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
+
 **Snapshot 2026-04-23** — data from public advisories, CVE records, and vendor post-mortems.
 
 This is not a comprehensive audit. It is a sampled look at what has actually gone wrong in popular ecosystems over the last ~28 months (2024-01-01 through today), aimed at one question tech-pickers keep asking:

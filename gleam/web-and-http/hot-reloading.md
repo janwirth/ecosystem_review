@@ -1,5 +1,8 @@
 # Hot reloading tools for Gleam
 
+> [!NOTE]
+> **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
+
 Saved a file, want the running app to pick it up without a full restart or a manual refresh?
 This article maps what's available across both targets.
 

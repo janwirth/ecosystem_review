@@ -1,5 +1,8 @@
 # Decoders in Gleam
 
+> [!NOTE]
+> **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
+
 Runtime translation from a wire format (JSON / CBOR / BSON / MsgPack / Protobuf / etc.) into a typed Gleam value. The grammar is fixed and trivial — the work is mapping fields to records and validating shapes.
 
 For text-grammar parsing (where you write the grammar yourself), see [parse.md](parse.md). For build-time codegen that emits decoders for you, see [generate.md](generate.md). For the inverse direction (typed value → wire bytes), see [serialize.md](serialize.md).

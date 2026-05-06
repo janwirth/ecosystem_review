@@ -1,5 +1,8 @@
 # Browser-based SSH terminals (for iframe / Notion embed)
 
+> [!NOTE]
+> **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
+
 You want a live SSH shell inside a web page — an iframe you can drop into Notion, a docs page, or an internal dashboard. The browser can't speak SSH directly (no raw TCP), so every option here pairs an [xterm.js](https://xtermjs.org/) frontend with a server-side WebSocket → SSH proxy. This document ranks the open-source tools in that category by maintenance, fitness for iframe embedding, and deployment weight.
 
 No live benchmarking was run — evaluation is based on repo metadata, documentation, and architecture review. Stats snapshot: **2026-04-18**.
