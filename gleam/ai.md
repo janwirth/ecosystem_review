@@ -37,13 +37,13 @@ Snapshot: **2026-05-06**.
 | Category | ☎️ BEAM | 📜 JS |
 | --- | --- | --- |
 | **[Multi-provider](#multi-provider-abstractions)** | · [🥇](#leaderboard) [starlet](#starlet) ([repo](https://github.com/jtdowney/starlet), 1★) — *unified API for OpenAI / Anthropic / Gemini / Ollama; tool calls, structured output, reasoning*<br>· [🥇](#leaderboard) [glean](#glean) ([repo](https://github.com/uncle-samm/glean), 2★) — *10 providers / 78+ models, real SSE streaming, simulation-testable agents*<br>· [gai](#gai) ([repo](https://github.com/chtushar/gai), 0★) — *placeholder; OpenAI provider scaffold only* | — |
-| **[Anthropic / Claude](#anthropic--claude)** | · [claude_gleam](#claude_gleam) ([repo](https://github.com/pothos-dev/claude-sdk-gleam), 0★) — *agent loop, concurrent tool exec on BEAM, OTP actor streaming*<br>· [anthropic_gleam](#anthropic_gleam) ([repo](https://github.com/justin4957/anthropic-gleam), 0★) — *sans-IO, streaming, tool use, exp-backoff retries*<br>· [starflow](#starflow) ([repo](https://github.com/ethanthoma/starflow), 7★) — *stateful conversation chains; 16 months idle* | — |
-| **[OpenAI & compatible](#openai--openai-compatible)** | · [🥇](#leaderboard) [glopenai](#glopenai) ([repo](https://github.com/nilp0inter/glopenai), 0★) — *sans-IO; chat, embeddings, moderation, images, audio, fine-tuning, batch, vector stores*<br>· [gllm](#gllm) ([repo](https://github.com/Forwall100/gllm), 1★) — *basic chat completion against any OpenAI-compatible endpoint (incl. OpenRouter)*<br>· [gopenai](#gopenai) ([hex](https://hex.pm/packages/gopenai)) — *no source repo link; 19 months stale* | — |
-| **[Mistral](#mistral)** | · [gleamstral](#gleamstral) ([repo](https://github.com/Neofox/gleamstral), 6★) — *chat, vision (Pixtral), embeddings, agents, tools, structured output* | — |
+| **[Anthropic / Claude](#anthropic--claude)** | · [claude_gleam](#claude_gleam) ([repo](https://github.com/pothos-dev/claude-sdk-gleam), 0★) — *agent loop, concurrent tool exec on BEAM, OTP actor streaming*<br>· [🥈](#leaderboard) [anthropic_gleam](#anthropic_gleam) ([repo](https://github.com/justin4957/anthropic-gleam), 0★) — *sans-IO, streaming, tool use, exp-backoff retries*<br>· [starflow](#starflow) ([repo](https://github.com/ethanthoma/starflow), 7★) — *stateful conversation chains; 16 months idle* | — |
+| **[OpenAI & compatible](#openai--openai-compatible)** | · [🥉](#leaderboard) [glopenai](#glopenai) ([repo](https://github.com/nilp0inter/glopenai), 0★) — *sans-IO; chat, embeddings, moderation, images, audio, fine-tuning, batch, vector stores*<br>· [🥈](#leaderboard) [gllm](#gllm) ([repo](https://github.com/Forwall100/gllm), 1★) — *basic chat completion against any OpenAI-compatible endpoint (incl. OpenRouter)*<br>· [gopenai](#gopenai) ([hex](https://hex.pm/packages/gopenai)) — *no source repo link; 19 months stale* | — |
+| **[Mistral](#mistral)** | · [🥈](#leaderboard) [gleamstral](#gleamstral) ([repo](https://github.com/Neofox/gleamstral), 6★) — *chat, vision (Pixtral), embeddings, agents, tools, structured output* | — |
 | **[Ollama (local)](#ollama-local)** | · [ollama_gleam](#ollama_gleam) ([repo](https://github.com/ddanielsantos/ollama_gleam), 2★) — *thin client; 20 months idle, README is template stub* | — |
 | **[Speech / transcription](#speech--transcription)** | — | · [assemblyai](#assemblyai) ([repo](https://github.com/iindyverse/assemblyai), 1★) — *AssemblyAI API client; capped stdlib `<= 0.67.1`* |
 | **[LLM input encoding](#llm-input-encoding)** | · [🥇](#leaderboard) [toon_codec](#toon_codec) ([repo](https://github.com/axelbellec/toon_codec), 9★) — *TOON encoder/decoder; 30–50% token savings vs JSON for LLM context* | · [toon_codec](#toon_codec) — *also pure Gleam, single-target Erlang code but no FFI* |
-| **[MCP servers / clients](#model-context-protocol-mcp)** | · [🥇](#leaderboard) [aide](#aide) ([repo](https://github.com/CrowdHailer/aide), 4★) — *MCP server framework, CPS-style, BYO web server*<br>· [mcp_toolkit](#mcp_toolkit) ([repo](https://github.com/mikan-laboratory/mcp_toolkit), 1★) — *MCP server with bundled stdio/HTTP/WS/SSE transports*<br>· [mcp_client](#mcp_client) ([repo](https://github.com/manelsen/mcp_client), 2★) — *MCP client over JSON-RPC/STDIO; OTP-supervised actors*<br>· [aide_generator](#aide_generator) ([repo](https://github.com/CrowdHailer/aide_generator), 2★) — *codegen for MCP tool encoders/decoders* | — |
+| **[MCP servers / clients](#model-context-protocol-mcp)** | · [🥇](#leaderboard) [aide](#aide) ([repo](https://github.com/CrowdHailer/aide), 4★) — *MCP server framework, CPS-style, BYO web server*<br>· [🥈](#leaderboard) [mcp_toolkit](#mcp_toolkit) ([repo](https://github.com/mikan-laboratory/mcp_toolkit), 1★) — *MCP server with bundled stdio/HTTP/WS/SSE transports*<br>· [🥈](#leaderboard) [mcp_client](#mcp_client) ([repo](https://github.com/manelsen/mcp_client), 2★) — *MCP client over JSON-RPC/STDIO; OTP-supervised actors*<br>· [aide_generator](#aide_generator) ([repo](https://github.com/CrowdHailer/aide_generator), 2★) — *codegen for MCP tool encoders/decoders* | — |
 
 > [!IMPORTANT]
 > **Three providers have no Gleam-native client at snapshot:** Google Gemini, Cohere, and Groq. Reach them via [starlet](#starlet) or [glean](#glean) (both abstract Gemini), via OpenAI-compat endpoints with [gllm](#gllm) / [glopenai](#glopenai), or by hand-rolling HTTP requests with `gleam_http` + `gleam_json`. There is no SDK for **DeepSeek**, **Qwen**, **Moonshot**, **MiniMax**, or **OpenRouter** as standalone libraries — but [glean](#glean) exposes all of them through its multi-provider façade.
@@ -213,7 +213,7 @@ Use [glean](#glean) or [starlet](#starlet) instead.
 
 Three independent Claude clients — the most-served single vendor in Gleam.
 
-| Criterion | [claude_gleam](https://github.com/pothos-dev/claude-sdk-gleam) | [anthropic_gleam](https://github.com/justin4957/anthropic-gleam) | [starflow](https://github.com/ethanthoma/starflow) |
+| Criterion | [claude_gleam](https://github.com/pothos-dev/claude-sdk-gleam) | [anthropic_gleam](https://github.com/justin4957/anthropic-gleam) [🥈](#leaderboard) | [starflow](https://github.com/ethanthoma/starflow) |
 | --- | --- | --- | --- |
 | Stars | 0★ · 🟥 | 0★ · 🟥 | 7★ · 🟥 |
 | License | MIT in `gleam.toml`, **no LICENSE file** · 🟥 (issue [#1](https://github.com/pothos-dev/claude-sdk-gleam/issues/1) is "License?") | MIT (declared, file present) · 🟩 | Apache-2.0 in `gleam.toml`, **no LICENSE file** · 🟩 (declared) |
@@ -282,7 +282,7 @@ pub fn main() {
 ```
 
 #### anthropic_gleam
-[repo](https://github.com/justin4957/anthropic-gleam) · [hexdocs](https://hexdocs.pm/anthropic_gleam/)
+[repo](https://github.com/justin4957/anthropic-gleam) · [🥈](#leaderboard) · [hexdocs](https://hexdocs.pm/anthropic_gleam/)
 
 The other Claude SDK. Hex description: *"A well-typed, idiomatic Gleam client for Anthropic's Claude API with streaming support and tool use."* Sans-IO architecture (you bring your own HTTP client), full Messages API with typed events, exponential-backoff retry, observability hooks for logging/telemetry, and request validation before send.
 
@@ -334,7 +334,7 @@ pub fn main() {
 
 Three OpenAI clients with very different completeness.
 
-| Criterion | [glopenai](https://github.com/nilp0inter/glopenai) [🥇](#leaderboard) | [gllm](https://github.com/Forwall100/gllm) | [gopenai](https://hex.pm/packages/gopenai) |
+| Criterion | [glopenai](https://github.com/nilp0inter/glopenai) [🥉](#leaderboard) | [gllm](https://github.com/Forwall100/gllm) [🥈](#leaderboard) | [gopenai](https://hex.pm/packages/gopenai) |
 | --- | --- | --- | --- |
 | Stars | 0★ · 🟥 | 1★ · 🟥 | ⬜ (no repo link) |
 | License | MIT · 🟩 | Apache-2.0 OR MIT (`gleam.toml`) · 🟩 | Apache-2.0 (Hex metadata) · 🟩 |
@@ -359,7 +359,7 @@ Three OpenAI clients with very different completeness.
 | OpenAI-compat endpoints | ✅ (custom base, e.g. Ollama, Azure) | ✅ (any compatible) | ⬜ |
 
 #### glopenai
-[repo](https://github.com/nilp0inter/glopenai) · [🥇](#leaderboard) · [hexdocs](https://hexdocs.pm/glopenai/)
+[repo](https://github.com/nilp0inter/glopenai) · [🥉](#leaderboard) · [hexdocs](https://hexdocs.pm/glopenai/)
 
 Hex description: *"Sans-IO OpenAI API client for Gleam, ported from async-openai."* Released **2026-04-15** — three weeks before snapshot — but already shipping the broadest OpenAI surface in Gleam: chat completions, the new Responses API, models, embeddings, moderation, image generation, audio TTS, files, legacy completions, fine-tuning, batch, vector stores, ChatKit, uploads, webhooks. The roadmap calls out what's not yet ported: assistants, video (Sora), containers, skills, evals, admin, realtime, audio transcription, image editing.
 
@@ -386,7 +386,7 @@ pub fn main() {
 ```
 
 #### gllm
-[repo](https://github.com/Forwall100/gllm) · [hexdocs](https://hexdocs.pm/gllm/)
+[repo](https://github.com/Forwall100/gllm) · [🥈](#leaderboard) · [hexdocs](https://hexdocs.pm/gllm/)
 
 "Gleam library for interacting with OpenAI-compatible APIs." The README is honest: *"This is **not** a complete library. Currently supports only basic chat completion requests, no streaming, no comprehensive error handling, no embeddings/images/etc., synchronous only."* What's there works against any OpenAI-compatible endpoint — OpenAI itself, OpenRouter, or any local server (Ollama in OpenAI-compat mode, llama.cpp, vLLM).
 
@@ -420,11 +420,11 @@ With no source repo, no recent activity, and an inconsistent doc page, treat as 
 ### Mistral
 
 #### gleamstral
-[repo](https://github.com/Neofox/gleamstral) · [hexdocs](https://hexdocs.pm/gleamstral/)
+[repo](https://github.com/Neofox/gleamstral) · [🥈](#leaderboard) · [hexdocs](https://hexdocs.pm/gleamstral/)
 
 The most feature-complete *single-vendor* SDK in the Gleam AI ecosystem.
 
-| Criterion | [gleamstral](https://github.com/Neofox/gleamstral) |
+| Criterion | [gleamstral](https://github.com/Neofox/gleamstral) [🥈](#leaderboard) |
 | --- | --- |
 | Stars | 6★ · 🟥 |
 | License | MIT (`gleam.toml`, no LICENSE file in repo) · 🟩 (declared) |
@@ -548,7 +548,7 @@ The polished outlier of the article: 9★, clean tracker, real test suite, singl
 
 [Model Context Protocol](https://modelcontextprotocol.io/) is Anthropic's spec for letting LLM clients (Claude Code, Cursor, Claude Desktop) call tools, read resources, and use prompts hosted by a remote process over JSON-RPC. Four Gleam packages cover the space — three for **building MCP servers** (so Claude/Cursor can call your Gleam code), one for **consuming MCP servers** (so a Gleam app can use Claude Desktop's tool ecosystem).
 
-| Criterion | [aide](https://github.com/CrowdHailer/aide) [🥇](#leaderboard) | [mcp_toolkit](https://github.com/mikan-laboratory/mcp_toolkit) | [mcp_client](https://github.com/manelsen/mcp_client) | [aide_generator](https://github.com/CrowdHailer/aide_generator) |
+| Criterion | [aide](https://github.com/CrowdHailer/aide) [🥇](#leaderboard) | [mcp_toolkit](https://github.com/mikan-laboratory/mcp_toolkit) [🥈](#leaderboard) | [mcp_client](https://github.com/manelsen/mcp_client) [🥈](#leaderboard) | [aide_generator](https://github.com/CrowdHailer/aide_generator) |
 | --- | --- | --- | --- | --- |
 | Role | Server framework | Server framework | **Client** | Codegen for `aide` |
 | Stars | 4★ · 🟥 | 1★ · 🟥 | 2★ · 🟥 | 2★ · 🟥 |
@@ -600,14 +600,14 @@ pub fn main() {
 ```
 
 #### mcp_toolkit
-[repo](https://github.com/mikan-laboratory/mcp_toolkit) · [hexdocs](https://hexdocs.pm/mcp_toolkit/)
+[repo](https://github.com/mikan-laboratory/mcp_toolkit) · [🥈](#leaderboard) · [hexdocs](https://hexdocs.pm/mcp_toolkit/)
 
 A **fork** of [`mikkihugo/mcp_toolkit_gleam`](https://github.com/mikkihugo/mcp_toolkit_gleam) updated to track newer Gleam releases. BEAM-only, but ships **bundled transports** that `aide` doesn't: stdio (for Claude Desktop's native MCP integration), WebSocket, SSE, plus HTTP JSON-RPC over `mist`. The fork adds 95 commits since divergence — active maintenance rather than a stale mirror.
 
 License is the one wrinkle: GitHub reports `NOASSERTION` (no machine-readable LICENSE file matching SPDX), while `gleam.toml` declares `Apache-2.0`. Treat as Apache-2.0 with a note to upstream.
 
 #### mcp_client
-[repo](https://github.com/manelsen/mcp_client) · [hexdocs](https://hexdocs.pm/mcp_client/)
+[repo](https://github.com/manelsen/mcp_client) · [🥈](#leaderboard) · [hexdocs](https://hexdocs.pm/mcp_client/)
 
 The **only MCP client** in Gleam at snapshot. Lets your Gleam app act as the LLM-facing side: connect to GitHub's MCP server, the filesystem MCP server, Brave Search MCP, etc., over JSON-RPC 2.0/STDIO. Three-layer architecture (transport / manager / facade), exponential-backoff reconnect, **1 MB line buffering** for large JSON-RPC responses, MCP `2024-11-05` protocol compliance.
 
