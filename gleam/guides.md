@@ -633,7 +633,7 @@ Scored against the [7-dim rubric](#scoring-dimensions). Max score = 14.
 - **[web-and-http/web-apps.md](web-and-http/web-apps.md)** — Lustre, Wisp, Mist, full-stack Gleam web stack. The [Lustre guide](#lustre--framework-shipped-guide) and [Wisp guide](#wisp--framework-shipped-guide-examples-only) entries here score the *guides*; the libraries themselves are reviewed there.
 - **[databases.md](databases.md)** — pog, sqlight, cake, squirrel, etc. Database tooling has no dedicated guide of its own; readers learn from Hex docs + each library's README.
 - **[authentication.md](authentication.md)** — auth libraries. No tutorial-shaped meta-doc; same per-library README pattern.
-- **[parsers-and-generators/README.md](parsers-and-generators/README.md)** — parser combinators, codecs, codegen. Each tool's docs serve as its own guide.
+- **[parse-and-generate-gleam.md](parse-and-generate-gleam.md)** · **[parse-and-generate-other-languages.md](parse-and-generate-other-languages.md)** · **[serialize-and-deserialize.md](serialize-and-deserialize.md)** — parser combinators, codecs, codegen, ser/deser. Each tool's docs serve as its own guide.
 - **[mobile-apps.md](mobile-apps.md)** — building mobile apps with Gleam. No first-party "Gleam mobile" guide exists; that article is the closest reference.
 - **[../README.md](../README.md)** — top-level ecosystem reviews index.
 

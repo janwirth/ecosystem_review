@@ -411,7 +411,7 @@ pub fn get_user_by_username_decoder() -> decode.Decoder(GetUserByUsername) {
 ```
 
 > [!NOTE]
-> Parrot is also reviewed in [parsers-and-generators/generate.md → parrot](./parsers-and-generators/generate.md#parrot) under the broader codegen rubric. The score here is computed against this article's database-context rubric and matches the cross-article entry.
+> Parrot is also reviewed in [parse-and-generate-other-languages.md → parrot](./parse-and-generate-other-languages.md#parrot) under the broader codegen rubric. The score here is computed against this article's database-context rubric and matches the cross-article entry.
 
 #### sqlode 🐘🪶🐬
 [repo](https://github.com/nao1215/sqlode) · [leaderboard ↓](#leaderboard)
@@ -498,7 +498,7 @@ Concrete trade-offs surfaced by this report:
 - **Shared row types** — marmot's `-- returns: EntityRow` annotation lets multiple queries reuse a typed row, removing the per-query decoder duplication that motivated the ~500-line adapter cut.
 
 > [!NOTE]
-> Marmot is also reviewed in [parsers-and-generators/generate.md → marmot](./parsers-and-generators/generate.md#marmot) under the broader codegen rubric. The score here uses this article's database-context rubric.
+> Marmot is also reviewed in [parse-and-generate-other-languages.md → marmot](./parse-and-generate-other-languages.md#marmot) under the broader codegen rubric. The score here uses this article's database-context rubric.
 
 ### Migration Tools
 

@@ -30,7 +30,9 @@ Coverage starts where the author's own projects demand answers, then widens outw
 
 **Other**
 
-- [Parsers & generators](gleam/parsers-and-generators/README.md) — folder split into [parse](gleam/parsers-and-generators/parse.md), [decode](gleam/parsers-and-generators/decode.md), [generate](gleam/parsers-and-generators/generate.md), [serialize](gleam/parsers-and-generators/serialize.md). Covers combinators, format parsers, JSON / CBOR / Protobuf decoders, Gleam DSL codegen (gleamgen, trick), SQL→Gleam, OpenAPI→Gleam, and the Gleam→OpenAPI gap.
+- [Parse & generate Gleam](gleam/parse-and-generate-gleam.md) — Gleam source parsers (glance, glance_printer) and Gleam-emitting Gleam DSLs (gleamgen, trick, glue, derived).
+- [Parse & generate other languages](gleam/parse-and-generate-other-languages.md) — parser combinators, format parsers (TOML/Markdown/CSV/XML), HTML, OpenAPI parser, SQL→Gleam codegen, OpenAPI→Gleam codegen, GraphQL, static-asset embeds.
+- [Serialize & deserialize](gleam/serialize-and-deserialize.md) — encoder/decoder convention, hand-written ser/deser, per-format packages (JSON / CBOR / MsgPack / BSON / Protobuf), bidirectional schemas, codegen for ser/deser (json_typedef, gserde), and the Gleam→OpenAPI gap.
 - [Subprocesses](gleam/subprocesses.md) — shelling out, streaming stdio, process control.
 - [Syntax highlighting](gleam/syntax-highlighting.md) — per-language lexers, multi-language grammars, tree-sitter NIFs. 6 repos reviewed.
 - [Databases](gleam/databases.md) — PostgreSQL / SQLite / MySQL drivers, query builders, codegen, migrations, framework-bundled DB. 9 repos reviewed (+ 4 disregarded).
