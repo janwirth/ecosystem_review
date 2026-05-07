@@ -5,8 +5,11 @@
 
 Build-time tools that take an input artifact (Gleam source, SQL, OpenAPI, JSON Schema, etc.) and **emit Gleam source code**. Two shapes:
 
-1. **Gleam → Gleam** — a Gleam DSL describes the code you want and the tool prints it. ([gleamgen](#gleamgen), [glue](#glue), [derived](#derived), [gserde](#gserde), [json_typedef](#json_typedef), [trick](#trick).)
-2. **X → Gleam** — an external schema or query (SQL, OpenAPI, JSON Schema, GraphQL, MCP) drives the codegen. ([squirrel](../databases.md#squirrel-), [parrot](#parrot), [marmot](#marmot), [sqlode](../databases.md#sqlode-), [oaspec](#oaspec), [gilly](#gilly), [oas_generator](#oas_generator), [aide_generator](#aide_generator), [embeds](#embeds), [squall](#squall).)
+1. **Gleam → Gleam** — a Gleam DSL describes the code you want and the tool prints it. ([gleamgen](#gleamgen), [glue](#glue), [derived](#derived), [trick](#trick).)
+2. **X → Gleam** — an external schema or query (SQL, OpenAPI, GraphQL) drives the codegen. ([squirrel](../databases.md#squirrel-), [parrot](#parrot), [marmot](#marmot), [sqlode](../databases.md#sqlode-), [oaspec](#oaspec), [gilly](#gilly), [oas_generator](#oas_generator), [embeds](#embeds), [squall](#squall).)
+
+> [!NOTE]
+> **Codegen tools whose primary output is encoders/decoders** — `gserde`, `json_typedef`, `glerd_json`, `aide_generator` — live in [serialize.md → Codegen for ser/deser](serialize.md#codegen-for-serdeser). They share infrastructure with the tools below (often using `gleamgen` or `glance` under the hood) but are decision-shaped around the ser/deser problem.
 
 For runtime parsing of grammars, see [parse.md](parse.md). For the missing **Gleam → spec** direction (code-first OpenAPI), see [serialize.md](serialize.md#gleam--openapi-code-first-spec-generation).
 
@@ -17,10 +20,9 @@ For runtime parsing of grammars, see [parse.md](parse.md). For the missing **Gle
 3. [Gleam → Gleam generators](#gleam--gleam-generators)
 4. [SQL → Gleam](#sql--gleam)
 5. [OpenAPI → Gleam](#openapi--gleam)
-6. [JSON Schema → Gleam](#json-schema--gleam)
-7. [Other → Gleam](#other--gleam)
-8. [Cross-language framing](#cross-language-framing)
-9. [Leaderboards](#leaderboards)
+6. [Other → Gleam](#other--gleam)
+7. [Cross-language framing](#cross-language-framing)
+8. [Leaderboards](#leaderboards)
 
 ## Summary
 
@@ -28,11 +30,11 @@ For runtime parsing of grammars, see [parse.md](parse.md). For the missing **Gle
 
 | Slice | Tools |
 | --- | --- |
-| [Gleam → Gleam](#gleam--gleam-generators) | [gleamgen](#gleamgen), [glue](#glue), [derived](#derived), [gserde](#gserde), [json_typedef](#json_typedef), **[trick](#trick)** |
+| [Gleam → Gleam](#gleam--gleam-generators) | [gleamgen](#gleamgen), [glue](#glue), [derived](#derived), **[trick](#trick)** |
 | [SQL → Gleam](#sql--gleam) | [squirrel](../databases.md#squirrel-) 🐘, [parrot](#parrot) 🐘🪶🐬, [marmot](#marmot) 🪶, [sqlode](../databases.md#sqlode-) 🐘🪶🐬 |
 | [OpenAPI → Gleam](#openapi--gleam) | [oaspec](#oaspec), [gilly](#gilly), [oas_generator](#oas_generator) |
-| [JSON Schema → Gleam](#json-schema--gleam) | [json_typedef](#json_typedef) (RFC 8927) |
-| [Other → Gleam](#other--gleam) | [squall](#squall) (GraphQL), [aide_generator](#aide_generator) (MCP), [embeds](#embeds) (static assets) |
+| [Other → Gleam](#other--gleam) | [squall](#squall) (GraphQL), [embeds](#embeds) (static assets) |
+| Codegen for ser/deser | → [serialize.md](serialize.md#codegen-for-serdeser) ([json_typedef](serialize.md#json_typedef), [gserde](serialize.md#gserde), [glerd_json](serialize.md#glerd_json), [aide_generator](serialize.md#aide_generator)) |
 
 > [!IMPORTANT]
 > The reverse direction — **Gleam → spec** (e.g. mist/wisp routes → OpenAPI document) is **not covered by any package** as of snapshot. See [serialize.md](serialize.md#gleam--openapi-code-first-spec-generation) for the structural reason and workarounds.
@@ -69,11 +71,9 @@ Libraries that **emit Gleam code** from Gleam — typically called by build scri
 | [gleamgen](#gleamgen) | Gleam DSL (phantom-typed) | Formatted .gleam files | 27★ · 🟨 | — | Type-safe Gleam-emitting Gleam |
 | [trick](#trick) | Gleam DSL (elm-codegen-style) | Formatted .gleam files | 12★ · 🟨 | — | Inspired by elm-codegen; not on Hex yet |
 | [glue](#glue) | Gleam source (via [glance](parse.md#glance)) | Gleam functions in same module | 9★ · 🟥 | 2024-12-08 | `compare`, `list_variants` derivers |
-| [derived](#derived) | Gleam source w/ `!derived()` markers | Gleam functions inserted in-place | 2★ · 🟥 | 2025-08-03 | "Code generator's code generator" |
-| [gserde](#gserde) | Gleam types | JSON encode/decode functions | 32★ · 🟨 | 2025-12-13 | Alpha quality (per README) |
-| [json_typedef](#json_typedef) | RFC 8927 JSON Type Definition | Gleam encoders/decoders | 51★ · 🟥 | 2025-04-27 | Schema-first JSON codegen |
+| [derived](#derived) | Gleam source w/ `!derived()` markers | Gleam functions inserted in-place | 2★ · 🟥 | 2025-08-03 | "Code generator's code generator"; framework for custom derivers |
 
-Pick: **gleamgen** for the most-mature DSL with phantom-type guarantees. **trick** if you want elm-codegen ergonomics and don't mind a git dependency. **glue** if you only need the canned `compare`/`list_variants` derivers. **derived** if you want a marker-based round-tripper. **gserde** for opinionated JSON encode/decode emission. **json_typedef** when you have an RFC 8927 schema as the source-of-truth.
+Pick: **gleamgen** for the most-mature DSL with phantom-type guarantees. **trick** if you want elm-codegen ergonomics and don't mind a git dependency. **glue** if you only need the canned `compare`/`list_variants` derivers. **derived** if you want a marker-based round-tripper. For **JSON encode/decode codegen** (the most common downstream use of these primitives), see [serialize.md → Codegen for ser/deser](serialize.md#codegen-for-serdeser).
 
 ### gleamgen
 [repo](https://github.com/Brewingweasel/gleamgen)
@@ -129,17 +129,7 @@ pub fn main() {
 ### derived
 [repo](https://github.com/dusty-phillips/derived)
 
-"The gleam code generator's code generator." Marker-based: write `!derived(...)` directives in your Gleam source, run `derived`, and the tool inserts generated code at protected markers (round-trip safe). For building custom serialisation, validation, or documentation derivers. Last commit 2025-08-03.
-
-### gserde
-[repo](https://github.com/cdaringe/gserde)
-
-"gleam codegen for serialization and deserialization." Generates JSON encode/decode functions for custom types. README declares **alpha** quality. Last commit 2025-12-13. Useful for prototyping; for production, prefer hand-written `gleam_json` decoders or the schema-first [json_typedef](#json_typedef).
-
-### json_typedef
-[repo](https://github.com/lpil/json-typedef)
-
-"Work with JSON using a schema! RFC8927." JSON Type Definition (RFC 8927) — a JSON schema standard simpler than JSON Schema itself. Decodes a TypeDef document into Gleam, then generates encoders/decoders. By Louis Pilfold. 51★, last commit 2025-04-27, v1.1.3.
+"The gleam code generator's code generator." Marker-based: write `!derived(...)` directives in your Gleam source, run `derived`, and the tool inserts generated code at protected markers (round-trip safe). The framework for building custom derivers — `derived` itself is not a JSON encoder generator, but a tool you compose with [trick](#trick) or [gleamgen](#gleamgen) to build one. Common use cases: serialisation derivers (cross-link → [serialize.md](serialize.md#codegen-for-serdeser)), validation derivers, documentation derivers. Last commit 2025-08-03.
 
 ## SQL → Gleam
 
@@ -304,12 +294,6 @@ The `send_fn` is yours — gilly stays out of HTTP transport. Plug in `gleam/htt
 
 "Generate HTTP clients from Open API specs." Older entrant in the OpenAPI corner, built on top of the [oas](parse.md#oas) parser library. Supports both backend (`gleam/httpc`) and frontend (`gleam/fetch`) — making it the dual-target choice when oaspec/gilly's BEAM-only output won't fit. 25★, last commit 2026-04-16. Same author as `oas`.
 
-## JSON Schema → Gleam
-
-Cross-reference: [json_typedef](#json_typedef) is the schema-first JSON codegen entry, listed under [Gleam → Gleam generators](#gleam--gleam-generators) above (because it both parses the schema and emits the Gleam — making it both an "other-language parser" and a "Gleam generator" in one package).
-
-For runtime JSON-Schema *validation* (without codegen), see [decode.md](decode.md#json-schema-json-patch-json-rpc) — [castor](decode.md#castor), [jscheam](decode.md#jscheam), [sextant](decode.md#sextant).
-
 ## Other → Gleam
 
 ### squall
@@ -317,15 +301,20 @@ For runtime JSON-Schema *validation* (without codegen), see [decode.md](decode.m
 
 "Type-safe GraphQL client generator." Generates Gleam client code from GraphQL schemas + queries. Out of scope for in-depth review at this snapshot; warrants a dedicated GraphQL article when the corner grows.
 
-### aide_generator
-[repo](https://github.com/crowdhailer/aide_generator)
-
-"Generate encoders and decoders for MCP tools." Same author as `oas`/`oas_generator`. Useful for building MCP servers in Gleam where tool schemas are the source-of-truth.
-
 ### embeds
 [repo](https://github.com/arkandos/gleam-embeds)
 
 "Generate Gleam modules based on static assets." Bake files (HTML, CSS, images, anything) into compiled Gleam modules at build time. Adjacent to codegen — emits Gleam constants holding asset bytes rather than functional code.
+
+### MCP encoders/decoders
+
+[aide_generator](serialize.md#aide_generator) emits encoders + decoders for MCP tool schemas. Covered under [serialize.md → Codegen for ser/deser](serialize.md#codegen-for-serdeser) because its primary output is ser/deser code.
+
+### JSON Schema / RFC 8927
+
+[json_typedef](serialize.md#json_typedef) consumes RFC 8927 JSON Type Definition documents and emits Gleam types + encoders + decoders. Same reasoning as above — its primary output is ser/deser code, so it lives in [serialize.md](serialize.md#codegen-for-serdeser).
+
+For runtime JSON-Schema *validation* (without codegen), see [decode.md → JSON Schema](decode.md#json-schema-json-patch-json-rpc) — [castor](decode.md#castor), [jscheam](decode.md#jscheam), [sextant](decode.md#sextant).
 
 ### gRPC / Protobuf codegen
 
@@ -357,14 +346,15 @@ The same constraint is what makes the **Gleam → spec** direction (e.g. handler
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | 🥇 | [Brewingweasel/gleamgen](https://github.com/Brewingweasel/gleamgen) | Gleam (DSL) | 🟨 | 🟨 | 🟩 | 🟩 | 🟩 | 🟩🟩 | 🟩 | **6** |
 | 2 | 🥈 | [GearsDatapacks/trick](https://github.com/GearsDatapacks/trick) | Gleam (elm-codegen-style) | 🟨 | 🟥 | 🟩 | 🟩 | 🟨 | 🟩🟩 | 🟩 | **5** |
-| 3 | 🥉 | [lpil/json-typedef](https://github.com/lpil/json-typedef) | Gleam (RFC 8927) | 🟥 | 🟨 | 🟩 | 🟩 | 🟩🟩 | 🟩 | 🟩 | **5** |
-| 4 | — | [cdaringe/gserde](https://github.com/cdaringe/gserde) | JSON encoders/decoders | 🟨 | 🟨 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 | **6** |
-| 5 | — | [dusty-phillips/derived](https://github.com/dusty-phillips/derived) | Custom (markers) | 🟥 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 | **5** |
-| 6 | — | [lpil/glue](https://github.com/lpil/glue) | Gleam (`compare`, etc.) | 🟥 | 🟨 | 🟩 | 🟨 | 🟩 | 🟩 | 🟩 | **3** |
+| 3 | 🥉 | [dusty-phillips/derived](https://github.com/dusty-phillips/derived) | Custom (markers) | 🟥 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 | **5** |
+| 4 | — | [lpil/glue](https://github.com/lpil/glue) | Gleam (`compare`, etc.) | 🟥 | 🟨 | 🟩 | 🟨 | 🟩 | 🟩 | 🟩 | **3** |
+
+> [!NOTE]
+> Codegen tools whose **primary output is encoders/decoders** ([json_typedef](serialize.md#json_typedef), [gserde](serialize.md#gserde), [glerd_json](serialize.md#glerd_json)) have their own leaderboard at [serialize.md → Codegen for ser/deser](serialize.md#codegen-for-serdeser).
 
 ### X → Gleam generators (combined)
 
-Includes SQL, OpenAPI, JSON Schema, GraphQL, MCP. Cross-reference: [../databases.md leaderboard](../databases.md#leaderboard) covers SQL codegen alongside drivers and migrations.
+Includes SQL, OpenAPI, GraphQL. Cross-reference: [../databases.md leaderboard](../databases.md#leaderboard) covers SQL codegen alongside drivers and migrations. Codegen tools whose output is encoders/decoders (json_typedef RFC 8927, aide_generator MCP) have their own leaderboard in [serialize.md](serialize.md#codegen-for-serdeser).
 
 | Position | Award | Repo | Input | ★ | Lic | Compat | Maint | Age | README | Idiom | Score |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -384,6 +374,7 @@ Includes SQL, OpenAPI, JSON Schema, GraphQL, MCP. Cross-reference: [../databases
 - **[gilly](https://github.com/cyclimse/gilly)** — tight scope, builder-pattern API, snapshot-tested, real-world Scaleway example.
 - **[gleamgen](https://github.com/Brewingweasel/gleamgen)** — phantom-typed builder API, foundational dependency for downstream codegen tools.
 - **[trick](https://github.com/GearsDatapacks/trick)** — elm-codegen-shaped builder; pre-Hex but the developer-experience peer of gleamgen.
+- **[json_typedef](serialize.md#json_typedef)**, **[gserde](serialize.md#gserde)**, **[aide_generator](serialize.md#aide_generator)** — covered in [serialize.md](serialize.md#codegen-for-serdeser) as ser/deser-specific codegen.
 
 [How scores are calculated →](README.md#scoring-rubric-shared)
 
@@ -391,5 +382,5 @@ Includes SQL, OpenAPI, JSON Schema, GraphQL, MCP. Cross-reference: [../databases
 
 - [parse.md](parse.md) — runtime parsing (the input side of codegen pipelines like `oas → oas_generator`).
 - [decode.md](decode.md) — runtime JSON Schema validation tooling that overlaps the same conceptual space.
-- [serialize.md](serialize.md) — the inverse direction (Gleam → spec / wire format) and the structural reasons it is hard.
+- [serialize.md](serialize.md) — runtime ser/deser, codegen for encoders/decoders (json_typedef, gserde, glerd_json, aide_generator), bidirectional schemas, and the Gleam→spec gap.
 - [../databases.md](../databases.md#sql-code-generators) — squirrel vs sqlode comparison in depth.

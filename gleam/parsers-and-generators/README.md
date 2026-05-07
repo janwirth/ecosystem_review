@@ -13,21 +13,22 @@ The article is split by **what the tool does**, not what input it consumes:
 | --- | --- | --- |
 | [parse.md](parse.md) | Text → AST / typed value at **runtime**, via combinators or grammars (parser combinators, format parsers, HTML, source-language parsers like `glance`). | 2026-04-26 |
 | [decode.md](decode.md) | Wire bytes → typed value at **runtime** (JSON / CBOR / MsgPack / etc. decoders — the format is already well-defined; the work is mapping fields to records). | 2026-04-26 |
-| [generate.md](generate.md) | Input artifact → emit Gleam (or other) **source code at build time** (gleamgen-style DSLs, X→Gleam codegen for SQL / OpenAPI / JSON Schema). | 2026-04-26 |
-| [serialize.md](serialize.md) | Typed value → wire bytes / spec document at **runtime** (encoders + the Gleam→OpenAPI gap). | 2026-04-26 |
+| [generate.md](generate.md) | Input artifact → emit Gleam (or other) **source code at build time** — Gleam-emitting DSLs (gleamgen, trick), X→Gleam codegen for SQL / OpenAPI / GraphQL / static assets. | 2026-04-26 |
+| [serialize.md](serialize.md) | Serialization & deserialization in Gleam — hand-written encoders+decoders, per-format packages, **codegen for ser/deser** (gserde, json_typedef, glerd_json, aide_generator), runtime bidirectional schemas, and the Gleam→OpenAPI gap. | 2026-05-07 |
 
 The parse/decode and generate/serialize axes split along the **runtime vs. build-time** line and the **structure-extraction vs. structure-emission** line:
 
 |  | Runtime | Build-time |
 | --- | --- | --- |
-| **Input → typed value** | [parse](parse.md) (text grammar) · [decode](decode.md) (defined wire format) | — (compile-time decoders are not a thing in Gleam) |
-| **Typed value → output** | [serialize](serialize.md) (encoders) | [generate](generate.md) (codegen) |
+| **Input → typed value** | [parse](parse.md) (text grammar) · [decode](decode.md) (defined wire format) | [serialize → codegen](serialize.md#codegen-for-serdeser) (decoders generated from schema/types) |
+| **Typed value → output** | [serialize](serialize.md) (encoders, schemas) | [generate](generate.md) (Gleam DSLs, X→Gleam codegen) · [serialize → codegen](serialize.md#codegen-for-serdeser) (encoders generated from schema/types) |
 
 ## Cross-cutting themes
 
-- **Gleam (parse & gen)** — Gleam-native libraries cluster in [parse.md](parse.md) (combinators, format parsers) and [generate.md](generate.md) (gleamgen, glue, derived, gserde, trick).
+- **Gleam (parse & gen)** — Gleam-native libraries cluster in [parse.md](parse.md) (combinators, format parsers) and [generate.md](generate.md) (gleamgen, glue, derived, trick). Codegen tools whose **primary output is encoders/decoders** (gserde, json_typedef, glerd_json, aide_generator) live in [serialize.md](serialize.md#codegen-for-serdeser) instead.
+- **Ser/deser** — both directions covered together in [serialize.md](serialize.md): hand-written encoders + decoders, per-format packages, codegen tools, runtime bidirectional schemas, and the Gleam→spec gap. Deep per-package decoder coverage stays in [decode.md](decode.md); the encoder side is symmetric.
 - **OpenAPI** — threads through [parse.md](parse.md) (`oas` reads specs), [generate.md](generate.md) (`oaspec`, `gilly`, `oas_generator` emit Gleam from specs), and [serialize.md](serialize.md) (the Gleam→OpenAPI gap — no code-first spec generator exists).
-- **Other languages** — comparative framing in [decode.md](decode.md) (Rust serde, Go encoding/json, Elixir Jason as analogues for Gleam's runtime decoders) and [serialize.md](serialize.md) (serde-derive, protoc, asn1c, utoipa as analogues for Gleam's missing build-time serializers).
+- **Other languages** — comparative framing in [decode.md](decode.md) (Rust serde, Go encoding/json, Elixir Jason as analogues for Gleam's runtime decoders) and [serialize.md](serialize.md) (serde-derive, pydantic, utoipa, FastAPI as analogues for Gleam's hand-written ser/deser baseline and the missing type→spec emitter).
 
 ## Out of scope (across all four files)
 

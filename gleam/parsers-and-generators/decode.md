@@ -34,7 +34,7 @@ For text-grammar parsing (where you write the grammar yourself), see [parse.md](
 | [Wire protocols](#wire-protocol-codecs) | [postgresql_protocol](#postgresql_protocol), [h2_frame](#h2_frame) |
 
 > [!IMPORTANT]
-> Decoders for **the official `dynamic.decode` style** (chained `decode.field(...)` calls) are the idiomatic shape across Gleam JSON libraries. You will write decoders by hand unless you reach for [generate.md](generate.md) to derive them at build time (e.g. [json_typedef](generate.md#json_typedef), [gserde](generate.md#gserde)).
+> Decoders for **the official `dynamic.decode` style** (chained `decode.field(...)` calls) are the idiomatic shape across Gleam JSON libraries. You will write decoders by hand unless you reach for [serialize.md → codegen](serialize.md#codegen-for-serdeser) to derive them at build time (e.g. [json_typedef](serialize.md#json_typedef), [gserde](serialize.md#gserde)).
 
 ## Discovery
 
@@ -209,7 +209,7 @@ Define a schema once, get both encoder and decoder.
 Bidirectional schema library — single source-of-truth for both directions of conversion.
 
 > [!NOTE]
-> Bidirectional schemas overlap with the [generate.md](generate.md) story: `convert` and `kata` keep both directions in sync at **runtime**, while `json_typedef` and `gserde` keep them in sync via **build-time** code emission. Pick runtime-bidirectional when you want a single value to drive both directions; pick build-time codegen when you want zero-cost generated functions and don't mind a separate build step.
+> Bidirectional schemas overlap with the [serialize.md → codegen](serialize.md#codegen-for-serdeser) story: `convert` and `kata` keep both directions in sync at **runtime**, while `json_typedef` and `gserde` keep them in sync via **build-time** code emission. Pick runtime-bidirectional when you want a single value to drive both directions; pick build-time codegen when you want zero-cost generated functions and don't mind a separate build step.
 
 ## Wire-protocol codecs
 
@@ -231,7 +231,7 @@ How Gleam's runtime-decoder model compares to other languages, since the same jo
 
 | Language | Default style | Cost | Drift risk |
 | --- | --- | --- | --- |
-| **Gleam** | Hand-written `decode.Decoder` chained from primitives ([`gleam/dynamic/decode`](https://hexdocs.pm/gleam_stdlib/gleam/dynamic/decode.html)). Build-time codegen optional via [json_typedef](generate.md#json_typedef) / [gserde](generate.md#gserde). | Verbose by line count, but explicit. | Field renames caught at compile time. |
+| **Gleam** | Hand-written `decode.Decoder` chained from primitives ([`gleam/dynamic/decode`](https://hexdocs.pm/gleam_stdlib/gleam/dynamic/decode.html)). Build-time codegen optional via [json_typedef](serialize.md#json_typedef) / [gserde](serialize.md#gserde). | Verbose by line count, but explicit. | Field renames caught at compile time. |
 | **Rust** | `#[derive(Deserialize)]` via `serde`. Macro expands to a hand-written-equivalent decoder at compile time. | Zero runtime overhead, terse source. | Caught at compile time (macro expansion is type-checked). |
 | **Go** | Reflection on struct tags (`json:"name"`). | Runtime reflection cost. | Field-name typos in tags become silent skips (no compile error). |
 | **Elixir** | `Jason.decode!/1` returns a map/list tree, then pattern-match. Optional struct shapes via `Jason.Encoder`/`Jason.decode_into/2`. | Cheap; tree allocation. | Map keys are strings or atoms — easy to mismatch. |
@@ -240,7 +240,7 @@ How Gleam's runtime-decoder model compares to other languages, since the same jo
 
 Gleam sits closest to **Elm** (which it inherits the dynamic-decoder pattern from): explicit, verbose, type-checked. It is the "no-magic" end of the spectrum. The trade-off is more code per record vs guaranteed safety + zero codegen surface.
 
-When the verbosity gets in the way: reach into [generate.md](generate.md) (`json_typedef` for schema-first, `gserde` for type-first, [trick](generate.md#trick) for hand-rolled emit).
+When the verbosity gets in the way: reach into [serialize.md → codegen for ser/deser](serialize.md#codegen-for-serdeser) (`json_typedef` for schema-first, `gserde` for type-first, [trick](generate.md#trick) for hand-rolled emit).
 
 ## Leaderboards
 
