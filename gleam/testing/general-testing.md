@@ -223,6 +223,7 @@ Generate random values that satisfy a spec, check invariants, shrink counterexam
 Active: last commit 2026-04-10, v1.0.4 released Feb 2026. Dual-licensed Apache-2.0/MIT — useful if you need to redistribute under either. 5 open issues, all feature-request/discussion shape. The standard property-testing choice for Gleam at snapshot.
 
 ```gleam
+import gleam/list
 import gleeunit
 import qcheck
 
@@ -231,8 +232,11 @@ pub fn main() {
 }
 
 pub fn reverse_reverse_is_identity_test() {
-  use xs <- qcheck.given(qcheck.list_generic(qcheck.int_uniform(), 0, 100))
-  list.reverse(list.reverse(xs)) == xs
+  use xs <- qcheck.given(qcheck.generic_list(
+    elements_from: qcheck.uniform_int(),
+    length_from: qcheck.bounded_int(from: 0, to: 100),
+  ))
+  assert list.reverse(list.reverse(xs)) == xs
 }
 ```
 
