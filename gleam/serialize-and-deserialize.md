@@ -3,7 +3,11 @@
 > [!NOTE]
 > **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
 
-How a Gleam value crosses the bytes-vs-types boundary. **Serialize** = `T → bytes` (or → spec document). **Deserialize** = `bytes → Result(T, Error)`. The two directions are written together because most Gleam packages bundle both — the encoder and decoder ship in the same module, around the same field names — and because the design pressure on each side is symmetric.
+If you want to write a Gleam value to a file, send it over the network, or hand it to another process, you have to turn it into bytes first — files, sockets, and pipes don't speak Gleam types. **Serialization** is that conversion. **Deserialization** is the reverse: read bytes back, get a typed Gleam value (or an error if the bytes are malformed).
+
+Concretely: **Serialize** = `T → bytes` (or → spec document). **Deserialize** = `bytes → Result(T, Error)`. The bytes might be UTF-8 JSON in `config.json`, a binary CBOR payload in a WebAuthn signature, a Protobuf message on a gRPC wire, or a row of BSON in MongoDB — the destination dictates the format, but the question is the same: how do you cross the gap between your typed Gleam record and the bytes the outside world wants?
+
+The two directions are written together because most Gleam packages bundle both — the encoder and decoder ship in the same module, around the same field names — and because the design pressure on each side is symmetric.
 
 This article covers:
 
@@ -46,7 +50,7 @@ For text-grammar parsing where you author the grammar and for build-time emissio
 | [JSON Schema / Patch / RPC](#json-schema-json-patch-json-rpc) | ✅ [castor](#castor), [jscheam](#jscheam), [sextant](#sextant), [squirtle](#squirtle), [pollux](#pollux). |
 | [Bidirectional schemas (single source of truth at runtime)](#bidirectional-schemas-at-runtime) | ✅ [convert](#convert), [kata](#kata), [json_blueprint](#json_blueprint). Define once, derive both directions. |
 | [Wire-protocol codecs](#wire-protocol-codecs) | ✅ [postgresql_protocol](#postgresql_protocol), [h2_frame](#h2_frame). |
-| [Codegen for ser/deser (at build time)](#codegen-for-serdeser) | ⚠️ Several entrants, none dominant. [json_typedef](#json_typedef), [gserde](#gserde), [glerd_json](#glerd_json), [derived](#derived), [aide_generator](#aide_generator). |
+| [Codegen for ser/deser (at build time)](#codegen-for-serdeser) | ⚠️ Several entrants, none dominant. [json_typedef](#json_typedef), [gserde](#gserde), [sara](#sara), [glerd_json](#glerd_json), [derived](#derived), [aide_generator](#aide_generator). |
 | [Gleam → spec document (OpenAPI / JSON Schema from types)](#gleam--openapi-code-first-spec-generation) | ❌ **Gap.** No package emits a spec from your types or your routes. |
 | [`#[derive]`-style attribute macros](#cross-language-framing) | ❌ Not possible — Gleam has no macros and no compiler plugins. |
 
@@ -83,6 +87,7 @@ Searches run on **2026-05-07** against [packages.gleam.run](https://packages.gle
 | `convert` | [packages.gleam.run/?search=convert](https://packages.gleam.run/?search=convert) |
 | `kata` | [packages.gleam.run/?search=kata](https://packages.gleam.run/?search=kata) |
 | `glerd` | [packages.gleam.run/?search=glerd](https://packages.gleam.run/?search=glerd) |
+| `sara` | [packages.gleam.run/?search=sara](https://packages.gleam.run/?search=sara) |
 | GitHub: `language:gleam openapi route` | targeted scan for un-published code-first OpenAPI tools (no results at snapshot) |
 
 Out of scope: text-grammar parsing where you author the grammar (→ [parse-and-generate-other-languages.md](parse-and-generate-other-languages.md)); build-time emission of arbitrary Gleam source not specifically targeting ser/deser, e.g. SQL→Gleam codegen, gleamgen, trick (→ [parse-and-generate-gleam.md](parse-and-generate-gleam.md), [parse-and-generate-other-languages.md](parse-and-generate-other-languages.md)).
@@ -437,13 +442,14 @@ Build-time tools whose **primary output is encoder / decoder code**. These are t
 | --- | --- | --- | --- | --- |
 | [json_typedef](#json_typedef) | RFC 8927 JSON Type Definition | Gleam types + JSON encoders/decoders | 51★ | Schema-first; well-trusted (lpil) |
 | [gserde](#gserde) | Gleam types | JSON encoders/decoders | 32★ · alpha | Type-first |
+| [sara](#sara) | Gleam types w/ `//@json_encode()` / `//@json_decode()` annotations | JSON encoders/decoders in `_json.gleam` modules | 10★ | Annotation-driven; squirrel-inspired |
 | [glerd_json](#glerd_json) | Gleam types via `glerd` runtime info | JSON encoders/decoders | n/v | Runtime-info-driven |
 | [derived](#derived) | Gleam source w/ `!derived(...)` markers | Anything (incl. ser/deser) | 2★ | Marker-based; bring-your-own deriver |
 | [aide_generator](#aide_generator) | MCP tool schemas | MCP encoders/decoders | n/v | Narrow-scope (MCP only) |
 
 Decision flow:
 - **You have a schema document** (TypeDef, OpenAPI, MCP) → use the tool that consumes that document directly. `json_typedef` for TypeDef, [oaspec](parse-and-generate-other-languages.md#oaspec) / [gilly](parse-and-generate-other-languages.md#gilly) for OpenAPI, `aide_generator` for MCP.
-- **You want to start from your Gleam types** → `gserde` is the most direct match. `glerd_json` if you already use the `glerd` runtime-info ecosystem. `derived` if you want a marker-based approach where you control the emitted shape.
+- **You want to start from your Gleam types** → `gserde` (full source-walking) or `sara` (per-type annotations) are the most direct matches. `glerd_json` if you already use the `glerd` runtime-info ecosystem. `derived` if you want a marker-based approach where you control the emitted shape.
 - **Round-trip correctness is critical and you have many records** → schema-first (`json_typedef`) beats type-first because the schema is a single artefact you can validate the wire against.
 
 ### json_typedef
@@ -493,6 +499,37 @@ The schema-first stance means changes to the wire format are **document edits**,
 | Issues | 1 open |
 
 For production today, prefer hand-written `gleam_json` decoders or schema-first `json_typedef`. For prototyping, gserde turns hours of decoder typing into seconds.
+
+### sara
+
+[repo](https://github.com/gungun974/Sara) · [hexdocs](https://hexdocs.pm/sara/1.0.0/index.html)
+
+"A Gleam serialization code generator." Annotation-driven type-first codegen: mark a custom type with `//@json_encode()` and/or `//@json_decode()`, run `gleam run -m sara`, and `sara` emits a sibling `_json.gleam` module with the encoder/decoder functions. Inspired by [squirrel](parse-and-generate-other-languages.md#squirrel-) (which uses the same "annotate + run codegen" loop for SQL). Pure Gleam, dev-dependency, dual-target.
+
+```gleam
+//@json_encode()
+//@json_decode()
+pub type Comment {
+  Comment(id: Int, message: String)
+}
+```
+
+Then `gleam run -m sara` produces `comment_json.gleam` next to the source. Supports built-in types (Bool/Int/Float/String/List/Tuple), custom types, recursive types, nested structures. Unannotated types can be handled by passing custom encoder/decoder functions as parameters (escape hatch for opaque types or third-party types you can't annotate).
+
+| Criterion | [sara](https://github.com/gungun974/Sara) |
+| --- | --- |
+| Stars | 10★ · 🟨 |
+| License | Apache-2.0 · 🟩 |
+| Target | ☎️📜 Both (pure Gleam) |
+| Maintenance | 🟩 (last commit 2026-03-21, ~7 weeks before snapshot) |
+| Age | ~7 weeks (created 2026-03-21) · 🟥 |
+| README maturity | 🟩 (annotation example, run command, limitations) |
+| Idiomaticity | 🟩 (typed, explicit annotations) |
+| Issues | 3 open |
+
+**Limitation:** annotated types must be `pub` and non-opaque, since the generated `_json.gleam` module needs to access the constructors. Same constraint applies to most source-walking codegen tools in Gleam.
+
+**vs gserde / json_typedef:** sara sits between the two — gserde walks all types in your project (no annotation needed, but less control), json_typedef requires a separate schema document (most explicit, but two artefacts). sara's per-type annotation gives finer control than gserde without the schema-document overhead of json_typedef.
 
 ### glerd_json
 
@@ -602,11 +639,12 @@ When the verbosity gets in the way: reach into [codegen for ser/deser](#codegen-
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | 🥇 | [lpil/json-typedef](https://github.com/lpil/json-typedef) | RFC 8927 TypeDef | 🟨 | 🟨 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 | **5** |
 | 2 | 🥈 | [cdaringe/gserde](https://github.com/cdaringe/gserde) | Gleam types | 🟨 | 🟨 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 | **5** |
-| 3 | 🥉 | [crowdhailer/aide_generator](https://github.com/crowdhailer/aide_generator) | MCP tool schemas | ⬜ | 🟩 | 🟩 | 🟩 | 🟨 | 🟩 | 🟩 | **5** |
-| 4 | — | [darky/glerd-json](https://hex.pm/packages/glerd_json) | Gleam types via `glerd` | ⬜ | ⬜ | 🟩 | 🟨 | 🟩 | 🟨 | 🟩 | **3** |
-| 5 | — | [dusty-phillips/derived](https://github.com/dusty-phillips/derived) | `!derived()` markers | 🟥 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 | **5** |
+| 2 | 🥈 | [crowdhailer/aide_generator](https://github.com/crowdhailer/aide_generator) | MCP tool schemas | ⬜ | 🟩 | 🟩 | 🟩 | 🟨 | 🟩 | 🟩 | **5** |
+| 2 | 🥈 | [dusty-phillips/derived](https://github.com/dusty-phillips/derived) | `!derived()` markers | 🟥 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 | **5** |
+| 5 | — | [gungun974/Sara](https://github.com/gungun974/Sara) | Gleam types w/ annotations | 🟨 | 🟩 | 🟩 | 🟩 | 🟥 | 🟩 | 🟩 | **4** |
+| 6 | — | [darky/glerd-json](https://hex.pm/packages/glerd_json) | Gleam types via `glerd` | ⬜ | ⬜ | 🟩 | 🟨 | 🟩 | 🟨 | 🟩 | **3** |
 
-**json_typedef** wins on authority + schema-first stance + "lpil-built" trust. **gserde** is the most direct type-first answer but the alpha caveat keeps it tied. **derived** is the right pick when none of the above emit the shape you want — it is the framework, not the deriver.
+**json_typedef** wins on authority + schema-first stance + "lpil-built" trust. **gserde** is the most direct type-first answer but the alpha caveat keeps it tied. **sara** is the youngest entrant but ships a clean per-type annotation API; the squirrel-inspired loop will feel familiar to anyone using SQL codegen. **derived** is the right pick when none of the above emit the shape you want — it is the framework, not the deriver.
 
 ### Bidirectional schemas at runtime
 
