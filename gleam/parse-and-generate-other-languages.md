@@ -3,14 +3,14 @@
 > [!NOTE]
 > **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
 
-**Snapshot 2026-05-07.** Tools whose **input is a non-Gleam language**: parser combinators for hand-rolled grammars, format-specific parsers (TOML, Markdown, CSV, XML, CEL), HTML parsers, OpenAPI/SQL/GraphQL spec parsers, and codegen tools that consume those inputs to **emit Gleam source code**.
+**Snapshot 2026-05-07.** Tools whose **input is a non-Gleam language**: parser combinators for hand-rolled grammars, format-specific parsers (TOML, Markdown, CSV, XML, CEL), HTML parsers, SQL/GraphQL parsers, and codegen tools that consume those inputs to **emit Gleam source code**.
 
 This article has two halves:
 
-1. **Runtime parsing of other-language text** — combinators, format parsers, HTML parsers, the `oas` OpenAPI parser. Output is a typed Gleam value at runtime.
-2. **Build-time codegen consuming external schemas** — SQL → Gleam, OpenAPI → Gleam, GraphQL → Gleam, static-asset embedding. Output is committed `.gleam` source.
+1. **Runtime parsing of other-language text** — combinators, format parsers, HTML parsers. Output is a typed Gleam value at runtime.
+2. **Build-time codegen consuming external schemas** — SQL → Gleam, GraphQL → Gleam, static-asset embedding. Output is committed `.gleam` source.
 
-For tools that parse Gleam itself or emit Gleam from a Gleam-shaped DSL, see [parse-and-generate-gleam.md](parse-and-generate-gleam.md). For codegen tools whose primary output is encoders/decoders (`json_typedef`, `gserde`, `glerd_json`, `aide_generator`) and the runtime ser/deser story (`gleam_json`, `protozoa`, `gleam_erlang_cbor`), see [serialize-and-deserialize.md](serialize-and-deserialize.md).
+For tools that parse Gleam itself or emit Gleam from a Gleam-shaped DSL, see [parse-and-generate-gleam.md](parse-and-generate-gleam.md). For codegen tools whose primary output is encoders/decoders (`json_typedef`, `gserde`, `glerd_json`, `aide_generator`) and the runtime ser/deser story (`gleam_json`, `protozoa`, `gleam_erlang_cbor`), see [serialization/serialize-and-deserialize.md](serialization/serialize-and-deserialize.md). For OpenAPI specifically (parser library, spec→Gleam codegen, Gleam→spec gap), see [openapi.md](openapi.md).
 
 ## Table of Contents
 
@@ -19,17 +19,16 @@ For tools that parse Gleam itself or emit Gleam from a Gleam-shaped DSL, see [pa
 3. [Data-format parsers](#data-format-parsers)
 4. [HTML parsers](#html-parsers)
 5. [String-slicing primitives](#string-slicing-primitives)
-6. [OpenAPI parsing](#openapi-parsing)
-7. [X → Gleam code generation](#x--gleam-code-generation)
+6. [X → Gleam code generation](#x--gleam-code-generation)
    - [SQL → Gleam](#sql--gleam)
-   - [OpenAPI → Gleam](#openapi--gleam)
    - [Other → Gleam](#other--gleam)
-8. [Gaps](#gaps)
+7. [Gaps](#gaps)
    - [gRPC / Protobuf codegen](#grpc--protobuf-codegen)
    - [Codegen for ser/deser (cross-link)](#codegen-for-serdeser-cross-link)
-9. [Cross-language framing](#cross-language-framing)
-10. [Leaderboards](#leaderboards)
-11. [Related](#related)
+   - [OpenAPI (cross-link)](#openapi-cross-link)
+8. [Cross-language framing](#cross-language-framing)
+9. [Leaderboards](#leaderboards)
+10. [Related](#related)
 
 [How scores are calculated →](databases.md#scoring-dimensions)
 
@@ -50,8 +49,6 @@ Searches run on **2026-05-07** against [packages.gleam.run](https://packages.gle
 | `csv` | [packages.gleam.run/?search=csv](https://packages.gleam.run/?search=csv) |
 | `regex` | [packages.gleam.run/?search=regex](https://packages.gleam.run/?search=regex) |
 | `tree-sitter` | [packages.gleam.run/?search=tree-sitter](https://packages.gleam.run/?search=tree-sitter) (0 hits) |
-| `openapi` | [packages.gleam.run/?search=openapi](https://packages.gleam.run/?search=openapi) |
-| `swagger` | [packages.gleam.run/?search=swagger](https://packages.gleam.run/?search=swagger) |
 | `sql` | [packages.gleam.run/?search=sql](https://packages.gleam.run/?search=sql) |
 | `schema` | [packages.gleam.run/?search=schema](https://packages.gleam.run/?search=schema) |
 | `graphql` | [packages.gleam.run/?search=graphql](https://packages.gleam.run/?search=graphql) |
@@ -203,43 +200,22 @@ Three approaches, none of them overlapping.
 
 "Efficiently slice prefixes from strings. Good for parsers!" Below the combinator level — used as a dependency by several syntax-highlighter lexers (just, pearl, tear). 18★, last commit 2025-11-18, 0 open issues.
 
-## OpenAPI parsing
-
-> [!NOTE]
-> **Per-language syntax-highlighting lexers** (Gleam, Erlang, Elixir, JavaScript) live in [syntax-highlighting.md](syntax-highlighting.md). They parse other languages too — the role-difference is "extract token stream for colourisation" vs "extract AST for analysis/codegen." For parsing Gleam source itself, see [parse-and-generate-gleam.md](parse-and-generate-gleam.md#glance).
-
-### oas
-[repo](https://github.com/crowdhailer/oas)
-
-"Work with Open API Specs (previously swagger) and JSON Schema." Decodes OpenAPI 3.x documents into Gleam types (paths, components, operations). Used as input by [oas_generator](#oas_generator) below. Apache-2.0. 0 open issues at snapshot. Note: gleam.toml has `target = "javascript"` — JS-first, but parsing is platform-agnostic.
-
-| Criterion | [oas](https://github.com/crowdhailer/oas) |
-| --- | --- |
-| Stars | 15★ · 🟨 |
-| License | Apache-2.0 · 🟩 |
-| Target | ☎️📜 Both (JS-first per gleam.toml, parsing is platform-agnostic) |
-| Maintenance | 🟩🟩 (last commit 2026-04-16) |
-| Age | older · 🟩 |
-| README maturity | 🟩 |
-| Idiomaticity | 🟩 |
-| Issues | 0 open |
-
 ## X → Gleam code generation
 
-Build-time tools that take an external schema or query (SQL, OpenAPI, GraphQL, static asset directory) and **emit Gleam source code**. The output is `.gleam` files that you commit to your repo.
+Build-time tools that take an external schema or query (SQL, GraphQL, static asset directory) and **emit Gleam source code**. The output is `.gleam` files that you commit to your repo.
 
 | Slice | Tools |
 | --- | --- |
 | [SQL → Gleam](#sql--gleam) | [squirrel](databases.md#squirrel-) 🐘, [parrot](#parrot) 🐘🪶🐬, [marmot](#marmot) 🪶, [sqlode](databases.md#sqlode-) 🐘🪶🐬 |
-| [OpenAPI → Gleam](#openapi--gleam) | [oaspec](#oaspec), [gilly](#gilly), [oas_generator](#oas_generator) |
 | [Other → Gleam](#other--gleam) | [squall](#squall) (GraphQL), [embeds](#embeds) (static assets) |
-| Codegen for ser/deser | → [serialize-and-deserialize.md → Codegen for ser/deser](serialize-and-deserialize.md#codegen-for-serdeser) |
+| OpenAPI → Gleam | → [openapi.md](openapi.md#openapi--gleam-codegen) |
+| Codegen for ser/deser | → [serialization/serialize-and-deserialize.md → Codegen for ser/deser](serialization/serialize-and-deserialize.md#codegen-for-serdeser) |
 
 > [!NOTE]
-> **Codegen tools whose primary output is encoders/decoders** — `gserde`, `json_typedef`, `glerd_json`, `aide_generator` — live in [serialize-and-deserialize.md → Codegen for ser/deser](serialize-and-deserialize.md#codegen-for-serdeser). They share infrastructure with the tools below (often using `gleamgen` or `glance` under the hood) but are decision-shaped around the ser/deser problem.
+> **Codegen tools whose primary output is encoders/decoders** — `gserde`, `json_typedef`, `glerd_json`, `aide_generator` — live in [serialization/serialize-and-deserialize.md → Codegen for ser/deser](serialization/serialize-and-deserialize.md#codegen-for-serdeser). They share infrastructure with the tools below (often using `gleamgen` or `glance` under the hood) but are decision-shaped around the ser/deser problem.
 
-> [!IMPORTANT]
-> The reverse direction — **Gleam → spec** (e.g. mist/wisp routes → OpenAPI document) is **not covered by any package** as of snapshot. See [serialize-and-deserialize.md](serialize-and-deserialize.md#gleam--openapi-code-first-spec-generation) for the structural reason and workarounds.
+> [!NOTE]
+> **OpenAPI tools** — the [oas](openapi.md#oas) parser, [oaspec](openapi.md#oaspec), [gilly](openapi.md#gilly), and [oas_generator](openapi.md#oas_generator) codegen tools, plus the Gleam → OpenAPI gap — all live in [openapi.md](openapi.md).
 
 ### SQL → Gleam
 
@@ -294,125 +270,6 @@ Quick map:
 > [!NOTE]
 > marmot is also reviewed in [databases.md → SQL Code Generators](databases.md#sql-code-generators) under the database lens. The 7-dim score is the same in both places; cross-link kept in both directions.
 
-### OpenAPI → Gleam
-
-Three tools cover this corner. Both [oaspec](#oaspec) and [gilly](#gilly) are very young (Apr 2026) but ship usable code today; [oas_generator](#oas_generator) is older, built on [oas](#oas).
-
-#### Comparison
-
-| Criterion | [oaspec](https://github.com/nao1215/oaspec) | [gilly](https://github.com/cyclimse/gilly) | [oas_generator](https://github.com/crowdhailer/oas_generator) |
-| --- | --- | --- | --- |
-| Stars | 4★ · 🟥 | 1★ · 🟥 | 25★ · 🟨 |
-| License | MIT · 🟩 | Unlicense (public domain) · 🟩 | Apache-2.0 · 🟩 |
-| Target | ☎️ BEAM | ☎️ BEAM | ☎️📜 Both (uses gleam/httpc + gleam/fetch) |
-| Gleam compat | `>= 0.44 and < 2.0` · 🟩 | `>= 0.44 and < 2.0` · 🟩 | unspecified (no gleam constraint) · 🟨 |
-| Maintenance | 🟩🟩 (last commit 2026-04-26) | 🟩🟩 (last commit 2026-04-19) | 🟩🟩 (last commit 2026-04-16) |
-| Age | ~3 weeks (Apr 7, 2026) · 🟥 | ~2 weeks (Apr 12, 2026) · 🟥 | ~older · 🟩 |
-| README maturity | 🟩🟩 (full guide, CLI ref, library API, capability boundaries) | 🟩 (description, usage, flag table, examples link) | 🟩 (description + usage) |
-| Idiomaticity | 🟩 (explicit codegen) | 🟩 (explicit codegen) | 🟩 (explicit codegen) |
-| Issues | 5 open | 3 open | ⬜ |
-| | | | |
-| **Features** | | | |
-| Generates client SDK | ✅ | ✅ | ✅ |
-| Generates server stubs (handlers + router) | ✅ | — | — |
-| Spec format | YAML + JSON | JSON | OpenAPI 3.0+ |
-| `$ref` resolution | ✅ (incl. circular detection) | partial | via `oas` |
-| `oneOf` / `anyOf` / `allOf` | ✅ | partial | via `oas` |
-| Path / query / header / cookie params | ✅ | path, query, header | typical |
-| `deepObject` / `pipeDelimited` / `spaceDelimited` | ✅ | — | — |
-| Form bodies (`x-www-form-urlencoded`, `multipart`) | ✅ | — | — |
-| Security schemes (apiKey, HTTP, OAuth2, OIDC) | ✅ (bearer attach for OAuth2/OIDC) | manual via request middleware | basic |
-| Validation guards from schema constraints | ✅ | — | — |
-| `validate` subcommand (no codegen) | ✅ | — | — |
-| CI drift check (`--check`) | ✅ | — | — |
-| Library API (use as Gleam dep, not just CLI) | ✅ | ✅ | ✅ |
-| Snapshot tests on generated output | — | ✅ ([birdie](https://github.com/giacomocavalieri/birdie)) | — |
-
-> [!IMPORTANT]
-> Both **oaspec** and **gilly** are days-to-weeks old at snapshot. They move fast — every PR in both repos was merged within hours of opening. Neither has a community track record yet. Pin a version.
-
-> [!NOTE]
-> Generated code is plain Gleam built on `gleam/http` types, so it composes with the rest of the ecosystem (e.g. [server frameworks](web-and-http/web-apps.md#server-frameworks), [HTTP clients](web-and-http/http-clients.md)). The generators themselves run on BEAM (oaspec/gilly) or are dual-target (oas_generator).
-
-#### oaspec
-[repo](https://github.com/nao1215/oaspec)
-
-"Generate strongly typed Gleam server stubs and client SDK from OpenAPI 3.x specifications." Wide coverage of the OpenAPI features that show up in real specs: `$ref`, `allOf`/`oneOf`/`anyOf`, `deepObject` query params, form and multipart bodies, all four major security scheme families. Capability boundaries are listed in the README and enforced at validation time — unsupported keywords (`prefixItems`, `not`, `unevaluatedProperties`, etc.) fail fast instead of producing broken code. Backed by 624 unit tests, 40 integration compile tests, 182 fixtures (94 OSS-derived). Distributed as an Erlang escript binary; also usable as a Gleam library with a pure pipeline (`parse → normalize → resolve → capability check → hoist → dedup → validate → codegen`).
-
-CLI:
-```sh
-oaspec init
-# edit oaspec.yaml: input, package, mode (server | client | both)
-oaspec generate --config=oaspec.yaml
-```
-
-Output layout:
-```text
-gen/my_api/        types, decode, encode, request_types, response_types,
-                   middleware, guards, handlers, router
-gen_client/my_api/ types, decode, encode, request_types, response_types,
-                   middleware, guards, client
-```
-
-Generated client signature:
-```gleam
-pub type Pet {
-  Pet(id: Int, name: String, status: PetStatus, tag: Option(String))
-}
-
-pub type PetStatus {
-  PetStatusAvailable
-  PetStatusPending
-  PetStatusSold
-}
-
-pub fn create_pet(config: ClientConfig, body: types.CreatePetRequest)
-  -> Result(response_types.CreatePetResponse, ClientError)
-```
-
-CI drift check:
-```sh
-oaspec generate --config=oaspec.yaml --check --fail-on-warnings
-```
-
-#### gilly
-[repo](https://github.com/cyclimse/gilly)
-
-"Generate Gleam SDKs from OpenAPI specifications." Client-only scope, inspired by [squirrel](https://github.com/giacomocavalieri/squirrel) (Postgres codegen) and [oapi-codegen](https://github.com/oapi-codegen/oapi-codegen) (Go). Builder-pattern request constructors, snapshot-tested with [birdie](https://github.com/giacomocavalieri/birdie). README is upfront about scope: "many features from the OpenAPI specification are not yet supported"; generated code may break between releases. Ships a real-world Scaleway Containers example (~80 lines) that creates a serverless namespace, polls it to ready, and deploys an nginx container — useful as a reference for how the generated builder API composes with `gleam/httpc`.
-
-CLI:
-```sh
-gleam add gilly --dev
-gleam run -m gilly -- openapi.json --output src/my_api.gleam
-```
-
-Flags worth knowing:
-- `--optionality {RequiredOnly | NullableOnly | RequiredAndNullable}` — how to decide which fields are `Option(_)` (default `RequiredOnly`)
-- `--optional-query-params` — force all query params optional regardless of spec
-- `--indent N` — spaces per indent level (default 2)
-
-Generated client usage (Scaleway example, abridged):
-```gleam
-let api_client =
-  client.new(send_fn, region: region, project_id: project_id)
-
-let assert Ok(namespace) =
-  client.new_create_namespace_request(
-    name: "gilly-example",
-    activate_vpc_integration: True,
-    secret_environment_variables: [],
-    tags: ["example", "gilly"],
-  )
-  |> client.create_namespace(api_client)
-```
-
-The `send_fn` is yours — gilly stays out of HTTP transport. Plug in `gleam/httpc`, `gleam/hackney`, or anything that round-trips `gleam/http` types.
-
-#### oas_generator
-[repo](https://github.com/crowdhailer/oas_generator)
-
-"Generate HTTP clients from Open API specs." Older entrant in the OpenAPI corner, built on top of the [oas](#oas) parser library. Supports both backend (`gleam/httpc`) and frontend (`gleam/fetch`) — making it the dual-target choice when oaspec/gilly's BEAM-only output won't fit. 25★, last commit 2026-04-16. Same author as `oas`.
-
 ### Other → Gleam
 
 #### squall
@@ -429,20 +286,24 @@ The `send_fn` is yours — gilly stays out of HTTP transport. Plug in `gleam/htt
 
 ### gRPC / Protobuf codegen
 
-**Gap.** No published Gleam package emits Gleam code from `.proto` definitions, and no Gleam gRPC server framework exists. **Workaround:** generate Erlang stubs with `protoc` + `grpcbox` and call them from Gleam. Runtime-only Protobuf coverage exists via [protozoa](serialize-and-deserialize.md#protozoa) — cross-link to [serialize-and-deserialize.md](serialize-and-deserialize.md) for the runtime ser/deser story.
+**Gap.** No published Gleam package emits Gleam code from `.proto` definitions, and no Gleam gRPC server framework exists. **Workaround:** generate Erlang stubs with `protoc` + `grpcbox` and call them from Gleam. Runtime-only Protobuf coverage exists via [protozoa](serialization/serialize-and-deserialize.md#protozoa) — cross-link to [serialization/serialize-and-deserialize.md](serialization/serialize-and-deserialize.md) for the runtime ser/deser story.
 
 ### Codegen for ser/deser (cross-link)
 
 Several X→Gleam codegen tools exist whose primary output is **encoders/decoders** rather than business-logic types or HTTP clients:
 
-- **[json_typedef](serialize-and-deserialize.md#json_typedef)** — consumes RFC 8927 JSON Type Definition documents and emits Gleam types + encoders + decoders.
-- **[gserde](serialize-and-deserialize.md#gserde)** — derives JSON encoders/decoders from Gleam type definitions.
-- **[glerd_json](serialize-and-deserialize.md#glerd_json)** — JSON ser/deser derivation.
-- **[aide_generator](serialize-and-deserialize.md#aide_generator)** — emits encoders + decoders for MCP tool schemas.
+- **[json_typedef](serialization/serialize-and-deserialize.md#json_typedef)** — consumes RFC 8927 JSON Type Definition documents and emits Gleam types + encoders + decoders.
+- **[gserde](serialization/serialize-and-deserialize.md#gserde)** — derives JSON encoders/decoders from Gleam type definitions.
+- **[glerd_json](serialization/serialize-and-deserialize.md#glerd_json)** — JSON ser/deser derivation.
+- **[aide_generator](serialization/serialize-and-deserialize.md#aide_generator)** — emits encoders + decoders for MCP tool schemas.
 
-These are "X→Gleam" too, but they're decision-shaped around the ser/deser problem, so they live in [serialize-and-deserialize.md → Codegen for ser/deser](serialize-and-deserialize.md#codegen-for-serdeser).
+These are "X→Gleam" too, but they're decision-shaped around the ser/deser problem, so they live in [serialization/serialize-and-deserialize.md → Codegen for ser/deser](serialization/serialize-and-deserialize.md#codegen-for-serdeser).
 
-For runtime JSON-Schema *validation* (without codegen), see [serialize-and-deserialize.md](serialize-and-deserialize.md) — castor, jscheam, sextant.
+For runtime JSON-Schema *validation* (without codegen), see [serialization/serialize-and-deserialize.md](serialization/serialize-and-deserialize.md) — castor, jscheam, sextant.
+
+### OpenAPI (cross-link)
+
+The [oas](openapi.md#oas) parser, [oaspec](openapi.md#oaspec) / [gilly](openapi.md#gilly) / [oas_generator](openapi.md#oas_generator) codegen tools, and the **Gleam → OpenAPI gap** all live in [openapi.md](openapi.md). The reverse direction — **Gleam → spec** (e.g. mist/wisp routes → OpenAPI document) is **not covered by any package** as of snapshot. See [openapi.md](openapi.md#gleam--openapi-code-first-spec-generation) for the structural reason and workarounds.
 
 ## Cross-language framing
 
@@ -460,7 +321,7 @@ How Gleam's build-time codegen story compares.
 
 The Gleam codegen story sits closest to **TypeScript** and **Go**: emit-and-commit, build-step driven, no compiler magic. This is a deliberate consequence of Gleam having [no macros](https://github.com/gleam-lang/gleam/issues/1767) and no runtime reflection — the only way to do "derive" is to **literally write the Gleam source**.
 
-The same constraint is what makes the **Gleam → spec** direction (e.g. handler types → OpenAPI) hard: there is no inspection mechanism short of parsing the source via [glance](parse-and-generate-gleam.md#glance). See [serialize-and-deserialize.md](serialize-and-deserialize.md#gleam--openapi-code-first-spec-generation) for the full discussion.
+The same constraint is what makes the **Gleam → spec** direction (e.g. handler types → OpenAPI) hard: there is no inspection mechanism short of parsing the source via [glance](parse-and-generate-gleam.md#glance). See [openapi.md](openapi.md#gleam--openapi-code-first-spec-generation) for the full discussion.
 
 ## Leaderboards
 
@@ -495,43 +356,29 @@ The same constraint is what makes the **Gleam → spec** direction (e.g. handler
 | 2 | 🥈 | [lpil/htmgrrrl](https://github.com/lpil/htmgrrrl) | 🟨 | 🟥 | 🟩🟩 | 🟩 | 🟩 | **4** |
 | 3 | 🥉 | [lpil/javascript-dom-parser](https://github.com/lpil/javascript-dom-parser) | 🟥 | 🟥 | 🟩🟩 | 🟩 | 🟩 | **2** |
 
-### OpenAPI parsers & generators
-
-Combines the [oas](#oas) parser with the three OpenAPI codegen tools, since they're typically picked together.
-
-| Position | Award | Repo | Role | ★ | Lic | Compat | Maint | Age | README | Idiom | Score |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | 🥇 | [crowdhailer/oas](https://github.com/crowdhailer/oas) | Parser library | 🟨 | 🟩 | 🟨 | 🟩🟩 | 🟩 | 🟩 | 🟩 | **7** |
-| 2 | 🥈 | [nao1215/oaspec](https://github.com/nao1215/oaspec) | Codegen (server + client) | 🟥 | 🟩 | 🟩 | 🟩🟩 | 🟥 | 🟩🟩 | 🟩 | **6** |
-| 2 | 🥈 | [crowdhailer/oas_generator](https://github.com/crowdhailer/oas_generator) | Codegen (client, dual-target) | 🟨 | 🟩 | 🟨 | 🟩🟩 | 🟩 | 🟩 | 🟩 | **6** |
-| 4 | 🥉 | [cyclimse/gilly](https://github.com/cyclimse/gilly) | Codegen (client) | 🟥 | 🟩 | 🟩 | 🟩🟩 | 🟥 | 🟩 | 🟩 | **4** |
-
 ### X → Gleam generators (combined)
 
-Includes SQL, OpenAPI, GraphQL, static-asset embedding. Cross-reference: [databases.md leaderboard](databases.md#leaderboard) covers SQL codegen alongside drivers and migrations. Codegen tools whose output is encoders/decoders (json_typedef RFC 8927, aide_generator MCP) have their own leaderboard in [serialize-and-deserialize.md → Codegen for ser/deser](serialize-and-deserialize.md#codegen-for-serdeser).
+Includes SQL, GraphQL, static-asset embedding. Cross-reference: [databases.md leaderboard](databases.md#leaderboard) covers SQL codegen alongside drivers and migrations. OpenAPI codegen has its own leaderboard in [openapi.md](openapi.md#leaderboard). Codegen tools whose output is encoders/decoders (json_typedef RFC 8927, aide_generator MCP) have their own leaderboard in [serialization/serialize-and-deserialize.md → Codegen for ser/deser](serialization/serialize-and-deserialize.md#codegen-for-serdeser).
 
 | Position | Award | Repo | Input | ★ | Lic | Compat | Maint | Age | README | Idiom | Score |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | 🥇 | [giacomocavalieri/squirrel](https://github.com/giacomocavalieri/squirrel) | SQL (PostgreSQL) | 🟩🟩 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩🟩 | 🟩 | **9** |
 | 2 | 🥈 | [daniellionel01/parrot](https://github.com/daniellionel01/parrot) | SQL (sqlc; multi-DB) | 🟩🟩 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩🟩 | 🟩 | **9** |
-| 3 | 🥉 | [nao1215/oaspec](https://github.com/nao1215/oaspec) | OpenAPI 3.x | 🟥 | 🟩 | 🟩 | 🟩🟩 | 🟥 | 🟩🟩 | 🟩 | **6** |
-| 4 | — | [crowdhailer/oas_generator](https://github.com/crowdhailer/oas_generator) | OpenAPI 3.x | 🟨 | 🟩 | 🟨 | 🟩🟩 | 🟩 | 🟩 | 🟩 | **6** |
-| 5 | — | [pairshaped/marmot](https://github.com/pairshaped/marmot) | SQL (SQLite) | 🟥 | 🟩 | 🟩 | 🟩🟩 | 🟥 | 🟩🟩 | 🟩 | **5** |
-| 6 | — | [nao1215/sqlode](https://github.com/nao1215/sqlode) | SQL (multi-DB) | 🟥 | 🟩 | 🟩 | 🟩🟩 | 🟥 | 🟩🟩 | 🟩 | **5** |
-| 7 | — | [cyclimse/gilly](https://github.com/cyclimse/gilly) | OpenAPI 3.x | 🟥 | 🟩 | 🟩 | 🟩🟩 | 🟥 | 🟩 | 🟩 | **4** |
+| 3 | 🥉 | [pairshaped/marmot](https://github.com/pairshaped/marmot) | SQL (SQLite) | 🟥 | 🟩 | 🟩 | 🟩🟩 | 🟥 | 🟩🟩 | 🟩 | **5** |
+| 4 | — | [nao1215/sqlode](https://github.com/nao1215/sqlode) | SQL (multi-DB) | 🟥 | 🟩 | 🟩 | 🟩🟩 | 🟥 | 🟩🟩 | 🟩 | **5** |
 
 ### Honorable mentions
 
 - **[squirrel](https://github.com/giacomocavalieri/squirrel)** — the established SQL→Gleam codegen, FOSDEM-talked, 633★. The reference implementation other tools cite. Full review in [databases.md](databases.md#squirrel-).
 - **[parrot](https://github.com/daniellionel01/parrot)** — sqlc-backed, multi-DB, 207★. Renamed from `sqlc-gen-gleam`.
-- **[oaspec](https://github.com/nao1215/oaspec)** — wide OpenAPI coverage out of the gate, capability boundaries documented, server *and* client.
-- **[gilly](https://github.com/cyclimse/gilly)** — tight scope, builder-pattern API, snapshot-tested, real-world Scaleway example.
-- **[json_typedef](serialize-and-deserialize.md#json_typedef)**, **[gserde](serialize-and-deserialize.md#gserde)**, **[aide_generator](serialize-and-deserialize.md#aide_generator)** — covered in [serialize-and-deserialize.md](serialize-and-deserialize.md#codegen-for-serdeser) as ser/deser-specific codegen.
+- **OpenAPI codegen** — [oaspec](openapi.md#oaspec), [gilly](openapi.md#gilly), [oas_generator](openapi.md#oas_generator). Covered in [openapi.md](openapi.md).
+- **[json_typedef](serialization/serialize-and-deserialize.md#json_typedef)**, **[gserde](serialization/serialize-and-deserialize.md#gserde)**, **[aide_generator](serialization/serialize-and-deserialize.md#aide_generator)** — covered in [serialization/serialize-and-deserialize.md](serialization/serialize-and-deserialize.md#codegen-for-serdeser) as ser/deser-specific codegen.
 
 ## Related
 
 - [parse-and-generate-gleam.md](parse-and-generate-gleam.md) — sibling article: Gleam-source parsers (glance, glance_printer) and Gleam-emitting Gleam DSLs (gleamgen, trick, glue, derived).
-- [serialize-and-deserialize.md](serialize-and-deserialize.md) — runtime ser/deser (gleam_json, protozoa, gleam_erlang_cbor), codegen for encoders/decoders (json_typedef, gserde, glerd_json, aide_generator), and the Gleam → OpenAPI gap.
+- [openapi.md](openapi.md) — the OpenAPI corner: parser library (oas), spec→Gleam codegen (oaspec, gilly, oas_generator), and the Gleam → OpenAPI gap.
+- [serialization/serialize-and-deserialize.md](serialization/serialize-and-deserialize.md) — runtime ser/deser (gleam_json, protozoa, gleam_erlang_cbor), codegen for encoders/decoders (json_typedef, gserde, glerd_json, aide_generator).
 - [databases.md](databases.md#sql-code-generators) — squirrel and sqlode in depth (this article cross-links there to avoid duplication); parrot and marmot reviewed in both places.
 - [syntax-highlighting.md](syntax-highlighting.md) — sibling lexers for colourisation (per-language lexers used as highlighter input vs parsing for AST/analysis).
 - [../postman-to-openapi-converters.md](../postman-to-openapi-converters.md) — adjacent: converting Postman collections to OpenAPI specs (precedes the OpenAPI → Gleam pipeline).

@@ -23,8 +23,9 @@ For the full scoring formalization see [../formalization.md](../formalization.md
 ### Other
 
 - [Parse & generate Gleam](parse-and-generate-gleam.md) — Gleam source parsers (glance, glance_printer) + Gleam-emitting Gleam DSLs (gleamgen, trick, glue, derived).
-- [Parse & generate other languages](parse-and-generate-other-languages.md) — parser combinators, format parsers (TOML / Djot / CSV / XML / Markdown / CEL), HTML, OpenAPI parsing (oas), SQL→Gleam codegen, OpenAPI→Gleam codegen (oaspec / gilly / oas_generator), GraphQL (squall), static-asset embeds.
-- [Serialize & deserialize](serialize-and-deserialize.md) — encoder/decoder convention, why decoding by hand, per-format packages (JSON / CBOR / MsgPack / BSON / Protobuf / NBT / base32-62), bidirectional schemas, codegen for ser/deser (json_typedef, gserde, glerd_json, derived, aide_generator), and the Gleam→OpenAPI gap.
+- [Parse & generate other languages](parse-and-generate-other-languages.md) — parser combinators, format parsers (TOML / Djot / CSV / XML / Markdown / CEL), HTML, SQL→Gleam codegen, GraphQL (squall), static-asset embeds.
+- [OpenAPI in Gleam](openapi.md) — `oas` parser, OpenAPI → Gleam codegen (oaspec / gilly / oas_generator), and the **Gleam → OpenAPI (code-first) gap** — no package emits a spec from your routes.
+- [Serialize & deserialize](serialization/serialize-and-deserialize.md) — encoder/decoder convention, why decoding by hand, per-format packages (JSON / CBOR / MsgPack / BSON / Protobuf / NBT / base32-62), bidirectional schemas, codegen for ser/deser (json_typedef, gserde, sara, glerd_json, derived, aide_generator). **Note:** [`deriv`](serialization/serialize-and-deserialize.md#deriv) cannot resolve in projects using `gleam_json 3.x`.
 - [Subprocesses](subprocesses.md) — shelling out, streaming stdio, process control.
 - [Syntax highlighting](syntax-highlighting.md) — per-language lexers, multi-language grammars, tree-sitter NIFs. 6 repos reviewed.
 - [Databases](databases.md) — PostgreSQL / SQLite / MySQL drivers, query builders, codegen, migrations, framework-bundled DB. 9 repos reviewed (+ 4 disregarded).

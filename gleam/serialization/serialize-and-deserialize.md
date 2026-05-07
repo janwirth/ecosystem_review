@@ -17,11 +17,11 @@ This article covers:
 - **JSON Schema / Patch / RPC tools** — castor, jscheam, sextant, squirtle, pollux.
 - **Bidirectional schemas at runtime** — convert, kata, json_blueprint.
 - **Wire-protocol codecs** — postgresql_protocol, h2_frame.
-- **Codegen for ser/deser** — gserde, json_typedef, derived, glerd_json, aide_generator.
-- **The biggest gap in the ecosystem** — Gleam → spec document (code-first OpenAPI / JSON Schema from type definitions). No library covers it.
+- **Codegen for ser/deser** — gserde, json_typedef, sara, derived, glerd_json, aide_generator. Plus [deriv](#deriv) — currently broken on new projects (gleam_json 3.x conflict).
+- **The biggest gap in the ecosystem** — Gleam → spec document (code-first OpenAPI / JSON Schema from type definitions). No library covers it. See [openapi.md → Gleam → OpenAPI](../openapi.md#gleam--openapi-code-first-spec-generation).
 - Cross-language framing against serde / pydantic / Jason / encoding/json / utoipa.
 
-For text-grammar parsing where you author the grammar and for build-time emission of *non-ser/deser* Gleam code (Gleam DSLs, SQL→Gleam, OpenAPI→server stubs), see [parse-and-generate-gleam.md](parse-and-generate-gleam.md) and [parse-and-generate-other-languages.md](parse-and-generate-other-languages.md).
+For text-grammar parsing where you author the grammar and for build-time emission of *non-ser/deser* Gleam code (Gleam DSLs, SQL→Gleam, GraphQL→Gleam), see [parse-and-generate-gleam.md](../parse-and-generate-gleam.md) and [parse-and-generate-other-languages.md](../parse-and-generate-other-languages.md). For OpenAPI specifically (parser library, spec→Gleam codegen, Gleam→spec gap), see [openapi.md](../openapi.md).
 
 ## Table of contents
 
@@ -34,10 +34,12 @@ For text-grammar parsing where you author the grammar and for build-time emissio
 7. [Bidirectional schemas at runtime](#bidirectional-schemas-at-runtime)
 8. [Wire-protocol codecs](#wire-protocol-codecs)
 9. [Codegen for ser/deser](#codegen-for-serdeser)
-10. [Gleam → OpenAPI (code-first spec generation)](#gleam--openapi-code-first-spec-generation)
-11. [Cross-language framing](#cross-language-framing)
-12. [Leaderboards](#leaderboards)
-13. [Related](#related)
+10. [Cross-language framing](#cross-language-framing)
+11. [Leaderboards](#leaderboards)
+12. [Related](#related)
+
+> [!NOTE]
+> The **Gleam → OpenAPI (code-first spec)** discussion lived in this article previously. It now lives in its own article: [openapi.md → Gleam → OpenAPI](../openapi.md#gleam--openapi-code-first-spec-generation).
 
 ## Summary
 
@@ -50,8 +52,8 @@ For text-grammar parsing where you author the grammar and for build-time emissio
 | [JSON Schema / Patch / RPC](#json-schema-json-patch-json-rpc) | ✅ [castor](#castor), [jscheam](#jscheam), [sextant](#sextant), [squirtle](#squirtle), [pollux](#pollux). |
 | [Bidirectional schemas (single source of truth at runtime)](#bidirectional-schemas-at-runtime) | ✅ [convert](#convert), [kata](#kata), [json_blueprint](#json_blueprint). Define once, derive both directions. |
 | [Wire-protocol codecs](#wire-protocol-codecs) | ✅ [postgresql_protocol](#postgresql_protocol), [h2_frame](#h2_frame). |
-| [Codegen for ser/deser (at build time)](#codegen-for-serdeser) | ⚠️ Several entrants, none dominant. [json_typedef](#json_typedef), [gserde](#gserde), [sara](#sara), [glerd_json](#glerd_json), [derived](#derived), [aide_generator](#aide_generator). |
-| [Gleam → spec document (OpenAPI / JSON Schema from types)](#gleam--openapi-code-first-spec-generation) | ❌ **Gap.** No package emits a spec from your types or your routes. |
+| [Codegen for ser/deser (at build time)](#codegen-for-serdeser) | ⚠️ Several entrants, none dominant. [json_typedef](#json_typedef), [gserde](#gserde), [sara](#sara), [glerd_json](#glerd_json), [derived](#derived), [aide_generator](#aide_generator). [deriv](#deriv) is currently broken on new projects (pinned to `gleam_json < 3.0`). |
+| Gleam → spec document (OpenAPI / JSON Schema from types) | ❌ **Gap.** No package emits a spec from your types or your routes. → see [openapi.md → Gleam → OpenAPI](../openapi.md#gleam--openapi-code-first-spec-generation). |
 | [`#[derive]`-style attribute macros](#cross-language-framing) | ❌ Not possible — Gleam has no macros and no compiler plugins. |
 
 > [!IMPORTANT]
@@ -90,7 +92,7 @@ Searches run on **2026-05-07** against [packages.gleam.run](https://packages.gle
 | `sara` | [packages.gleam.run/?search=sara](https://packages.gleam.run/?search=sara) |
 | GitHub: `language:gleam openapi route` | targeted scan for un-published code-first OpenAPI tools (no results at snapshot) |
 
-Out of scope: text-grammar parsing where you author the grammar (→ [parse-and-generate-other-languages.md](parse-and-generate-other-languages.md)); build-time emission of arbitrary Gleam source not specifically targeting ser/deser, e.g. SQL→Gleam codegen, gleamgen, trick (→ [parse-and-generate-gleam.md](parse-and-generate-gleam.md), [parse-and-generate-other-languages.md](parse-and-generate-other-languages.md)).
+Out of scope: text-grammar parsing where you author the grammar (→ [parse-and-generate-other-languages.md](../parse-and-generate-other-languages.md)); build-time emission of arbitrary Gleam source not specifically targeting ser/deser, e.g. SQL→Gleam codegen, gleamgen, trick (→ [parse-and-generate-gleam.md](../parse-and-generate-gleam.md), [parse-and-generate-other-languages.md](../parse-and-generate-other-languages.md)).
 
 ## The encoder/decoder convention
 
@@ -289,7 +291,7 @@ Gleam has good coverage here for the formats that show up in real workloads.
 | [gleebor](#gleebor) | CBOR (RFC 8949) | [hex](https://hex.pm/packages/gleebor) | Pure Gleam. **⚠ Hex shows ~2 years stale at snapshot; sticky if active CBOR work is needed.** |
 | [gmsg](#gmsg) | MessagePack | [hex](https://hex.pm/packages/gmsg) | Pure Gleam |
 | [bison](#bison) | BSON | [hex](https://hex.pm/packages/bison) | MongoDB wire format |
-| [protozoa](#protozoa) | Protocol Buffers | [hex](https://hex.pm/packages/protozoa) | Library only — no `.proto` codegen (see [parse-and-generate-other-languages.md](parse-and-generate-other-languages.md#grpc--protobuf-codegen)). v2.0.3 with companion `protozoa_dev` CLI. |
+| [protozoa](#protozoa) | Protocol Buffers | [hex](https://hex.pm/packages/protozoa) | Library only — no `.proto` codegen (see [parse-and-generate-other-languages.md](../parse-and-generate-other-languages.md#grpc--protobuf-codegen)). v2.0.3 with companion `protozoa_dev` CLI. |
 | [nbeet](#nbeet) | NBT (Minecraft) | [hex](https://hex.pm/packages/nbeet) | Niche but complete |
 | [gleb128](#gleb128) | LEB128 integers | [hex](https://hex.pm/packages/gleb128) | Variable-length integer encoding |
 | [thirtytwo](#thirtytwo) | Base32 (RFC 4648 + Crockford + Geohash) | [hex](https://hex.pm/packages/thirtytwo) | Multi-variant |
@@ -310,7 +312,7 @@ BSON — MongoDB's wire format. Encode + decode.
 
 #### protozoa
 
-Protocol Buffers library for Gleam. Encode + decode at the byte level. **Note:** does **not** generate Gleam types from `.proto` definitions — see [parse-and-generate-other-languages.md → gRPC / Protobuf codegen](parse-and-generate-other-languages.md#grpc--protobuf-codegen) for the codegen gap.
+Protocol Buffers library for Gleam. Encode + decode at the byte level. **Note:** does **not** generate Gleam types from `.proto` definitions — see [parse-and-generate-other-languages.md → gRPC / Protobuf codegen](../parse-and-generate-other-languages.md#grpc--protobuf-codegen) for the codegen gap.
 
 #### nbeet
 
@@ -348,7 +350,7 @@ TOON — an LLM-friendly JSON-replacement format. Format-specific; narrow audien
 
 [repo](https://github.com/crowdhailer/castor)
 
-"Build schemas as well as encoding decoding from json schema file." Same author as [oas](parse-and-generate-other-languages.md#oas) and [oas_generator](parse-and-generate-other-languages.md#oas_generator). Bidirectional: parse a JSON Schema document, or build one programmatically.
+"Build schemas as well as encoding decoding from json schema file." Same author as [oas](../openapi.md#oas) and [oas_generator](../openapi.md#oas_generator). Bidirectional: parse a JSON Schema document, or build one programmatically.
 
 ### jscheam
 
@@ -426,7 +428,7 @@ Lower-level than user-facing wire formats — these are the framing bytes of est
 
 [repo](https://hex.pm/packages/postgresql_protocol)
 
-PostgreSQL wire-protocol encoder + decoder. Used by [pog](databases.md#pog-) under the hood.
+PostgreSQL wire-protocol encoder + decoder. Used by [pog](../databases.md#pog-) under the hood.
 
 ### h2_frame
 
@@ -446,10 +448,11 @@ Build-time tools whose **primary output is encoder / decoder code**. These are t
 | [glerd_json](#glerd_json) | Gleam types via `glerd` runtime info | JSON encoders/decoders | n/v | Runtime-info-driven |
 | [derived](#derived) | Gleam source w/ `!derived(...)` markers | Anything (incl. ser/deser) | 2★ | Marker-based; bring-your-own deriver |
 | [aide_generator](#aide_generator) | MCP tool schemas | MCP encoders/decoders | n/v | Narrow-scope (MCP only) |
+| [deriv](#deriv) | Gleam types w/ `//$ derive json …` markers | JSON encoders/decoders + type unification | 5★ · ⚠️ broken on new projects | Pinned to `gleam_json < 3.0`; conflicts with current `gleam_json 3.x` |
 
 Decision flow:
-- **You have a schema document** (TypeDef, OpenAPI, MCP) → use the tool that consumes that document directly. `json_typedef` for TypeDef, [oaspec](parse-and-generate-other-languages.md#oaspec) / [gilly](parse-and-generate-other-languages.md#gilly) for OpenAPI, `aide_generator` for MCP.
-- **You want to start from your Gleam types** → `gserde` (full source-walking) or `sara` (per-type annotations) are the most direct matches. `glerd_json` if you already use the `glerd` runtime-info ecosystem. `derived` if you want a marker-based approach where you control the emitted shape.
+- **You have a schema document** (TypeDef, OpenAPI, MCP) → use the tool that consumes that document directly. `json_typedef` for TypeDef, [oaspec](../openapi.md#oaspec) / [gilly](../openapi.md#gilly) for OpenAPI, `aide_generator` for MCP.
+- **You want to start from your Gleam types** → `gserde` (full source-walking) or `sara` (per-type annotations) are the most direct matches. `glerd_json` if you already use the `glerd` runtime-info ecosystem. `derived` if you want a marker-based approach where you control the emitted shape. **Avoid `deriv` until its `gleam_json` constraint is bumped** — it cannot resolve in any project that depends on `gleam_json 3.x`.
 - **Round-trip correctness is critical and you have many records** → schema-first (`json_typedef`) beats type-first because the schema is a single artefact you can validate the wire against.
 
 ### json_typedef
@@ -504,7 +507,7 @@ For production today, prefer hand-written `gleam_json` decoders or schema-first 
 
 [repo](https://github.com/gungun974/Sara) · [hexdocs](https://hexdocs.pm/sara/1.0.0/index.html)
 
-"A Gleam serialization code generator." Annotation-driven type-first codegen: mark a custom type with `//@json_encode()` and/or `//@json_decode()`, run `gleam run -m sara`, and `sara` emits a sibling `_json.gleam` module with the encoder/decoder functions. Inspired by [squirrel](parse-and-generate-other-languages.md#squirrel-) (which uses the same "annotate + run codegen" loop for SQL). Pure Gleam, dev-dependency, dual-target.
+"A Gleam serialization code generator." Annotation-driven type-first codegen: mark a custom type with `//@json_encode()` and/or `//@json_decode()`, run `gleam run -m sara`, and `sara` emits a sibling `_json.gleam` module with the encoder/decoder functions. Inspired by [squirrel](../databases.md#squirrel-) (which uses the same "annotate + run codegen" loop for SQL). Pure Gleam, dev-dependency, dual-target.
 
 ```gleam
 //@json_encode()
@@ -535,7 +538,7 @@ Then `gleam run -m sara` produces `comment_json.gleam` next to the source. Suppo
 
 [hex](https://hex.pm/packages/glerd_json)
 
-"JSON encoders/decoders codegen using Glerd." Built on top of [glerd](https://hex.pm/packages/glerd), a runtime type-information library that exposes Gleam record metadata to other tools. `glerd_json` consumes that metadata and emits encoders/decoders. Different mechanism from `gserde` (which parses Gleam source via [glance](parse-and-generate-gleam.md#glance)) — `glerd` instruments your build to expose type info at build time, then plugins like `glerd_json` consume it.
+"JSON encoders/decoders codegen using Glerd." Built on top of [glerd](https://hex.pm/packages/glerd), a runtime type-information library that exposes Gleam record metadata to other tools. `glerd_json` consumes that metadata and emits encoders/decoders. Different mechanism from `gserde` (which parses Gleam source via [glance](../parse-and-generate-gleam.md#glance)) — `glerd` instruments your build to expose type info at build time, then plugins like `glerd_json` consume it.
 
 The pattern is interesting because it factors out the "extract type info" step into a shared library, so other tools (validation, GraphQL schema, etc.) can reuse it. Adoption is still small at snapshot.
 
@@ -545,67 +548,52 @@ The pattern is interesting because it factors out the "extract type info" step i
 
 "The gleam code generator's code generator." Marker-based: write `!derived(...)` directives in docstrings of your Gleam source, run `derived`, and the tool inserts generated code at protected markers (round-trip safe; reruns won't double-insert). For building **custom** ser/deser derivers — useful when neither `json_typedef` nor `gserde` produces the shape you want and you'd rather write a small deriver than every encoder by hand.
 
-derived itself is **not** a JSON encoder generator out of the box; it is the framework on which one could be built. Pair with [trick](parse-and-generate-gleam.md#trick) or [gleamgen](parse-and-generate-gleam.md#gleamgen) for the code-emission half and you have a custom deriver in <100 lines.
+derived itself is **not** a JSON encoder generator out of the box; it is the framework on which one could be built. Pair with [trick](../parse-and-generate-gleam.md#trick) or [gleamgen](../parse-and-generate-gleam.md#gleamgen) for the code-emission half and you have a custom deriver in <100 lines.
 
 ### aide_generator
 
 [repo](https://github.com/crowdhailer/aide_generator)
 
-"Generate encoders and decoders for MCP tools." Narrow scope: emit ser/deser for the parameter and result types of an MCP (Model Context Protocol) tool definition. Same author as [oas](parse-and-generate-other-languages.md#oas) and [oas_generator](parse-and-generate-other-languages.md#oas_generator). Not a general-purpose codegen — but the right pick if you are building an MCP server in Gleam where tool schemas are the source of truth. See [ai.md](ai.md) for the MCP context.
+"Generate encoders and decoders for MCP tools." Narrow scope: emit ser/deser for the parameter and result types of an MCP (Model Context Protocol) tool definition. Same author as [oas](../openapi.md#oas) and [oas_generator](../openapi.md#oas_generator). Not a general-purpose codegen — but the right pick if you are building an MCP server in Gleam where tool schemas are the source of truth. See [ai.md](../ai.md) for the MCP context.
+
+### deriv
+
+[repo](https://github.com/bchase/deriv) · [hex](https://hex.pm/packages/deriv)
+
+"Derive functions for your Gleam types." Marker-based codegen: write `//$ derive json decode encode` (or `//$ derive unify`) above a type definition, run `gleam run -m deriv`, and the tool emits JSON encoders/decoders alongside type-unification helpers. Supports custom field naming (e.g. mapping a Gleam field `draft` to JSON key `content`) and nested-key paths (e.g. `meta_nested_key` → `meta.nested.key`). Last release: v2.0.0 (2025-04-08).
+
+> [!CAUTION]
+> **deriv 2.0.0 cannot resolve dependencies in new projects as of snapshot (2026-05-07).** Its manifest pins `gleam_json >= 2.2.0 and < 3.0.0`, but the current `gleam_json` is **v3.1.0**. Adding `deriv` to a project that already depends on `gleam_json 3.x` fails immediately:
+>
+> ```
+> error: Dependency resolution failed
+> There's no compatible version of `gleam_json`:
+>   - You require deriv >= 0.0.0
+>     - deriv requires gleam_json >= 2.2.0 and < 3.0.0
+>   - You require gleam_json 3.1.0
+> ```
+>
+> Adding `deriv` to a fresh project pins the project to `gleam_json 2.x`, which is missing the API surface added in 3.0. Until upstream bumps the constraint, prefer [gserde](#gserde) or [sara](#sara) for type-first JSON codegen.
+
+| Criterion | [deriv](https://github.com/bchase/deriv) |
+| --- | --- |
+| Stars | 5★ · 🟥 |
+| License | MIT · 🟩 |
+| Target | ☎️ BEAM |
+| Gleam compat | `gleam_stdlib >= 0.34.0 and < 2.0.0` · 🟩, but `gleam_json < 3.0.0` · 🟥 |
+| Maintenance | 🟥 (latest release 2025-04-08; no commits since) |
+| Age | ~13 months at snapshot · 🟩 |
+| README maturity | 🟩 (annotation examples, custom-naming, nested keys) |
+| Idiomaticity | 🟩 (typed, explicit annotations) |
+| Issues | not surfaced |
+
+The annotation/run-codegen loop is the same shape as [sara](#sara), so if upstream catches up on `gleam_json` and `decode 1.x`, deriv is a reasonable peer in the codegen-from-types corner. As of snapshot, treat it as **stale**.
 
 ### What does *not* exist (yet)
 
 - **No `#[derive(Decode)]`-equivalent** — Gleam has no macros. The closest analogue is `gserde` (parse source, emit code) or `glerd_json` (runtime type info, emit code), neither of which is a one-liner annotation.
 - **No serde-style format-pluggable codegen** — Rust's `serde` separates the "describe my type" trait from the "this format encodes booleans like X" trait, letting one derive serve JSON, CBOR, MsgPack, etc. Gleam codegen tools are **per-format** (gserde is JSON-only, json_typedef is JSON-only). A future serde-shaped Gleam tool would be a useful addition.
-- **No Protobuf `.proto` codegen** — `protozoa` is library-only. Cross-link: [parse-and-generate-other-languages.md → gRPC / Protobuf codegen](parse-and-generate-other-languages.md#grpc--protobuf-codegen).
-
-## Gleam → OpenAPI (code-first spec generation)
-
-If you have a [mist](web-and-http/web-apps.md#mist) or [wisp](web-and-http/web-apps.md#wisp) app and want an OpenAPI spec emitted from your routes and handler types — **no such tool exists in Gleam yet**.
-
-| Direction | Status | Tools |
-| --- | --- | --- |
-| Spec → Gleam (server stubs + client SDK) | ✅ covered | [oaspec](parse-and-generate-other-languages.md#oaspec), [gilly](parse-and-generate-other-languages.md#gilly), [oas_generator](parse-and-generate-other-languages.md#oas_generator) |
-| **Gleam → Spec (code-first)** | ❌ **none** | — |
-| Spec parsing (as a library) | ✅ covered | [oas](parse-and-generate-other-languages.md#oas) |
-
-> [!IMPORTANT]
-> If you want code-first OpenAPI in the style of [FastAPI](https://fastapi.tiangolo.com/), [Ktor](https://ktor.io/docs/openapi-spec-generation.html), [tsoa](https://tsoa-community.github.io/docs/), or [utoipa](https://github.com/juhaku/utoipa), **the Gleam ecosystem cannot give it to you today**. You will either hand-write the spec, generate it outside Gleam, or adopt the spec-first workflow with [oaspec](parse-and-generate-other-languages.md#oaspec)/[gilly](parse-and-generate-other-languages.md#gilly)/[oas_generator](parse-and-generate-other-languages.md#oas_generator).
-
-### Why the gap exists
-
-The structural reason: **Gleam has no runtime type reflection and no macros.** A code-first generator would have to walk the compiler AST or require developers to write a parallel description of each route (defeating the point). Neither approach has been published as a package.
-
-What a hypothetical `mist_openapi` or `wisp_openapi` would need to do:
-
-1. **Enumerate routes.** Both mist and wisp dispatch via ordinary Gleam pattern-match on the request — there is no declarative route registry to walk. An annotation layer or a routing DSL would need to exist first.
-2. **Extract parameter and body types.** Gleam functions carry static types, but those types are erased on BEAM and absent from JS. Without macros or reflection, the generator would have to parse Gleam source (the compiler AST) at build time — or rely on `glerd`-style runtime metadata.
-3. **Emit JSON Schema.** A type → schema mapper for Gleam records, custom types (sum types → `oneOf`), `Option` (nullable), `List` (array), `Dict` (`additionalProperties`), and generics.
-4. **Assemble the document.** Compose into a full OpenAPI 3.x document (security schemes, servers, tags, responses) and serialise.
-
-### What exists that could be reused
-
-- [crowdhailer/oas](parse-and-generate-other-languages.md#oas) — data model for the output document (could be the encode side if builders + a JSON encoder were added).
-- [gleam_json](#gleam_json) — JSON serialisation.
-- [glance](parse-and-generate-gleam.md#glance) — Gleam source parser, the most plausible bridge to "extract types from handler functions."
-- [glerd](https://hex.pm/packages/glerd) — runtime type metadata; could expose handler signatures to a generator without source-walking.
-- [gleamgen](parse-and-generate-gleam.md#gleamgen) / [trick](parse-and-generate-gleam.md#trick) / [derived](#derived) — code-emit infrastructure (would emit the *registration* layer, not the spec itself).
-- [json_blueprint](#json_blueprint) — already produces JSON Schema from a runtime definition; with route-walking on top, this is the shortest path to a working tool.
-
-### What is missing
-
-- Any published Gleam-level route registry abstraction (the mist/wisp idiom is an opaque pattern match).
-- Any type-introspection mechanism that doesn't depend on parsing source. `glerd` is the only published shoe-in; it is small but well-shaped.
-- An opinionated DSL that holds both handler and signature description at the same value level.
-
-### Workarounds
-
-- **Hand-written spec** — keep `openapi.yaml` in the repo, feed it to [oaspec](parse-and-generate-other-languages.md#oaspec) with `--check` in CI to detect drift between spec and generated server stubs. This inverts the code-first model: the **spec** is authoritative, your Gleam server is derived.
-- **Spec-first as default** — if your reason for wanting code-first is "I don't want to maintain a YAML file by hand," spec-first tooling now covers enough of the OpenAPI surface that the YAML can be short and mostly auto-scaffoldable from an initial sketch.
-- **Annotation DSL** — wrap routes in a small Gleam DSL that holds both the handler and a description of its inputs/outputs; a separate function walks the DSL value to emit the spec. This is the only path that avoids parsing source. Nobody has published it yet.
-- **`json_blueprint` for the schema half** — if your need is just JSON Schema for request/response bodies (not the full OpenAPI document), `json_blueprint` already gives you a single-source-of-truth path. Ship the request/response schemas with your handlers and assemble them into a hand-written OpenAPI shell.
-
-For Postman ↔ OpenAPI conversion (the inverse direction, often a workaround input), see [../postman-to-openapi-converters.md](../postman-to-openapi-converters.md).
+- **No Protobuf `.proto` codegen** — `protozoa` is library-only. Cross-link: [parse-and-generate-other-languages.md → gRPC / Protobuf codegen](../parse-and-generate-other-languages.md#grpc--protobuf-codegen).
 
 ## Cross-language framing
 
@@ -627,11 +615,11 @@ The closest analogue to Gleam's code-first OpenAPI situation is **Elixir's `open
 
 The closest analogue to Gleam's hand-written ser/deser baseline is **Elm**: deliberately verbose, deliberately type-checked, deliberately no-magic. The Gleam ecosystem inherits that aesthetic and the ergonomic cost.
 
-When the verbosity gets in the way: reach into [codegen for ser/deser](#codegen-for-serdeser) (`json_typedef` for schema-first, `gserde` for type-first, [trick](parse-and-generate-gleam.md#trick) for hand-rolled emit).
+When the verbosity gets in the way: reach into [codegen for ser/deser](#codegen-for-serdeser) (`json_typedef` for schema-first, `gserde` for type-first, [trick](../parse-and-generate-gleam.md#trick) for hand-rolled emit).
 
 ## Leaderboards
 
-[How scores are calculated →](databases.md#scoring-dimensions)
+[How scores are calculated →](../databases.md#scoring-dimensions)
 
 ### Codegen for ser/deser
 
@@ -643,8 +631,9 @@ When the verbosity gets in the way: reach into [codegen for ser/deser](#codegen-
 | 2 | 🥈 | [dusty-phillips/derived](https://github.com/dusty-phillips/derived) | `!derived()` markers | 🟥 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 | **5** |
 | 5 | — | [gungun974/Sara](https://github.com/gungun974/Sara) | Gleam types w/ annotations | 🟨 | 🟩 | 🟩 | 🟩 | 🟥 | 🟩 | 🟩 | **4** |
 | 6 | — | [darky/glerd-json](https://hex.pm/packages/glerd_json) | Gleam types via `glerd` | ⬜ | ⬜ | 🟩 | 🟨 | 🟩 | 🟨 | 🟩 | **3** |
+| 7 | — | [bchase/deriv](https://github.com/bchase/deriv) ⚠️ | Gleam types w/ `//$ derive` markers | 🟥 | 🟩 | 🟥 | 🟥 | 🟩 | 🟩 | 🟩 | **1** |
 
-**json_typedef** wins on authority + schema-first stance + "lpil-built" trust. **gserde** is the most direct type-first answer but the alpha caveat keeps it tied. **sara** is the youngest entrant but ships a clean per-type annotation API; the squirrel-inspired loop will feel familiar to anyone using SQL codegen. **derived** is the right pick when none of the above emit the shape you want — it is the framework, not the deriver.
+**json_typedef** wins on authority + schema-first stance + "lpil-built" trust. **gserde** is the most direct type-first answer but the alpha caveat keeps it tied. **sara** is the youngest entrant but ships a clean per-type annotation API; the squirrel-inspired loop will feel familiar to anyone using SQL codegen. **derived** is the right pick when none of the above emit the shape you want — it is the framework, not the deriver. **deriv** drops to the bottom because of its `gleam_json < 3.0.0` cap — see the [`Caution` callout](#deriv).
 
 ### Bidirectional schemas at runtime
 
@@ -684,18 +673,17 @@ Star counts on most JSON packages aren't surfaced individually by the search ind
 
 | Tool | Status |
 | --- | --- |
-| Anything that walks Gleam types and emits OpenAPI | ❌ does not exist |
+| Anything that walks Gleam types and emits OpenAPI | ❌ does not exist · see [openapi.md](../openapi.md#gleam--openapi-code-first-spec-generation) |
 | Anything that walks Gleam types and emits JSON Schema | ⚠️ [json_blueprint](#json_blueprint) gets close (single blueprint → encode + decode + auto-Schema), but you still author the blueprint by hand |
-
-The gap. See [Gleam → OpenAPI](#gleam--openapi-code-first-spec-generation) for the structural reasons and the workarounds.
 
 ## Related
 
-- [parse-and-generate-gleam.md](parse-and-generate-gleam.md) — Gleam source parsers (glance) and Gleam-emitting DSLs (gleamgen, trick). The build-time machinery on which `gserde` and `derived` sit.
-- [parse-and-generate-other-languages.md](parse-and-generate-other-languages.md) — parser combinators, format parsers, OpenAPI parser (`oas`), spec→Gleam codegen (`oaspec`, `gilly`), and the Protobuf `.proto` codegen gap.
-- [databases.md](databases.md) — SQL→Gleam codegen produces *types and query functions*, not encoders/decoders, but uses the same code-emit infrastructure. Canonical scoring rubric lives here.
-- [web-and-http/web-apps.md](web-and-http/web-apps.md) — mist, wisp; relevant context for the [code-first OpenAPI gap](#gleam--openapi-code-first-spec-generation).
-- [web-and-http/http-clients.md](web-and-http/http-clients.md) — HTTP transport that consumes the encoders/decoders here.
-- [ai.md](ai.md) — MCP context for `aide_generator`.
-- [../postman-to-openapi-converters.md](../postman-to-openapi-converters.md) — adjacent spec-conversion workflow.
-- [../formalization.md](../formalization.md) — scoring formalization.
+- [openapi.md](../openapi.md) — OpenAPI parser library (`oas`), spec→Gleam codegen (`oaspec`, `gilly`, `oas_generator`), and the Gleam → OpenAPI gap.
+- [parse-and-generate-gleam.md](../parse-and-generate-gleam.md) — Gleam source parsers (glance) and Gleam-emitting DSLs (gleamgen, trick). The build-time machinery on which `gserde` and `derived` sit.
+- [parse-and-generate-other-languages.md](../parse-and-generate-other-languages.md) — parser combinators, format parsers, SQL→Gleam codegen, GraphQL, and the Protobuf `.proto` codegen gap.
+- [databases.md](../databases.md) — SQL→Gleam codegen produces *types and query functions*, not encoders/decoders, but uses the same code-emit infrastructure. Canonical scoring rubric lives here.
+- [web-and-http/web-apps.md](../web-and-http/web-apps.md) — mist, wisp; relevant context for the code-first OpenAPI gap.
+- [web-and-http/http-clients.md](../web-and-http/http-clients.md) — HTTP transport that consumes the encoders/decoders here.
+- [ai.md](../ai.md) — MCP context for `aide_generator`.
+- [postman-to-openapi-converters.md](../../postman-to-openapi-converters.md) — adjacent spec-conversion workflow.
+- [formalization.md](../../formalization.md) — scoring formalization.

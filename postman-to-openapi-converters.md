@@ -139,7 +139,7 @@ p2o ./collection.json -f ./openapi.yaml
 
 [repo](https://github.com/kevinswiber/postman2openapi) · [browser version](https://kevinswiber.github.io/postman2openapi/) · Apache-2.0 · 419★ · last commit 2024-07-03
 
-The only tool that runs the request/response examples through schema inference and emits `properties` inline (not just `example:`). Also emits `operationId`, `summary`, and `description` per operation. Makes the output substantially more useful as a contract for codegen tools (e.g. [oaspec](gleam/parse-and-generate-other-languages.md#oaspec) or openapi-generator).
+The only tool that runs the request/response examples through schema inference and emits `properties` inline (not just `example:`). Also emits `operationId`, `summary`, and `description` per operation. Makes the output substantially more useful as a contract for codegen tools (e.g. [oaspec](gleam/openapi.md#oaspec) or openapi-generator).
 
 **Trade-off:** 71 lint errors. The largest cluster is `nullable-type-sibling` — `nullable: true` is emitted without an accompanying `type:`, which OpenAPI 3.0 explicitly forbids and which most validators reject. Generated code from strict generators will refuse this output until you fix it (sed-able). Also: array-item examples occasionally violate the inferred type (`type: integer` with a string example).
 
