@@ -9,7 +9,7 @@
 2. **Spec → Gleam codegen** — emit Gleam server stubs and/or client SDKs from a spec ([oaspec](#oaspec), [gilly](#gilly), [oas_generator](#oas_generator)).
 3. **Gleam → spec (code-first)** — emit an OpenAPI document from your routes / handler types. **No package covers this** as of snapshot.
 
-For the runtime ser/deser story (`gleam_json`, `protozoa`, `gleam_erlang_cbor`) and codegen tools whose primary output is encoders/decoders (`json_typedef`, `gserde`, `sara`, `glerd_json`, `aide_generator`), see [serialization/serialize-and-deserialize.md](serialization/serialize-and-deserialize.md). For non-OpenAPI parsers and X→Gleam codegen (parser combinators, format parsers, SQL→Gleam, GraphQL→Gleam), see [parse-and-generate-other-languages.md](parse-and-generate-other-languages.md).
+For the runtime ser/deser story (`gleam_json`, `protozoa`, …) see [serialization/runtime-bidirectional-json.md](serialization/runtime-bidirectional-json.md) (JSON) and [serialization/other-formats.md](serialization/other-formats.md) (CBOR / MsgPack / BSON / Protobuf / …). For codegen tools whose primary output is encoders/decoders (`json_typedef`, `gserde`, `sara`, `glerd_json`, `aide_generator`), see [serialization/codegen-json.md](serialization/codegen-json.md). For non-OpenAPI parsers and X→Gleam codegen (parser combinators, format parsers, SQL→Gleam, GraphQL→Gleam), see [parse-and-generate-other-languages.md](parse-and-generate-other-languages.md).
 
 ## Table of contents
 
@@ -206,11 +206,11 @@ What a hypothetical `mist_openapi` or `wisp_openapi` would need to do:
 ### What exists that could be reused
 
 - [crowdhailer/oas](#oas) — data model for the output document (could be the encode side if builders + a JSON encoder were added).
-- [gleam_json](serialization/serialize-and-deserialize.md#gleam_json) — JSON serialisation.
+- [gleam_json](serialization/runtime-bidirectional-json.md#gleam_json) — JSON serialisation.
 - [glance](parse-and-generate-gleam.md#glance) — Gleam source parser, the most plausible bridge to "extract types from handler functions."
 - [glerd](https://hex.pm/packages/glerd) — runtime type metadata; could expose handler signatures to a generator without source-walking.
-- [gleamgen](parse-and-generate-gleam.md#gleamgen) / [trick](parse-and-generate-gleam.md#trick) / [derived](serialization/serialize-and-deserialize.md#derived) — code-emit infrastructure (would emit the *registration* layer, not the spec itself).
-- [json_blueprint](serialization/serialize-and-deserialize.md#json_blueprint) — already produces JSON Schema from a runtime definition; with route-walking on top, this is the shortest path to a working tool.
+- [gleamgen](parse-and-generate-gleam.md#gleamgen) / [trick](parse-and-generate-gleam.md#trick) / [derived](serialization/codegen-json.md#derived) — code-emit infrastructure (would emit the *registration* layer, not the spec itself).
+- [json_blueprint](serialization/runtime-bidirectional-json.md#json_blueprint) — already produces JSON Schema from a runtime definition; with route-walking on top, this is the shortest path to a working tool.
 
 ### What is missing
 
@@ -223,7 +223,7 @@ What a hypothetical `mist_openapi` or `wisp_openapi` would need to do:
 - **Hand-written spec** — keep `openapi.yaml` in the repo, feed it to [oaspec](#oaspec) with `--check` in CI to detect drift between spec and generated server stubs. This inverts the code-first model: the **spec** is authoritative, your Gleam server is derived.
 - **Spec-first as default** — if your reason for wanting code-first is "I don't want to maintain a YAML file by hand," spec-first tooling now covers enough of the OpenAPI surface that the YAML can be short and mostly auto-scaffoldable from an initial sketch.
 - **Annotation DSL** — wrap routes in a small Gleam DSL that holds both the handler and a description of its inputs/outputs; a separate function walks the DSL value to emit the spec. This is the only path that avoids parsing source. Nobody has published it yet.
-- **`json_blueprint` for the schema half** — if your need is just JSON Schema for request/response bodies (not the full OpenAPI document), [json_blueprint](serialization/serialize-and-deserialize.md#json_blueprint) already gives you a single-source-of-truth path. Ship the request/response schemas with your handlers and assemble them into a hand-written OpenAPI shell.
+- **`json_blueprint` for the schema half** — if your need is just JSON Schema for request/response bodies (not the full OpenAPI document), [json_blueprint](serialization/runtime-bidirectional-json.md#json_blueprint) already gives you a single-source-of-truth path. Ship the request/response schemas with your handlers and assemble them into a hand-written OpenAPI shell.
 
 For Postman ↔ OpenAPI conversion (the inverse direction, often a workaround input), see [../postman-to-openapi-converters.md](../postman-to-openapi-converters.md).
 
@@ -263,13 +263,13 @@ Combines the [oas](#oas) parser with the three OpenAPI codegen tools, since they
 | Tool | Status |
 | --- | --- |
 | Anything that walks Gleam types and emits OpenAPI | ❌ does not exist |
-| Anything that walks Gleam types and emits JSON Schema | ⚠️ [json_blueprint](serialization/serialize-and-deserialize.md#json_blueprint) gets close (single blueprint → encode + decode + auto-Schema), but you still author the blueprint by hand |
+| Anything that walks Gleam types and emits JSON Schema | ⚠️ [json_blueprint](serialization/runtime-bidirectional-json.md#json_blueprint) gets close (single blueprint → encode + decode + auto-Schema), but you still author the blueprint by hand |
 
 The gap. See [Why the gap exists](#why-the-gap-exists) for the structural reasons and the workarounds.
 
 ## Related
 
-- [serialization/serialize-and-deserialize.md](serialization/serialize-and-deserialize.md) — runtime ser/deser (gleam_json, protozoa, gleam_erlang_cbor), codegen for encoders/decoders (json_typedef, gserde, sara, glerd_json, derived, aide_generator), JSON Schema tools (castor, jscheam, sextant), bidirectional schemas (convert, kata, json_blueprint).
+- [serialization/](serialization/) — folder. [README](serialization/README.md) for the encoder/decoder convention + hand-written ser/deser; [codegen-json.md](serialization/codegen-json.md) for build-time codegen (json_typedef, gserde, sara, glerd_json, derived, aide_generator); [runtime-bidirectional-json.md](serialization/runtime-bidirectional-json.md) for runtime JSON + JSON Schema tools (castor, jscheam, sextant) + bidirectional schemas (convert, kata, json_blueprint); [other-formats.md](serialization/other-formats.md) for non-JSON formats (CBOR / MsgPack / BSON / Protobuf / …).
 - [parse-and-generate-other-languages.md](parse-and-generate-other-languages.md) — parser combinators, format parsers (TOML/Djot/CSV/XML/Markdown/CEL), HTML parsers, SQL→Gleam codegen (squirrel/parrot/marmot/sqlode), GraphQL (squall), static-asset embeds, gRPC/Protobuf gap.
 - [parse-and-generate-gleam.md](parse-and-generate-gleam.md) — Gleam source parsers (glance, glance_printer) and Gleam-emitting DSLs (gleamgen, trick, glue, derived).
 - [web-and-http/web-apps.md](web-and-http/web-apps.md) — mist, wisp; relevant context for the [code-first OpenAPI gap](#gleam--openapi-code-first-spec-generation).

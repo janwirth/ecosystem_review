@@ -138,6 +138,9 @@ Star counts are small — biggest auth-specific package tops out around 30★. U
 
 The lowest-level slot is also the most-served: **three** independent Argon2 NIF backings, plus bcrypt and PBKDF2. Pick by NIF strategy and tolerance for build-time toolchain — all three Argon2 libs expose effectively the same interface.
 
+> [!NOTE]
+> For non-password hashing (file integrity, HMAC, content-addressing, hash-map keying, fast non-crypto), see [hashing.md](hashing.md). **Never** use a general-purpose hash like SHA-256 (`gleam_crypto.hash`) for password storage — SHA-256 is fast, which is the wrong property here.
+
 | Criterion | [argus](https://github.com/Pevensie/argus) | [antigone](https://github.com/lpil/antigone) | [aragorn2](https://github.com/maxdeviant/aragorn2) | [beecrypt](https://github.com/lpil/beecrypt) | [pinkdf2](https://github.com/yazatamorph/pinkdf2) |
 | --- | --- | --- | --- | --- | --- |
 | Algorithm | Argon2id | Argon2id | Argon2id | bcrypt | PBKDF2 |

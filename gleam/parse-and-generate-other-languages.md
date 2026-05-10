@@ -10,7 +10,7 @@ This article has two halves:
 1. **Runtime parsing of other-language text** — combinators, format parsers, HTML parsers. Output is a typed Gleam value at runtime.
 2. **Build-time codegen consuming external schemas** — SQL → Gleam, GraphQL → Gleam, static-asset embedding. Output is committed `.gleam` source.
 
-For tools that parse Gleam itself or emit Gleam from a Gleam-shaped DSL, see [parse-and-generate-gleam.md](parse-and-generate-gleam.md). For codegen tools whose primary output is encoders/decoders (`json_typedef`, `gserde`, `glerd_json`, `aide_generator`) and the runtime ser/deser story (`gleam_json`, `protozoa`, `gleam_erlang_cbor`), see [serialization/serialize-and-deserialize.md](serialization/serialize-and-deserialize.md). For OpenAPI specifically (parser library, spec→Gleam codegen, Gleam→spec gap), see [openapi.md](openapi.md).
+For tools that parse Gleam itself or emit Gleam from a Gleam-shaped DSL, see [parse-and-generate-gleam.md](parse-and-generate-gleam.md). For codegen tools whose primary output is JSON encoders/decoders (`json_typedef`, `gserde`, `glerd_json`, `aide_generator`), see [serialization/codegen-json.md](serialization/codegen-json.md); for the runtime ser/deser story (`gleam_json`, `protozoa`, …), see [serialization/runtime-bidirectional-json.md](serialization/runtime-bidirectional-json.md) (JSON) and [serialization/other-formats.md](serialization/other-formats.md) (CBOR / MsgPack / BSON / Protobuf / …). For OpenAPI specifically (parser library, spec→Gleam codegen, Gleam→spec gap), see [openapi.md](openapi.md).
 
 ## Table of Contents
 
@@ -209,10 +209,10 @@ Build-time tools that take an external schema or query (SQL, GraphQL, static ass
 | [SQL → Gleam](#sql--gleam) | [squirrel](databases.md#squirrel-) 🐘, [parrot](#parrot) 🐘🪶🐬, [marmot](#marmot) 🪶, [sqlode](databases.md#sqlode-) 🐘🪶🐬 |
 | [Other → Gleam](#other--gleam) | [squall](#squall) (GraphQL), [embeds](#embeds) (static assets) |
 | OpenAPI → Gleam | → [openapi.md](openapi.md#openapi--gleam-codegen) |
-| Codegen for ser/deser | → [serialization/serialize-and-deserialize.md → Codegen for ser/deser](serialization/serialize-and-deserialize.md#codegen-for-serdeser) |
+| Codegen for ser/deser | → [serialization/codegen-json.md](serialization/codegen-json.md) |
 
 > [!NOTE]
-> **Codegen tools whose primary output is encoders/decoders** — `gserde`, `json_typedef`, `glerd_json`, `aide_generator` — live in [serialization/serialize-and-deserialize.md → Codegen for ser/deser](serialization/serialize-and-deserialize.md#codegen-for-serdeser). They share infrastructure with the tools below (often using `gleamgen` or `glance` under the hood) but are decision-shaped around the ser/deser problem.
+> **Codegen tools whose primary output is encoders/decoders** — `gserde`, `json_typedef`, `glerd_json`, `aide_generator` — live in [serialization/codegen-json.md](serialization/codegen-json.md). They share infrastructure with the tools below (often using `gleamgen` or `glance` under the hood) but are decision-shaped around the ser/deser problem.
 
 > [!NOTE]
 > **OpenAPI tools** — the [oas](openapi.md#oas) parser, [oaspec](openapi.md#oaspec), [gilly](openapi.md#gilly), and [oas_generator](openapi.md#oas_generator) codegen tools, plus the Gleam → OpenAPI gap — all live in [openapi.md](openapi.md).
@@ -286,20 +286,20 @@ Quick map:
 
 ### gRPC / Protobuf codegen
 
-**Gap.** No published Gleam package emits Gleam code from `.proto` definitions, and no Gleam gRPC server framework exists. **Workaround:** generate Erlang stubs with `protoc` + `grpcbox` and call them from Gleam. Runtime-only Protobuf coverage exists via [protozoa](serialization/serialize-and-deserialize.md#protozoa) — cross-link to [serialization/serialize-and-deserialize.md](serialization/serialize-and-deserialize.md) for the runtime ser/deser story.
+**Gap.** No published Gleam package emits Gleam code from `.proto` definitions, and no Gleam gRPC server framework exists. **Workaround:** generate Erlang stubs with `protoc` + `grpcbox` and call them from Gleam. Runtime-only Protobuf coverage exists via [protozoa](serialization/other-formats.md#protozoa) — cross-link to [serialization/other-formats.md](serialization/other-formats.md) for the runtime ser/deser story.
 
 ### Codegen for ser/deser (cross-link)
 
 Several X→Gleam codegen tools exist whose primary output is **encoders/decoders** rather than business-logic types or HTTP clients:
 
-- **[json_typedef](serialization/serialize-and-deserialize.md#json_typedef)** — consumes RFC 8927 JSON Type Definition documents and emits Gleam types + encoders + decoders.
-- **[gserde](serialization/serialize-and-deserialize.md#gserde)** — derives JSON encoders/decoders from Gleam type definitions.
-- **[glerd_json](serialization/serialize-and-deserialize.md#glerd_json)** — JSON ser/deser derivation.
-- **[aide_generator](serialization/serialize-and-deserialize.md#aide_generator)** — emits encoders + decoders for MCP tool schemas.
+- **[json_typedef](serialization/codegen-json.md#json_typedef)** — consumes RFC 8927 JSON Type Definition documents and emits Gleam types + encoders + decoders.
+- **[gserde](serialization/codegen-json.md#gserde)** — derives JSON encoders/decoders from Gleam type definitions.
+- **[glerd_json](serialization/codegen-json.md#glerd_json)** — JSON ser/deser derivation.
+- **[aide_generator](serialization/codegen-json.md#aide_generator)** — emits encoders + decoders for MCP tool schemas.
 
-These are "X→Gleam" too, but they're decision-shaped around the ser/deser problem, so they live in [serialization/serialize-and-deserialize.md → Codegen for ser/deser](serialization/serialize-and-deserialize.md#codegen-for-serdeser).
+These are "X→Gleam" too, but they're decision-shaped around the ser/deser problem, so they live in [serialization/codegen-json.md](serialization/codegen-json.md).
 
-For runtime JSON-Schema *validation* (without codegen), see [serialization/serialize-and-deserialize.md](serialization/serialize-and-deserialize.md) — castor, jscheam, sextant.
+For runtime JSON-Schema *validation* (without codegen), see [serialization/runtime-bidirectional-json.md](serialization/runtime-bidirectional-json.md) — castor, jscheam, sextant.
 
 ### OpenAPI (cross-link)
 
@@ -358,7 +358,7 @@ The same constraint is what makes the **Gleam → spec** direction (e.g. handler
 
 ### X → Gleam generators (combined)
 
-Includes SQL, GraphQL, static-asset embedding. Cross-reference: [databases.md leaderboard](databases.md#leaderboard) covers SQL codegen alongside drivers and migrations. OpenAPI codegen has its own leaderboard in [openapi.md](openapi.md#leaderboard). Codegen tools whose output is encoders/decoders (json_typedef RFC 8927, aide_generator MCP) have their own leaderboard in [serialization/serialize-and-deserialize.md → Codegen for ser/deser](serialization/serialize-and-deserialize.md#codegen-for-serdeser).
+Includes SQL, GraphQL, static-asset embedding. Cross-reference: [databases.md leaderboard](databases.md#leaderboard) covers SQL codegen alongside drivers and migrations. OpenAPI codegen has its own leaderboard in [openapi.md](openapi.md#leaderboard). Codegen tools whose output is encoders/decoders (json_typedef RFC 8927, aide_generator MCP) have their own leaderboard in [serialization/codegen-json.md](serialization/codegen-json.md#leaderboard).
 
 | Position | Award | Repo | Input | ★ | Lic | Compat | Maint | Age | README | Idiom | Score |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -372,13 +372,13 @@ Includes SQL, GraphQL, static-asset embedding. Cross-reference: [databases.md le
 - **[squirrel](https://github.com/giacomocavalieri/squirrel)** — the established SQL→Gleam codegen, FOSDEM-talked, 633★. The reference implementation other tools cite. Full review in [databases.md](databases.md#squirrel-).
 - **[parrot](https://github.com/daniellionel01/parrot)** — sqlc-backed, multi-DB, 207★. Renamed from `sqlc-gen-gleam`.
 - **OpenAPI codegen** — [oaspec](openapi.md#oaspec), [gilly](openapi.md#gilly), [oas_generator](openapi.md#oas_generator). Covered in [openapi.md](openapi.md).
-- **[json_typedef](serialization/serialize-and-deserialize.md#json_typedef)**, **[gserde](serialization/serialize-and-deserialize.md#gserde)**, **[aide_generator](serialization/serialize-and-deserialize.md#aide_generator)** — covered in [serialization/serialize-and-deserialize.md](serialization/serialize-and-deserialize.md#codegen-for-serdeser) as ser/deser-specific codegen.
+- **[json_typedef](serialization/codegen-json.md#json_typedef)**, **[gserde](serialization/codegen-json.md#gserde)**, **[aide_generator](serialization/codegen-json.md#aide_generator)** — covered in [serialization/codegen-json.md](serialization/codegen-json.md) as ser/deser-specific codegen.
 
 ## Related
 
 - [parse-and-generate-gleam.md](parse-and-generate-gleam.md) — sibling article: Gleam-source parsers (glance, glance_printer) and Gleam-emitting Gleam DSLs (gleamgen, trick, glue, derived).
 - [openapi.md](openapi.md) — the OpenAPI corner: parser library (oas), spec→Gleam codegen (oaspec, gilly, oas_generator), and the Gleam → OpenAPI gap.
-- [serialization/serialize-and-deserialize.md](serialization/serialize-and-deserialize.md) — runtime ser/deser (gleam_json, protozoa, gleam_erlang_cbor), codegen for encoders/decoders (json_typedef, gserde, glerd_json, aide_generator).
+- [serialization/](serialization/) — folder. [codegen-json.md](serialization/codegen-json.md) for build-time JSON codegen; [runtime-bidirectional-json.md](serialization/runtime-bidirectional-json.md) for runtime JSON; [other-formats.md](serialization/other-formats.md) for non-JSON formats (protozoa, gleebor, …).
 - [databases.md](databases.md#sql-code-generators) — squirrel and sqlode in depth (this article cross-links there to avoid duplication); parrot and marmot reviewed in both places.
 - [syntax-highlighting.md](syntax-highlighting.md) — sibling lexers for colourisation (per-language lexers used as highlighter input vs parsing for AST/analysis).
 - [../postman-to-openapi-converters.md](../postman-to-openapi-converters.md) — adjacent: converting Postman collections to OpenAPI specs (precedes the OpenAPI → Gleam pipeline).

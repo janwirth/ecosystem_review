@@ -8,7 +8,7 @@ Gleam-on-Gleam tooling. Two operations on the same language:
 1. **Parsing Gleam** — read Gleam source code into a typed AST inside a Gleam program ([glance](#glance), [glance_printer](#glance_printer)).
 2. **Generating Gleam** — emit Gleam source from a Gleam DSL ([gleamgen](#gleamgen), [trick](#trick), [glue](#glue), [derived](#derived)).
 
-These primitives are the building blocks for almost every codegen tool in the ecosystem: SQL→Gleam, OpenAPI→Gleam, ser/deser derivers, and so on. Tools whose **input** is a non-Gleam language live in the sibling article [parse-and-generate-other-languages.md](parse-and-generate-other-languages.md); tools whose **output** is encoders/decoders live in [serialization/serialize-and-deserialize.md](serialization/serialize-and-deserialize.md).
+These primitives are the building blocks for almost every codegen tool in the ecosystem: SQL→Gleam, OpenAPI→Gleam, ser/deser derivers, and so on. Tools whose **input** is a non-Gleam language live in the sibling article [parse-and-generate-other-languages.md](parse-and-generate-other-languages.md); tools whose **output** is JSON encoders/decoders live in [serialization/codegen-json.md](serialization/codegen-json.md).
 
 ## Table of Contents
 
@@ -106,7 +106,7 @@ Libraries that **emit Gleam code** from a Gleam DSL — typically called by buil
 | [glue](#glue) | Gleam source (via [glance](#glance)) | Gleam functions in same module | 9★ · 🟥 | 2024-12-08 | `compare`, `list_variants` derivers |
 | [derived](#derived) | Gleam source w/ `!derived()` markers | Gleam functions inserted in-place | 2★ · 🟥 | 2025-08-03 | "Code generator's code generator"; framework for custom derivers |
 
-Pick: **gleamgen** for the most-mature DSL with phantom-type guarantees. **trick** if you want elm-codegen ergonomics and don't mind a git dependency. **glue** if you only need the canned `compare`/`list_variants` derivers. **derived** if you want a marker-based round-tripper that's safe to re-run. For **JSON encode/decode codegen** (the most common downstream use of these primitives), see [serialization/serialize-and-deserialize.md → Codegen for ser/deser](serialization/serialize-and-deserialize.md#codegen-for-serdeser).
+Pick: **gleamgen** for the most-mature DSL with phantom-type guarantees. **trick** if you want elm-codegen ergonomics and don't mind a git dependency. **glue** if you only need the canned `compare`/`list_variants` derivers. **derived** if you want a marker-based round-tripper that's safe to re-run. For **JSON encode/decode codegen** (the most common downstream use of these primitives), see [serialization/codegen-json.md](serialization/codegen-json.md).
 
 ### gleamgen
 [repo](https://github.com/Brewingweasel/gleamgen)
@@ -162,10 +162,10 @@ pub fn main() {
 ### derived
 [repo](https://github.com/dusty-phillips/derived)
 
-"The gleam code generator's code generator." Marker-based: write `!derived(...)` directives in your Gleam source, run `derived`, and the tool inserts generated code at protected markers (round-trip safe). The framework for building custom derivers — `derived` itself is not a JSON encoder generator, but a tool you compose with [trick](#trick) or [gleamgen](#gleamgen) to build one. Common use cases: serialisation derivers (cross-link → [serialization/serialize-and-deserialize.md](serialization/serialize-and-deserialize.md#codegen-for-serdeser)), validation derivers, documentation derivers. Last commit 2025-08-03.
+"The gleam code generator's code generator." Marker-based: write `!derived(...)` directives in your Gleam source, run `derived`, and the tool inserts generated code at protected markers (round-trip safe). The framework for building custom derivers — `derived` itself is not a JSON encoder generator, but a tool you compose with [trick](#trick) or [gleamgen](#gleamgen) to build one. Common use cases: serialisation derivers (cross-link → [serialization/codegen-json.md](serialization/codegen-json.md#derived)), validation derivers, documentation derivers. Last commit 2025-08-03.
 
 > [!NOTE]
-> **derived appears in two articles.** Here it's covered as a Gleam-emitting framework — the structural piece. In [serialization/serialize-and-deserialize.md](serialization/serialize-and-deserialize.md#codegen-for-serdeser) it's covered as a ser/deser deriver framework — the use-case piece. Both are accurate; pick the article that matches your lens.
+> **derived appears in two articles.** Here it's covered as a Gleam-emitting framework — the structural piece. In [serialization/codegen-json.md](serialization/codegen-json.md#derived) it's covered as a ser/deser deriver framework — the use-case piece. Both are accurate; pick the article that matches your lens.
 
 ## Cross-cutting tools using these primitives
 
@@ -173,7 +173,7 @@ The Gleam-emitting libraries above are the foundation for almost every codegen t
 
 - **SQL / GraphQL → Gleam.** See [parse-and-generate-other-languages.md → X → Gleam code generation](parse-and-generate-other-languages.md#x--gleam-code-generation) for [squirrel](databases.md#squirrel-), [parrot](parse-and-generate-other-languages.md#parrot), [marmot](parse-and-generate-other-languages.md#marmot), [sqlode](databases.md#sqlode-), [squall](parse-and-generate-other-languages.md#squall) (GraphQL), [embeds](parse-and-generate-other-languages.md#embeds) (static assets). Many of these emit Gleam via [gleamgen](#gleamgen) or [trick](#trick) under the hood.
 - **OpenAPI → Gleam.** See [openapi.md](openapi.md) for [oas](openapi.md#oas), [oaspec](openapi.md#oaspec), [gilly](openapi.md#gilly), [oas_generator](openapi.md#oas_generator).
-- **Codegen for ser/deser.** See [serialization/serialize-and-deserialize.md → Codegen for ser/deser](serialization/serialize-and-deserialize.md#codegen-for-serdeser) for [json_typedef](serialization/serialize-and-deserialize.md), [gserde](serialization/serialize-and-deserialize.md), [glerd_json](serialization/serialize-and-deserialize.md), [aide_generator](serialization/serialize-and-deserialize.md). These tools emit encoders/decoders rather than general Gleam, but they share the same emit-and-commit pipeline.
+- **Codegen for ser/deser.** See [serialization/codegen-json.md](serialization/codegen-json.md) for [json_typedef](serialization/codegen-json.md#json_typedef), [gserde](serialization/codegen-json.md#gserde), [glerd_json](serialization/codegen-json.md#glerd_json), [aide_generator](serialization/codegen-json.md#aide_generator). These tools emit encoders/decoders rather than general Gleam, but they share the same emit-and-commit pipeline.
 - **SQL → Gleam in depth.** [databases.md → SQL Code Generators](databases.md#sql-code-generators) has the deepest comparison for the SQL slice (squirrel vs parrot vs sqlode vs marmot).
 
 ## Cross-language framing
@@ -206,7 +206,7 @@ The same constraint is what makes the **Gleam → spec** direction (e.g. handler
 | 4 | — | [lpil/glue](https://github.com/lpil/glue) | Gleam (`compare`, etc.) | 🟥 | 🟨 | 🟩 | 🟨 | 🟩 | 🟩 | 🟩 | **3** |
 
 > [!NOTE]
-> Codegen tools whose **primary output is encoders/decoders** ([json_typedef](serialization/serialize-and-deserialize.md#codegen-for-serdeser), [gserde](serialization/serialize-and-deserialize.md#codegen-for-serdeser), [glerd_json](serialization/serialize-and-deserialize.md#codegen-for-serdeser)) have their own leaderboard at [serialization/serialize-and-deserialize.md → Codegen for ser/deser](serialization/serialize-and-deserialize.md#codegen-for-serdeser). Codegen tools whose **input is a non-Gleam language** ([squirrel](databases.md#squirrel-), [parrot](parse-and-generate-other-languages.md#parrot), [oaspec](openapi.md#oaspec), etc.) have their own leaderboard at [parse-and-generate-other-languages.md → X → Gleam code generation](parse-and-generate-other-languages.md#x--gleam-code-generation) and [openapi.md → Leaderboard](openapi.md#leaderboard).
+> Codegen tools whose **primary output is encoders/decoders** ([json_typedef](serialization/codegen-json.md#json_typedef), [gserde](serialization/codegen-json.md#gserde), [glerd_json](serialization/codegen-json.md#glerd_json)) have their own leaderboard at [serialization/codegen-json.md → Leaderboard](serialization/codegen-json.md#leaderboard). Codegen tools whose **input is a non-Gleam language** ([squirrel](databases.md#squirrel-), [parrot](parse-and-generate-other-languages.md#parrot), [oaspec](openapi.md#oaspec), etc.) have their own leaderboard at [parse-and-generate-other-languages.md → X → Gleam code generation](parse-and-generate-other-languages.md#x--gleam-code-generation) and [openapi.md → Leaderboard](openapi.md#leaderboard).
 
 [How scores are calculated →](databases.md#scoring-dimensions)
 
@@ -214,6 +214,6 @@ The same constraint is what makes the **Gleam → spec** direction (e.g. handler
 
 - [parse-and-generate-other-languages.md](parse-and-generate-other-languages.md) — parsers for non-Gleam input (SQL, JSON Schema, etc.) and codegen tools that emit Gleam from those inputs (squirrel, parrot, marmot, sqlode, squall, embeds).
 - [openapi.md](openapi.md) — OpenAPI-specific corner: `oas` parser, OpenAPI → Gleam codegen (oaspec, gilly, oas_generator), and the **Gleam → OpenAPI gap**.
-- [serialization/serialize-and-deserialize.md](serialization/serialize-and-deserialize.md) — runtime ser/deser, codegen for encoders/decoders (json_typedef, gserde, glerd_json, aide_generator).
+- [serialization/](serialization/) — folder. [README](serialization/README.md) for the encoder/decoder convention; [codegen-json.md](serialization/codegen-json.md) for build-time codegen (json_typedef, gserde, glerd_json, aide_generator); [runtime-bidirectional-json.md](serialization/runtime-bidirectional-json.md) for runtime JSON; [other-formats.md](serialization/other-formats.md) for non-JSON.
 - [databases.md](databases.md#sql-code-generators) — squirrel vs sqlode vs parrot vs marmot in depth.
 - [syntax-highlighting.md](syntax-highlighting.md) — sibling lexers for tokenising Gleam source for colourisation (different role than glance: token stream vs AST).
