@@ -9,6 +9,78 @@ The Gleam side of hashing is **one strong canonical library plus a long tail of 
 
 If you're picking a hash for a specific job, jump to **[When to use what](#when-to-use-what)**.
 
+> [!TIP]
+> **Quick recipes — copy-paste starting points for the five most common jobs.**
+>
+> **1. Hash a password** → use [`argus`](authentication.md#argus) (Argon2id, OWASP default). **Never** `gleam_crypto.hash` for passwords — SHA-256 is fast, which is the wrong property here.
+>
+> ```gleam
+> import argus
+>
+> pub fn store(plaintext: String) -> String {
+>   let assert Ok(hashed) = argus.hash(plaintext)
+>   hashed  // store this string in your DB
+> }
+>
+> pub fn check(plaintext: String, stored: String) -> Bool {
+>   let assert Ok(ok) = argus.verify(plaintext, stored)
+>   ok
+> }
+> ```
+>
+> **2. Hash a file / verify a download** → SHA-256 via [`gleam_crypto`](#gleam_crypto).
+>
+> ```gleam
+> import gleam/bit_array
+> import gleam/crypto
+>
+> pub fn checksum(contents: BitArray) -> String {
+>   crypto.hash(crypto.Sha256, contents)
+>   |> bit_array.base16_encode
+> }
+> ```
+>
+> **3. Sign / verify a webhook or session cookie** → HMAC-SHA256 + constant-time compare.
+>
+> ```gleam
+> import gleam/crypto
+>
+> pub fn sign(secret: BitArray, message: BitArray) -> BitArray {
+>   crypto.hmac(message, crypto.Sha256, secret)
+> }
+>
+> pub fn verify(secret: BitArray, message: BitArray, tag: BitArray) -> Bool {
+>   let expected = crypto.hmac(message, crypto.Sha256, secret)
+>   crypto.secure_compare(expected, tag)  // NOT ==, that's a timing-attack vector
+> }
+> ```
+>
+> **4. Key a hash map / shard a load balancer** → fast non-crypto Murmur3 via [`murmur3a`](#murmur3a).
+>
+> ```gleam
+> import murmur3a
+>
+> pub fn shard_id(key: String) -> Int {
+>   murmur3a.hash_string(key) % 64
+> }
+> ```
+>
+> **5. Compute an IPFS / multihash content ID** → [`multiformats`](#multiformats) + [`gleam_crypto`](#gleam_crypto).
+>
+> ```gleam
+> import gleam/crypto
+> import multiformats/cid
+> import multiformats/multihash
+>
+> pub fn content_id(payload: BitArray) -> String {
+>   let digest = crypto.hash(crypto.Sha256, payload)
+>   let mh = multihash.new(multihash.Sha2_256, digest)
+>   cid.new(cid.V1, cid.Raw, mh) |> cid.to_string
+> }
+> ```
+>
+> Other jobs — Keccak-256, BLAKE3, BLAKE2, SipHash, Bloom filters, Merkle trees, FFI escape hatches for missing algorithms — see [When to use what](#when-to-use-what).
+
 ## Table of Contents
 
 1. [Summary](#summary)
@@ -36,13 +108,13 @@ Snapshot: **2026-05-10**.
 | **[Cryptographic — canonical](#gleam_crypto)** | · [🥇](#leaderboard) [gleam_crypto](#gleam_crypto) ([repo](https://github.com/gleam-lang/crypto), 53★) — *MD5/SHA-1/SHA-2 + HMAC + secure compare + signed messages. First-party, dual-target.* | · [gleam_crypto](#gleam_crypto) — *same package, JS via `node:crypto`* |
 | **[Cryptographic — SHA-3 / Keccak](#sha-3--keccak)** | · [sha3 (poulwann)](#sha3-poulwann) ([repo](https://github.com/poulwann/sha3-gleam)) — *real SHA-3 224/256/384/512 via Erlang `:crypto`, git-only* <br>· [keccak_gleam](#keccak_gleam) ([repo](https://github.com/gusinacio/keccak_gleam), 0★) — *Keccak-256 (Ethereum), Elixir `ex_keccak` NIF* <br>· [keccaky](#keccaky) ([repo](https://github.com/pxlvre/keccaky), 3★) — *Keccak-256, Rust NIF, git-only* <br>· [sha3_gleam](#sha3_gleam) ([repo](https://github.com/DenizBasgoren/sha3_gleam), 1★) — *pure-Gleam toy; author disclaims production use* | — |
 | **[Cryptographic — BLAKE](#blake-family)** | · [gblake3](#gblake3) ([repo](https://codeberg.org/delta_g/gblake3)) — *BLAKE3, dual-target* <br>· [gblake2](#gblake2) ([repo](https://github.com/sisou/nimiq_gleam), 3★) — *BLAKE2b/2s via Elixir `blake2`* <br>· [nimiq_blake2b](#nimiq_blake2b) ([same parent](https://github.com/sisou/nimiq_gleam)) — *Nimiq-flavoured BLAKE2b* <br>· [pegasus_crypto](#pegasus_crypto) ([codeberg](https://codeberg.org/cmooon/pegasus), 1★) — *BLAKE2b via Rust NIF; claims constant-time + zero-on-drop, **v0.0.1 preview*** | · [gblake3](#gblake3) — *also targets JS via `blake3` npm package* |
-| **[Non-cryptographic](#non-cryptographic-hashes)** | · [🥇](#leaderboard) [murmur3a](#murmur3a) ([codeberg](https://codeberg.org/eaon/murmur3a)) — *Murmur3 32-bit, **pure Gleam, dual-target*** <br>· [mumu](#mumu) ([repo](https://github.com/georgesboris/mumu), 1★) — *Murmur3 via Erlang NIF, BEAM-only and faster* <br>· [gsiphash](#gsiphash) ([repo](https://github.com/BrendoCosta/gsiphash), 1★) — *SipHash family, pure Gleam* <br>· [kmh](#kmh) ([repo](https://github.com/mdarse/kmh)) — *Knuth multiplicative hashing, **LGPL*** | · [murmur3a](#murmur3a) — *same package, dual-target* |
+| **[Non-cryptographic](#non-cryptographic-hashes)** | · [🥇](#leaderboard) [murmur3a](#murmur3a) ([codeberg](https://codeberg.org/eaon/murmur3a)) — *Murmur3 32-bit, pure-Gleam port (no FFI), dual-target* <br>· [mumu](#mumu) ([repo](https://github.com/georgesboris/mumu), 1★) — *Murmur3 32-bit via FFI: Erlang NIF on BEAM + vendored `murmurhash-js` on JS, dual-target, faster on BEAM* <br>· [gsiphash](#gsiphash) ([repo](https://github.com/BrendoCosta/gsiphash), 1★) — *SipHash family, pure Gleam* <br>· [kmh](#kmh) ([repo](https://github.com/mdarse/kmh)) — *Knuth multiplicative hashing, **LGPL*** | · [murmur3a](#murmur3a) — *same package, pure-Gleam dual-target* <br>· [mumu](#mumu) — *vendored `murmurhash3_gc.mjs` for JS* |
 | **[HMAC / signing-adjacent](#hmac--message-signing)** | · [gleam_crypto.hmac](#gleam_crypto) — *the HMAC entry point* <br>· [hypersig](#hypersig) ([codeberg](https://codeberg.org/anactualemerald/hypersig)) — *HTTP signature + Digest header for ActivityPub, **GPL*** <br>· [hashsigs](#hashsigs) ([repo](https://github.com/ncitron/hashsigs), 1★) — *Lamport/Winternitz hash-based signatures, stub* | — |
 | **[Content-addressing](#content-addressing--specialty)** | · [multiformats](#multiformats) ([repo](https://github.com/CrowdHailer/multiformats), 4★) — *IPFS CID: multihash + multibase + multicodec, pairs with `gleam_crypto`* <br>· [gleam-merkle](#gleam-merkle) ([repo](https://github.com/mazshakibaii/gleam-merkle)) — *simple Merkle tree, pure Gleam* <br>· [bloomfilter_gleam](#bloomfilter_gleam) ([repo](https://github.com/sravan-s/bloomfilter_gleam)) — *Bloom filter, **WIP*** | — |
 | **[Password hashing](#password-hashing)** | *See [authentication.md#password-hashing](authentication.md#password-hashing)* — argus, antigone, aragorn2 (Argon2id) · beecrypt (bcrypt) · pinkdf2 (PBKDF2) | — |
 
 > [!NOTE]
-> The two Murmur3 packages on Hex are [`murmur3a`](#murmur3a) (pure-Gleam, dual-target) and [`mumu`](#mumu) (Erlang-NIF wrapper, BEAM-only). A third Hex package named `murmur` exists but is **pure Elixir, not Gleam** — installable as a dep and reachable via FFI, listed in [Disregarded](#disregarded) so searchers find the breadcrumb.
+> The two Murmur3 packages on Hex are [`murmur3a`](#murmur3a) (pure-Gleam port, dual-target) and [`mumu`](#mumu) (FFI wrapper: Erlang NIF on BEAM + vendored `murmurhash-js` on JS, also dual-target). See the [explainer note](#non-cryptographic-hashes) for why both exist. A third Hex package named `murmur` is **pure Elixir, not Gleam** — installable as a dep and reachable via FFI, listed in [Disregarded](#disregarded) so searchers find the breadcrumb.
 
 ## State of the ecosystem
 
@@ -52,7 +124,7 @@ What's there:
 - **[`gleam_crypto`](#gleam_crypto)** — first-party, dual-target, covers MD5/SHA-1/SHA-2 + HMAC + secure compare + signed cookies. Wraps Erlang's `:crypto` on BEAM and `node:crypto` on JS.
 - **Four** independent SHA-3 / Keccak implementations (one Erlang-`:crypto` wrapper, two NIFs, one pure-Gleam toy) — none canonical, all small.
 - **Three** BLAKE2b implementations (`gblake2`, `nimiq_blake2b`, `pegasus_crypto`) and one **BLAKE3** (`gblake3`, the only dual-target non-`gleam_crypto` cryptographic hash).
-- **Two** Murmur3 32-bit implementations (`murmur3a` pure-Gleam dual-target; `mumu` Erlang-NIF BEAM-only).
+- **Two** Murmur3 32-bit implementations, both dual-target via opposite strategies: `murmur3a` (pure-Gleam port of the Elm `murmur3`); `mumu` (FFI: Erlang NIF on BEAM + vendored `murmurhash-js` on JS).
 - One **SipHash** (`gsiphash`), one **Knuth-multiplicative** (`kmh`).
 - One **content-addressing** library (`multiformats` for IPFS CIDs).
 - Per-algorithm **password hashing** in [authentication.md](authentication.md#password-hashing).
@@ -130,7 +202,7 @@ These turned up in searches but are **not recommended** for general use. Listed 
 | **Sign a serialisable cookie / JWT-lite token** | [`gleam_crypto.sign_message/3`](#gleam_crypto) | Built on HMAC; verify with `verify_signed_message/2`. |
 | **Hash a password for storage** | See [authentication.md#password-hashing](authentication.md#password-hashing) | Argon2id via [`argus`](authentication.md#argus). **Never** `gleam_crypto.hash` for passwords. |
 | **Generate / verify a JWT** | See [authentication.md#jose--jwt-jws-jwe](authentication.md#jose--jwt-jws-jwe) | `gose`, `ywt`, or `gwt` — they call into the right hash for you. |
-| **Key a hash map / dedup big lists / shard a load balancer** (fast non-crypto) | [`mumu`](#mumu) on BEAM, [`murmur3a`](#murmur3a) on JS or dual-target | Both are Murmur3 32-bit. `mumu` is faster (NIF) but BEAM-only. |
+| **Key a hash map / dedup big lists / shard a load balancer** (fast non-crypto) | [`murmur3a`](#murmur3a) (default) or [`mumu`](#mumu) (faster on BEAM) | Both are Murmur3 32-bit, both dual-target — `murmur3a` is a pure-Gleam port (zero native deps, active upstream); `mumu` FFI-wraps a native NIF on BEAM + vendored JS. |
 | **Hash-table key randomisation against DoS** | [`gsiphash`](#gsiphash) | SipHash is what Python/Rust/Ruby use for the same purpose. |
 | **SHA-3 / Keccak (Ethereum, Cardano, modern crypto specs)** | [`sha3` (poulwann)](#sha3-poulwann) for SHA-3 standard, [`keccak_gleam`](#keccak_gleam) for Ethereum-Keccak-256 | Both wrap battle-tested NIFs. Avoid [`sha3_gleam`](#sha3_gleam) — author disclaims production use. |
 | **BLAKE3 (modern fast crypto hash)** | [`gblake3`](#gblake3) | Only option; dual-target. |
@@ -250,19 +322,27 @@ For hash maps, dedup, sharding, bloom filters, fingerprinting — NOT for securi
 | Criterion | [murmur3a](#murmur3a) | [mumu](#mumu) | [gsiphash](#gsiphash) | [kmh](#kmh) |
 | --- | --- | --- | --- | --- |
 | Algorithm | Murmur3 32-bit | Murmur3 32-bit | SipHash family | Knuth multiplicative |
-| Implementation | Pure Gleam | Erlang NIF wrapper | Pure Gleam | Pure Gleam |
+| Implementation | Pure Gleam (port of Robin Heggelund Hansen's Elm impl) | FFI wrapper: Erlang NIF on BEAM + vendored `murmurhash-js` on JS | Pure Gleam | Pure Gleam |
 | Stars | 0★ (Codeberg) · 🟥 | 1★ · 🟥 | 1★ · 🟥 | 0★ · 🟥 |
 | License | MIT · 🟩 | MIT · 🟩 | MIT · 🟩 | LGPL-2.1 · 🟥 |
-| Target | ☎️ BEAM + 📜 JS | ☎️ BEAM (NIF) | ☎️ BEAM | (unspecified — defaults to JS) |
+| Target | ☎️ BEAM + 📜 JS | ☎️ BEAM + 📜 JS | ☎️ BEAM | (unspecified — defaults to JS) |
 | Gleam compat | (range) · 🟩 | (range) · 🟩 | (range) · 🟩 | (range) · 🟩 |
 | Maintenance | 🟩🟩 (last commit 2026-02-13) | 🟥 (last commit 2024-05-12) | 🟥 (last commit 2024-09-07) | 🟥 (last commit 2024-09-08) |
 | README | 🟩 (clear quickstart + JS optimisation note) | 🟩 (clear quickstart) | 🟩 (clear) | 🟩 (clear) |
 | Idiomaticity | 🟩 | 🟩 | 🟩 | 🟩 |
 
+> [!NOTE]
+> **Why both `murmur3a` and `mumu` exist** — same algorithm (Murmur3 32-bit), same target matrix (BEAM + JS), but **opposite implementation strategies**:
+>
+> - **`mumu`** ([author Georges Boris](https://github.com/georgesboris/mumu), v1.0.0 published **2024-04-26** — first to land) is a thin **FFI wrapper**: `@external(erlang, ...)` calls the [`harness_erlang_murmurhash`](https://hex.pm/packages/harness_erlang_murmurhash) NIF on BEAM; `@external(javascript, ...)` calls a vendored copy of [Gary Court's `murmurhash3_gc.mjs`](https://github.com/garycourt/murmurhash-js) on JS. Faster on BEAM (NIF), but stale — last commit 2024-05-12 ("go away elixir" — dropped Elixir from the toolchain).
+> - **`murmur3a`** ([author eaon](https://codeberg.org/eaon/murmur3a), v0.5.0 published **2025-01-19** — ~9 months later) is a **pure-Gleam port** ("with a little JavaScript optimisation") of [Robin Heggelund Hansen's Elm `murmur3`](https://github.com/robinheghan/murmur3/). One codebase, both targets, zero native deps. Actively maintained — Hayleigh Thompson (`lpil`) opened performance issues [#1](https://codeberg.org/eaon/murmur3a/issues/1) / [#2](https://codeberg.org/eaon/murmur3a/issues/2) on 2026-02-12 and eaon shipped 1.0.2 + 1.0.3 within two days.
+>
+> Neither README references the other. Looks like **parallel discovery**, not competition or replacement. Output is bit-identical (both are RFC-conforming Murmur3 32-bit). Default to `murmur3a` for active upstream + zero native deps; pick `mumu` only if BEAM-NIF throughput beats the inconvenience of an extra Erlang dep.
+
 #### murmur3a
 [hex](https://hex.pm/packages/murmur3a) · [repo](https://codeberg.org/eaon/murmur3a)
 
-**Pure-Gleam Murmur3 32-bit** with a JS-specific optimisation hint. Provides `hash_string`, `hash_with_seed`, `hex_digest`. The only Murmur3 that runs on the JavaScript target. Choose this when you want one Murmur3 across both runtimes.
+**Pure-Gleam port of Murmur3 32-bit** (no FFI; based on Robin Heggelund Hansen's Elm implementation). Provides `hash_string`, `hash_with_seed`, `hex_digest`. Dual-target via a single Gleam codebase — no NIF on BEAM, no vendored JS on the browser. Choose this for active maintenance and zero native dependencies.
 
 ```gleam
 import murmur3a
@@ -275,7 +355,7 @@ pub fn shard_id(key: String) -> Int {
 #### mumu
 [hex](https://hex.pm/packages/mumu) · [repo](https://github.com/georgesboris/mumu)
 
-**Murmur3 via Erlang NIF** (the `harness_erlang_murmurhash` NIF, a fork of an older Erlang Murmur library). Returns `Int`. Faster than `murmur3a` on BEAM — but BEAM-only. Choose this for max throughput on the Erlang target.
+**Murmur3 32-bit via FFI** — `harness_erlang_murmurhash` NIF on BEAM, vendored `murmurhash3_gc.mjs` on JS. Dual-target like `murmur3a`, but each target calls into a battle-tested external implementation rather than running a Gleam port. Returns `Int`. Faster on BEAM via the NIF; comparable on JS. **Stale** — last commit 2024-05-12 (9 commits total).
 
 ```gleam
 import mumu
@@ -385,12 +465,12 @@ Score = sum of 7 dimensions (Stars / License / Gleam compat / Maintenance / Age 
 | --- | --- | --- | --- |
 | 🥇 | [gleam_crypto](#gleam_crypto) | **9** | First-party · dual-target · 53★ · MD5/SHA-1/SHA-2 + HMAC + secure-compare + signed messages · the canonical pick |
 | 🥈 | [gblake3](#gblake3) | **6** | Dual-target BLAKE3 · only path for BLAKE3 in Gleam · actively maintained |
-| 🥈 | [murmur3a](#murmur3a) | **6** | Pure-Gleam Murmur3 · dual-target · only Murmur3 that runs on JS · actively maintained |
+| 🥈 | [murmur3a](#murmur3a) | **6** | Pure-Gleam Murmur3 port · dual-target via one codebase (no FFI) · actively maintained |
 | 🥉 | [multiformats](#multiformats) | **5** | IPFS CID construction · pairs with `gleam_crypto` · only content-addressing path |
 | 5 | [sha3 (poulwann)](#sha3-poulwann) | **3** | Closest to a canonical SHA-3 path · wraps Erlang `:crypto` · git-only, 5 commits |
 | 5 | [gblake2](#gblake2) | **3** | BLAKE2b/2s · Elixir-NIF wrapper · monorepo-bundled |
 | 5 | [glesha](#glesha) | **3** | Redundant with `gleam_crypto`'s SHA-2 support today |
-| 5 | [mumu](#mumu) | **3** | Faster Murmur3 on BEAM (NIF) · BEAM-only · stale |
+| 5 | [mumu](#mumu) | **3** | Murmur3 via FFI (Erlang NIF + vendored JS) · dual-target · faster on BEAM · stale upstream |
 | 5 | [gsiphash](#gsiphash) | **3** | SipHash · pure Gleam · BEAM-only · stale |
 | 5 | [pegasus_crypto](#pegasus_crypto) | **3** | BLAKE2b with constant-time + zeroisation claims · v0.0.1 preview |
 | 11 | [keccak_gleam](#keccak_gleam) | **0** | Keccak-256 (Ethereum) · Elixir NIF · template-only README · no license |
