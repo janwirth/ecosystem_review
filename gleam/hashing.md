@@ -10,7 +10,7 @@ The Gleam side of hashing is **one strong canonical library plus a long tail of 
 If you're picking a hash for a specific job, jump to **[When to use what](#when-to-use-what)**.
 
 > [!TIP]
-> **Quick recipes — copy-paste starting points for the five most common jobs.**
+> **Quick recipes — copy-paste starting points for the six most common jobs.**
 >
 > **1. Hash a password** → use [`argus`](authentication.md#argus) (Argon2id, OWASP default). **Never** `gleam_crypto.hash` for passwords — SHA-256 is fast, which is the wrong property here.
 >
@@ -65,7 +65,22 @@ If you're picking a hash for a specific job, jump to **[When to use what](#when-
 > }
 > ```
 >
-> **5. Compute an IPFS / multihash content ID** → [`multiformats`](#multiformats) + [`gleam_crypto`](#gleam_crypto).
+> **5. Dedupe a stream of long IDs** → store 32-bit Murmur3 fingerprints instead of full strings (memory win when IDs are long).
+>
+> ```gleam
+> import gleam/set.{type Set}
+> import murmur3a
+>
+> pub fn seen(fingerprints: Set(Int), id: String) -> #(Bool, Set(Int)) {
+>   let fp = murmur3a.hash_string(id)
+>   case set.contains(fingerprints, fp) {
+>     True -> #(True, fingerprints)
+>     False -> #(False, set.insert(fingerprints, fp))
+>   }
+> }
+> ```
+>
+> **6. Compute an IPFS / multihash content ID** → [`multiformats`](#multiformats) + [`gleam_crypto`](#gleam_crypto).
 >
 > ```gleam
 > import gleam/crypto
