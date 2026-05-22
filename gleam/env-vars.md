@@ -364,6 +364,9 @@ Config sub-package shipped with the [`dream`](web-and-http/web-apps.md#dream) we
 
 A different job: load a config **file** (JSON/YAML/TOML) and let env vars be interpolated inside it. The env var is a value, not the primary source.
 
+> [!NOTE]
+> For YAML *parsing* on its own (no env interpolation, no auto-format-detection), see [yaml.md](yaml.md) — covers [`yamleam`](yaml.md#yamleam), [`taffy`](yaml.md#taffy), [`yay`](yaml.md#yay), [`glaml`](yaml.md#glaml), and [`cymbal`](yaml.md#cymbal) (emitter).
+
 #### yodel
 [repo](https://github.com/SnakeDoc/yodel)
 
