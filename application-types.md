@@ -5,7 +5,7 @@
 
 > *Before you pick a language or a framework, you pick an artifact. This article is about that earlier choice.*
 
-**Snapshot 2026-04-30** — frameworks named here are illustrative, not scored. For per-framework, snapshot-dated reviews see the cross-linked articles (e.g. [Building mobile apps](building-mobile-apps.md), [Gleam web apps](gleam/web-and-http/web-apps.md)).
+**Snapshot 2026-04-30** — frameworks named here are illustrative, not scored. For per-framework, snapshot-dated reviews see the cross-linked articles (e.g. [Building mobile apps](building-mobile-apps.md), [Building desktop apps](building-desktop-apps.md), [Gleam web apps](gleam/web-and-http/web-apps.md)).
 
 Most "what should I build with?" conversations skip a step. Before language, before framework, before stack, there is a more fundamental decision: *what kind of artifact ships?* A static website, a single-page web app, an installable PWA, a desktop binary, and a mobile-store app are five different products with different distribution channels, different update cadences, different offline expectations, and different security models. This article is a pragmatic orientation for the engineer or CTO standing at that fork — not a catalogue of every framework, but a map of the five archetypes and when each one earns its keep.
 
@@ -191,6 +191,9 @@ Two sub-archetypes:
 - **Native** — one toolchain per OS. Cocoa/Swift on macOS; .NET MAUI / WPF / WinUI on Windows; Qt/C++ or GTK on Linux. Maximum platform fidelity; multiple codebases (or per-OS UI layers behind a shared core).
 - **Cross-platform** — one codebase compiled or packaged for all three. Electron (Chromium + Node), Tauri (Rust + system webview), Flutter Desktop (Skia/Impeller renderer), Compose Multiplatform Desktop (Skia, JVM), .NET MAUI (Windows + macOS via Catalyst), Wails (Go + system webview).
 
+> [!IMPORTANT]
+> **In-depth review:** [Building Desktop Apps — Cross-Ecosystem Survey](building-desktop-apps.md) reviews 22 desktop frameworks plus 7 disregarded options on the same scoring rubric used elsewhere in this repo, with a dedicated pitfalls section (drag-files-out-of-window — Electron-only; Linux WebKitGTK fragmentation; code signing & notarisation; auto-update fragmentation). The summary below is a pointer; the cross-linked article is where to look for an actual stack decision.
+
 ### When to pick it
 
 - **The product needs to run when the network is down.** Editors, IDEs, design tools, DAWs, terminals.
@@ -316,6 +319,7 @@ Some properties cut across all five types and deserve their own articles or sect
 
 ## Related reading
 
+- [Building Desktop Apps — Cross-Ecosystem Survey](building-desktop-apps.md) — full per-framework review of desktop-app stacks (Electron, Tauri 2, Electrobun, Wails, Flutter Desktop, Compose MP, Avalonia, Slint, iced, egui, .NET MAUI, Qt 6, GTK 4, RN Desktop, native Swift / WinUI / WPF, plus pitfalls deep-dive).
 - [Building Mobile Apps — Cross-Ecosystem Survey](building-mobile-apps.md) — full per-framework review of mobile-app stacks (Flutter, React Native, Expo, Capacitor, Tauri Mobile, KMP, .NET MAUI, NativeScript, Lynx, Quasar, Solito, PWA, native iOS, native Android).
 - [Tools for building web applications with Gleam](gleam/web-and-http/web-apps.md) — web-app archetype, Gleam-specific.
 - [Building mobile apps with Gleam](gleam/mobile-apps.md) — mobile archetype, Gleam-specific (every path goes through JS + a shell).

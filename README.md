@@ -56,6 +56,10 @@ Coverage starts where the author's own projects demand answers, then widens outw
 
 - [Building mobile apps — cross-ecosystem survey](building-mobile-apps.md) — native (Kotlin/Swift), Flutter, React Native / Expo, Capacitor, Tauri Mobile, Compose Multiplatform / KMP, .NET MAUI, NativeScript, Lynx, Quasar, Solito, PWA. 14 frameworks reviewed + 7 disregarded/EOL. Sub-article of [Application types](application-types.md).
 
+### Desktop
+
+- [Building desktop apps — cross-ecosystem survey](building-desktop-apps.md) — Electron, Tauri 2, Electrobun, Wails, Neutralinojs, Flutter Desktop, Compose Multiplatform Desktop, Avalonia, Slint, iced, egui, Dioxus, .NET MAUI, Uno, Qt 6, GTK 4, React Native Desktop (Windows/macOS), native (Swift+SwiftUI, WinUI 3/WPF), WebUI, Sciter. 22 frameworks reviewed + 7 disregarded. Deep-dive pitfalls section: drag-files-out-of-window (Electron-only), WebKitGTK fragmentation on Linux, code signing / notarisation, auto-update fragmentation. Sub-article of [Application types](application-types.md).
+
 ### Testing
 
 - [BDD with Gherkin](bdd-with-gherkin.md) — cross-ecosystem Cucumber-family survey across Ruby, JS, JVM, Python, .NET, Go, Rust, PHP, Elixir, Gleam, Haskell.
