@@ -68,6 +68,10 @@ Coverage starts where the author's own projects demand answers, then widens outw
 
 - [UX resources & tools](ux-resources-and-tools.md) — curated review of UX (not visual design) resources: Laws of UX, NN/g heuristics + training, dogfooding practice, PostHog instrumentation, and the BDD/Gherkin connection.
 
+### Marketing
+
+- [SEO & analytics](seo-and-analytics.md) — keyword research, competitor analysis, technical/on-page/off-page SEO, Generative Engine Optimization (GEO), tools by price tier (Ahrefs / Semrush / Mangools / free), web + product analytics (GA4 / Plausible / PostHog / Clarity), and the full marketer weekly/quarterly playbook.
+
 ### Diagramming
 
 - [Diagramming tools — cross-ecosystem survey](diagramming.md) — Mermaid, PlantUML, D2, Graphviz/DOT, LaTeX/TikZ, Kroki, mingrammer/diagrams, Structurizr, WaveDrom, Excalidraw, plus 20+ ASCII renderers and terminal-chart tools. ~40 tools reviewed.
