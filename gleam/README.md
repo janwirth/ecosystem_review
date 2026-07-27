@@ -2,7 +2,7 @@
 
 Snapshot-dated evaluations of the [Gleam](https://gleam.run/) library landscape — what's maintained, what's idiomatic, and what actually covers the feature you need. Each article scores repos against the same scaffold (stars, license, language-compat, maintenance, age, README maturity, idiomaticity) plus category-specific dimensions, with disregarded repos listed for auditability.
 
-For the full scoring formalization see [../formalization.md](../formalization.md); the review process is documented in [../workflows/REVIEW_METHODOLOGY.md](../workflows/REVIEW_METHODOLOGY.md). Back to the top-level index: [../README.md](../README.md).
+For the full scoring formalization see [../formalization.md](../practices/formalization.md); the review process is documented in [../workflows/REVIEW_METHODOLOGY.md](../workflows/REVIEW_METHODOLOGY.md). Back to the top-level index: [../README.md](../README.md).
 
 ## Articles
 
@@ -39,5 +39,5 @@ For the full scoring formalization see [../formalization.md](../formalization.md
 - [Parallelization](parallelization.md) — single-node, in-process parallelism: actors + supervisors (`gleam_otp`), resource pools (`bath`, `lifeguard`, `crew`), parallel-map (`parallel_map`, `taskle`, `working_actors`), background jobs (`m25`, `bg_jobs`), rate limiting (`glimit`, `speedbump`), scheduling (`clockwork_schedule`), debounce/throttle (Lustre core; non-Lustre gap with DIY recipe), observability (`spectator`, `glychee`, `gleamy_bench`), PubSub / registries (`glyn`, `reki`, `singularity`, `glubsub`, `glixir` for Elixir FFI). Leads with bottleneck-identification workflow + recursive-directory anti-pattern. **Non-goals: distributed BEAM clustering.** 30+ packages reviewed (+ 12 disregarded).
 - [Email](email.md) — SMTP clients, transactional email vendor wrappers, HTML email composition, and the inbound / IMAP gap.
 - [AI / LLM clients](ai.md) — multi-provider abstractions (starlet, glean), per-vendor SDKs (Anthropic, OpenAI, Mistral, Ollama), AssemblyAI transcription, TOON token-efficient encoding, and the Model Context Protocol cluster (aide, mcp_toolkit, mcp_client). 16 repos reviewed (+ 4 disregarded).
-- [Mobile apps](mobile-apps.md) — Gleam has no native mobile target; the realistic 2026 paths all compile to JS then plug into a shell (Capacitor, Tauri Mobile, RN-as-logic-only, PWA, bare WebView). 5 paths scored. Cross-links to [../building-mobile-apps.md](../building-mobile-apps.md) for shell internals.
+- [Mobile apps](mobile-apps.md) — Gleam has no native mobile target; the realistic 2026 paths all compile to JS then plug into a shell (Capacitor, Tauri Mobile, RN-as-logic-only, PWA, bare WebView). 5 paths scored. Cross-links to [../building-mobile-apps.md](../application-types/mobile.md) for shell internals.
 - [Guides & learning resources](guides.md) — Language Tour, Writing Gleam guide, Cheatsheets, Exercism, CodeCrafters, awesome-gleam, framework-shipped guides (Lustre, Wisp), YouTube talks, community blog series, newsletter, Discord. 15 resources scored. Honest about the no-book / no-paid-course gap.

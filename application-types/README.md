@@ -5,7 +5,7 @@
 
 > *Before you pick a language or a framework, you pick an artifact. This article is about that earlier choice.*
 
-**Snapshot 2026-04-30** — frameworks named here are illustrative, not scored. For per-framework, snapshot-dated reviews see the cross-linked articles (e.g. [Building mobile apps](building-mobile-apps.md), [Building desktop apps](building-desktop-apps.md), [Gleam web apps](gleam/web-and-http/web-apps.md)).
+**Snapshot 2026-04-30** — frameworks named here are illustrative, not scored. For per-framework, snapshot-dated reviews see the cross-linked articles (e.g. [Building mobile apps](mobile.md), [Building desktop apps](desktop.md), [Gleam web apps](../gleam/web-and-http/web-apps.md)).
 
 Most "what should I build with?" conversations skip a step. Before language, before framework, before stack, there is a more fundamental decision: *what kind of artifact ships?* A static website, a single-page web app, an installable PWA, a desktop binary, and a mobile-store app are five different products with different distribution channels, different update cadences, different offline expectations, and different security models. This article is a pragmatic orientation for the engineer or CTO standing at that fork — not a catalogue of every framework, but a map of the five archetypes and when each one earns its keep.
 
@@ -76,6 +76,12 @@ A site whose primary job is to deliver *content* to visitors who arrived via a U
 | MkDocs / Docusaurus / VitePress | Various | Docs-tuned SSG | When the site *is* docs. |
 | Plain HTML + CSS | — | Hand-written | Still completely valid for small sites. |
 
+> [!IMPORTANT]
+> **Which tier do you need?** [Choosing a web-presence stack](choosing-a-web-presence-stack.md) is the step between this article and the tooling surveys: a five-tier spectrum (off-the-shelf builder → visual development platform → SSG + git CMS → framework + headless CMS → custom application), a pick-by-organizational-capacity grid, and the break-even analysis for when plugin costs on an off-the-shelf platform stop being cheaper than building. Read it before picking a product.
+
+> [!IMPORTANT]
+> **In-depth review:** [Website builders — cross-ecosystem survey](website-builders.md) covers the *other* half of this archetype — the hosted visual builders that actually make most of the world's websites (Wix, Squarespace, Webflow, Framer, WordPress + Elementor/Divi/Bricks, Readymag, the 2026 AI-first wave, and ~50 more). ~60 platforms across six families, with per-capability matrices, a full pricing-gotcha taxonomy (annual-vs-monthly, intro-then-renewal, seat×site, credit metering, transaction fees), and an export/lock-in table. The table above is for teams who will write and deploy code; that article is for everyone else.
+
 ### Distribution & install model
 
 - **Distribution:** any static host — Netlify, Vercel, Cloudflare Pages, GitHub Pages, S3+CloudFront, your own nginx.
@@ -118,10 +124,14 @@ An interactive application served over HTTPS, with authentication, persistent se
 | SolidJS (+ SolidStart) | TS / JS | Fine-grained reactive | React-shaped API, Svelte-like perf. |
 | Angular | TS | Opinionated SPA | Enterprise-flavoured; batteries-included. |
 | Phoenix LiveView | Elixir | Server-rendered + diffing | Real-time UI without JS framework. |
+| Ash + Phoenix | Elixir | Resource-oriented domain framework on top of Phoenix | Declarative resources, actions, policies; generates GraphQL / REST / JSON:API; deep Phoenix LiveView + Ecto / AshPostgres integration. |
 | Rails Hotwire (Turbo + Stimulus) | Ruby | Server-rendered + sprinkles | Ship fast; minimal JS budget. |
 | Laravel Livewire | PHP | Server-rendered + diffing | Phoenix-LiveView-shaped, PHP-flavoured. |
-| Lustre (Gleam) | Gleam | Elm-style SPA / SSR | Type-safe end-to-end; see [Gleam web apps](gleam/web-and-http/web-apps.md). |
+| Lustre (Gleam) | Gleam | Elm-style SPA / SSR | Type-safe end-to-end; see [Gleam web apps](../gleam/web-and-http/web-apps.md). |
 | HTMX + your-server-of-choice | HTML | Server-rendered + sprinkles | The "no SPA" web app revival. |
+
+> [!IMPORTANT]
+> **Author's opinionated best pick (not a scored claim — this article is illustrative):** **[Ash](https://hexdocs.pm/ash)** on top of Phoenix. The Ash ecosystem is *way ahead* on declarative resource modeling, generators, and code-extensions, with first-party add-ons covering most of what a real app needs out of the box — **AshAuthentication**, **AshAdmin**, **AshGraphQL**, **AshJsonApi**, **AshPostgres**, **AshOban**. Because it composes with Phoenix LiveView, you get real-time UI for free. See [ash-hq.org](https://ash-hq.org) and [hexdocs.pm/ash](https://hexdocs.pm/ash).
 
 ### Distribution & install model
 
@@ -132,10 +142,10 @@ An interactive application served over HTTPS, with authentication, persistent se
 ### Offline & state
 
 - **Offline:** typically none. Refresh = network round-trip. Light reads can be cached; writes require connectivity.
-- **State:** server is the source of truth; client holds a copy. Auth lives in cookies (session) or tokens (JWT / opaque bearer). See [Authentication](authentication.md) for the practical floor.
+- **State:** server is the source of truth; client holds a copy. Auth lives in cookies (session) or tokens (JWT / opaque bearer). See [Authentication](../authentication.md) for the practical floor.
 
 > [!NOTE]
-> **Gleam-specific cousin:** [Tools for building web applications with Gleam](gleam/web-and-http/web-apps.md) reviews the Gleam-side options (Lustre, wisp, dream, glimr, mist) on the same axes used elsewhere in this repo.
+> **Gleam-specific cousin:** [Tools for building web applications with Gleam](../gleam/web-and-http/web-apps.md) reviews the Gleam-side options (Lustre, wisp, dream, glimr, mist) on the same axes used elsewhere in this repo.
 
 ## Progressive Web App (PWA)
 
@@ -192,7 +202,7 @@ Two sub-archetypes:
 - **Cross-platform** — one codebase compiled or packaged for all three. Electron (Chromium + Node), Tauri (Rust + system webview), Flutter Desktop (Skia/Impeller renderer), Compose Multiplatform Desktop (Skia, JVM), .NET MAUI (Windows + macOS via Catalyst), Wails (Go + system webview).
 
 > [!IMPORTANT]
-> **In-depth review:** [Building Desktop Apps — Cross-Ecosystem Survey](building-desktop-apps.md) reviews 22 desktop frameworks plus 7 disregarded options on the same scoring rubric used elsewhere in this repo, with a dedicated pitfalls section (drag-files-out-of-window — Electron-only; Linux WebKitGTK fragmentation; code signing & notarisation; auto-update fragmentation). The summary below is a pointer; the cross-linked article is where to look for an actual stack decision.
+> **In-depth review:** [Building Desktop Apps — Cross-Ecosystem Survey](desktop.md) reviews 22 desktop frameworks plus 7 disregarded options on the same scoring rubric used elsewhere in this repo, with a dedicated pitfalls section (drag-files-out-of-window — Electron-only; Linux WebKitGTK fragmentation; code signing & notarisation; auto-update fragmentation). The summary below is a pointer; the cross-linked article is where to look for an actual stack decision.
 
 ### When to pick it
 
@@ -245,7 +255,7 @@ Two sub-archetypes:
 An app installed via the iOS App Store or Google Play Store (and on Android, side-loaded `.apk` or alternative stores), running on a phone or tablet. As with desktop, the split is **native** (one toolchain per OS) versus **cross-platform** (one codebase, packaged for both).
 
 > [!IMPORTANT]
-> **In-depth review:** [Building Mobile Apps — Cross-Ecosystem Survey](building-mobile-apps.md) reviews 14 mobile frameworks plus 7 disregarded / EOL options on the same scoring rubric used elsewhere in this repo. The summary below is a pointer; the cross-linked article is where to look for an actual stack decision.
+> **In-depth review:** [Building Mobile Apps — Cross-Ecosystem Survey](mobile.md) reviews 14 mobile frameworks plus 7 disregarded / EOL options on the same scoring rubric used elsewhere in this repo. The summary below is a pointer; the cross-linked article is where to look for an actual stack decision.
 
 ### When to pick it
 
@@ -260,7 +270,7 @@ An app installed via the iOS App Store or Google Play Store (and on Android, sid
 - You don't have the resources for app-store review cycles, account management, and per-platform compliance. (PWA, web app.)
 - You can deliver the experience as a [PWA](#progressive-web-app-pwa) and the audience will find / install it that way.
 
-### Frameworks (illustrative — see [building-mobile-apps.md](building-mobile-apps.md) for scored reviews)
+### Frameworks (illustrative — see [building-mobile-apps.md](mobile.md) for scored reviews)
 
 | Framework | Language | Archetype | Notable for |
 | --- | --- | --- | --- |
@@ -312,17 +322,19 @@ A pragmatic reading of this matrix:
 
 Some properties cut across all five types and deserve their own articles or sections:
 
-- **Authentication.** Every type that has users also has the same authentication-failure modes. Cookies vs tokens, OAuth/OIDC, passkeys, session lifecycle. See [Authentication on the web — a high-level guide](authentication.md). The mobile flavour adds keychain storage, biometric unlock, and OS-level credential providers; the desktop flavour adds OS keychain integration; the web/PWA flavour is the canonical reference.
+- **Authentication.** Every type that has users also has the same authentication-failure modes. Cookies vs tokens, OAuth/OIDC, passkeys, session lifecycle. See [Authentication on the web — a high-level guide](../authentication.md). The mobile flavour adds keychain storage, biometric unlock, and OS-level credential providers; the desktop flavour adds OS keychain integration; the web/PWA flavour is the canonical reference.
 - **Observability.** Web apps measure with browser RUM; mobile apps with Firebase / Sentry / proprietary; desktop with the platform's crash reporters. The instrumentation question carries across types.
 - **Build / signing / release.** Each type has a different release artifact and a different signing story. Conflating them is the most common reason teams underestimate mobile or desktop projects.
-- **Domain modelling.** Independent of artifact type. See [Domain-Driven Design](domain-driven-design.md).
+- **Domain modelling.** Independent of artifact type. See [Domain-Driven Design](../practices/domain-driven-design.md).
 
 ## Related reading
 
-- [Building Desktop Apps — Cross-Ecosystem Survey](building-desktop-apps.md) — full per-framework review of desktop-app stacks (Electron, Tauri 2, Electrobun, Wails, Flutter Desktop, Compose MP, Avalonia, Slint, iced, egui, .NET MAUI, Qt 6, GTK 4, RN Desktop, native Swift / WinUI / WPF, plus pitfalls deep-dive).
-- [Building Mobile Apps — Cross-Ecosystem Survey](building-mobile-apps.md) — full per-framework review of mobile-app stacks (Flutter, React Native, Expo, Capacitor, Tauri Mobile, KMP, .NET MAUI, NativeScript, Lynx, Quasar, Solito, PWA, native iOS, native Android).
-- [Tools for building web applications with Gleam](gleam/web-and-http/web-apps.md) — web-app archetype, Gleam-specific.
-- [Building mobile apps with Gleam](gleam/mobile-apps.md) — mobile archetype, Gleam-specific (every path goes through JS + a shell).
-- [Authentication on the web — a high-level guide](authentication.md) — cross-cutting; primer for any artifact with users.
-- [Domain-Driven Design](domain-driven-design.md) — cross-cutting; orientation for any artifact with non-trivial business logic.
-- [UX resources & tools](ux-resources-and-tools.md) — cross-cutting; UX laws and dogfooding apply to all five types.
+- [Choosing a web-presence stack](choosing-a-web-presence-stack.md) — the tier decision for the website archetype: off-the-shelf builder vs visual development platform vs SSG + git CMS vs framework + headless CMS vs custom application. Pick-by-organizational-capacity grid (capacity × requirement shape), the "no technical staff doesn't mean Wix" case, the plugin-cost break-even with real prices, and a one-way-doors migration table.
+- [Website builders — cross-ecosystem survey](website-builders.md) — website archetype, hosted-builder side. ~60 platforms across six families (mainstream all-in-one, designer-first, portfolio, WordPress/open-source, AI-first, Notion-as-CMS), plus ecommerce platforms and no-code app builders reviewed to draw the boundary. Pricing gotchas, caps, lock-in/export, SEO-by-construction, EAA accessibility, GDPR residency, Core Web Vitals.
+- [Building Desktop Apps — Cross-Ecosystem Survey](desktop.md) — full per-framework review of desktop-app stacks (Electron, Tauri 2, Electrobun, Wails, Flutter Desktop, Compose MP, Avalonia, Slint, iced, egui, .NET MAUI, Qt 6, GTK 4, RN Desktop, native Swift / WinUI / WPF, plus pitfalls deep-dive).
+- [Building Mobile Apps — Cross-Ecosystem Survey](mobile.md) — full per-framework review of mobile-app stacks (Flutter, React Native, Expo, Capacitor, Tauri Mobile, KMP, .NET MAUI, NativeScript, Lynx, Quasar, Solito, PWA, native iOS, native Android).
+- [Tools for building web applications with Gleam](../gleam/web-and-http/web-apps.md) — web-app archetype, Gleam-specific.
+- [Building mobile apps with Gleam](../gleam/mobile-apps.md) — mobile archetype, Gleam-specific (every path goes through JS + a shell).
+- [Authentication on the web — a high-level guide](../authentication.md) — cross-cutting; primer for any artifact with users.
+- [Domain-Driven Design](../practices/domain-driven-design.md) — cross-cutting; orientation for any artifact with non-trivial business logic.
+- [UX resources & tools](../design/ux.md) — cross-cutting; UX laws and dogfooding apply to all five types.

@@ -29,10 +29,13 @@
    - [Code signing & notarisation](#code-signing--notarisation)
    - [Auto-update is per-OS and unfun](#auto-update-is-per-os-and-unfun)
    - [WebView2 install UX on Windows](#webview2-install-ux-on-windows)
-8. [Disregarded / EOL / niche](#disregarded--eol--niche)
-9. [Leaderboards (per use-case)](#leaderboards-per-use-case)
-10. [Cross-link](#cross-link)
-11. [Discovery — search queries](#discovery--search-queries)
+   - [Build & compile times, boilerplate, code overhead](#build--compile-times-boilerplate-code-overhead)
+8. [Bundling external binaries — sidecar processes, executable permissions, code signing](#bundling-external-binaries--sidecar-processes-executable-permissions-code-signing)
+9. [Disregarded / EOL / niche](#disregarded--eol--niche)
+10. [Leaderboards (per use-case)](#leaderboards-per-use-case)
+11. [Recipe — Gleam + Lustre + Burrito + Electron (DIY stack)](#recipe--gleam--lustre--burrito--electron-diy-stack)
+12. [Cross-link](#cross-link)
+13. [Discovery — search queries](#discovery--search-queries)
 
 ## Goal
 
@@ -40,7 +43,7 @@ Help a tech lead or engineer choose a desktop-app stack in 2026 by laying every 
 
 Out-of-scope: game engines (Unity / Unreal / Godot — different design intent), terminal UIs / TUIs (Ratatui / Textual — different platform assumption), backend-as-a-service choice.
 
-This article is the desktop sibling of [Building Mobile Apps](building-mobile-apps.md) and lives one level below [Application types — what kind of thing are you building?](application-types.md). Read that one first if you haven't decided you actually need a desktop binary.
+This article is the desktop sibling of [Building Mobile Apps](mobile.md) and lives one level below [Application types — what kind of thing are you building?](README.md). Read that one first if you haven't decided you actually need a desktop binary.
 
 ## Legend
 
@@ -62,12 +65,16 @@ Desktop-specific extra rows (added per the brief):
 - **Bundle size** — rough size of a hello-world install image. **Tiny** <5 MB · **Small** 5–20 MB · **Medium** 20–60 MB · **Huge** >100 MB
 - **Auto-update** — *built-in* (framework ships an updater) · *DIY* (you wire Sparkle / Squirrel / MSIX / electron-updater yourself)
 - **OS-integration depth** — *first-class* (native menus, tray, global hotkeys, system dialogs, drag-out-of-window all just work) · *plugin-mediated* (community crates / npm packages exist for most) · *limited* (you'll hit a wall on something)
+- **Build / dev-loop cost** — three sub-axes scored together:
+  - *Cold build* — `git clone` to running hello-world. **Fast** <1 min · **Medium** 1–5 min · **Slow** 5–15 min · **Very slow** >15 min.
+  - *Hot-reload* — file save to visible UI change. **Hot-reload** sub-second · **Incremental** seconds · **Full rebuild** restart-and-pray.
+  - *Boilerplate density* — declarative noise + cross-language plumbing per feature. **Light** · **Medium** · **Heavy**. See [Build & compile times, boilerplate, code overhead](#build--compile-times-boilerplate-code-overhead) for the per-framework breakdown.
 
 ## Categories — the six archetypes
 
 Desktop frameworks split into six disjoint design-intents. The 7-dim score is comparable *within* an archetype, less so *across* — an Electron app and a SwiftUI app are not playing the same game.
 
-1. **Web view + bundled engine** — *one codebase, ship a full browser engine with every app*. Electron, NW.js. UI is HTML/CSS/JS in a Chromium you control entirely. Maximum web-platform feature reach; multi-hundred-MB binaries; one Chromium per app means the second one you install starts a second copy in RAM.
+1. **Web view + bundled engine** — *one codebase, ship a full browser engine with every app*. Electron, NW.js. UI is HTML/CSS/JS in a Chromium you control entirely. Maximum web-platform feature reach; multi-hundred-MB binaries; one Chromium per app means the second one you install starts a second copy in RAM. See also: [Recipe — Gleam + Lustre + Burrito + Electron](#recipe--gleam--lustre--burrito--electron-diy-stack) for a Gleam-only variant of the Electron pattern.
 2. **Web view + system web view** — *one codebase, use the OS's installed web engine*. Tauri 2, Wails, Electrobun, Neutralinojs, Dioxus (via `wry`). Tiny binaries (5–10 MB), but you inherit the OS's WebKit/WebView2 — including all the fragmentation that brings on Linux.
 3. **Custom canvas (cross-platform)** — *one codebase, draw every pixel yourself*. Flutter Desktop, Compose Multiplatform Desktop, Avalonia, Slint, iced, egui, Dioxus's Blitz (in development). Pixel-perfect identical across OSes; widgets are not real `NSButton` / `Win32 Button` / `GtkButton`; A11y is the perpetual weakest area.
 4. **Native widgets (cross-platform)** — *one codebase, real platform widgets via an abstraction layer*. .NET MAUI, Uno Platform, Qt 6 (QWidget), GTK 4, React Native Desktop. Real `UIButton` / `Button` / `GtkButton`; new platform APIs land in the abstraction layer later than native; lighter-weight than canvas-based.
@@ -529,6 +536,9 @@ Proprietary HTML/CSS engine — neither Chromium nor WebKit. Originally targeted
 | **Bundle** | huge (~115–200 MB) | small (~3–10 MB) | small (~10–20 MB) | small (~10 MB) | tiny (<2 MB) | medium (~15–30 MB) | medium-large (~30–50 MB, JRE) | medium (~30–50 MB) | small (<5 MB on desktop) | small (~5–15 MB) | small (~5–15 MB) | small (~5 MB) | medium (~30–50 MB) | medium (~30–60 MB) | medium (~20–50 MB) | small on Linux; larger on Win/mac (~80 MB) | medium (~20–50 MB) | medium (~20–50 MB) | small (~5–20 MB) | small (~10 MB WinUI; ~70 MB WPF self-contained) | huge (~100–150 MB) | tiny (<1 MB) | very small (~5 MB) |
 | **Auto-update** | **built-in** (Squirrel / MSIX / electron-updater) | **built-in** (signature-verified manifest) | **built-in** (Sparkle-style) | DIY | **built-in** | DIY | DIY | DIY (Velopack popular) | DIY | DIY | DIY | DIY | DIY (MSIX on Win) | DIY | DIY (Qt IFW) | DIY (Flatpak on Linux) | DIY | DIY (Sparkle / Squirrel) | **Sparkle** (de-facto standard) | MSIX or DIY | DIY | DIY | DIY |
 | **Drag-out to Finder/Explorer** | ✅ first-class | ❌ core; community [drag-rs](https://github.com/crabnebula-dev/drag-rs) | ❌ | ❌ | ❌ | ❌ (platform code) | ❌ (platform code) | ❌ (platform code) | ❌ | ❌ | ❌ | ❌ (shared wry gap) | platform-specific | platform-specific | ✅ (Qt's native APIs) | ✅ (GTK's native APIs) | platform-specific | platform-specific | ✅ first-class (AppKit) | ✅ first-class (Win32) | ✅ first-class | ❌ | ❌ |
+| **Cold build** | Fast · ~30 s | Slow · 5–15 min | Fast · ~30 s | Medium · 1–2 min | Fast · ~10 s | Medium · 2–5 min | Slow · 5–15 min | Medium · 1–2 min | Slow · 3–8 min | Slow · 5–10 min | Slow · 3–8 min | Slow · 5–10 min | Medium · 2–5 min | Medium · 2–5 min | Slow if from source; Medium with installer | Fast on Linux · Slow on Win/mac | Medium · 2–5 min | Medium · 2–5 min | Fast warm · Medium cold | Medium · 1–2 min | Fast · ~30 s | Seconds | Medium |
+| **Hot-reload / dev loop** | Vite/HMR sub-sec · main = restart | Frontend sub-sec · Rust = 10–30 s | Sub-second | JS sub-sec · Go = 1–5 s | Sub-second | **Stateful hot-reload <500 ms** (gold) | Compose Hot Reload sub-sec · JVM cold-start 1–2 s | XAML Hot Reload sub-sec · C# = 1–3 s | Slint Live-Preview sub-sec · Rust = 10–30 s | Incremental 5–15 s · no hot-reload | Incremental 3–10 s · no hot-reload | `dx serve --hot-reload` ~100 ms | XAML + .NET Hot Reload sub-sec (flaky) | Hot Reload + Hot Design | QML sub-sec · C++ = 5–30 s | gtk-rs incremental 5–10 s | Metro HMR sub-sec | Metro HMR sub-sec | Xcode Previews 1–3 s | XAML + C# Hot Reload | Sub-second | Full reload each run | Full reload each run |
+| **Boilerplate density** | Light | Medium (IPC pairs) | Light | Light–Medium | Lightest | Medium (widget trees) | Medium | Medium–Heavy (XAML + MVVM) | Medium (DSL + host) | Medium (Elm triplet) | **Lightest** (immediate-mode) | Medium (RSX + server-fn) | Heavy (XAML + handlers) | Heavy (WinUI XAML + targets) | **Heavy** (`moc` + signals/slots) | Medium–Heavy (`GObject` in C) | Light JS · Heavy native bridge | Light JS · Heavy native bridge | Light (SwiftUI) | Medium–Heavy (XAML) | Light | **Smallest** (~10 LoC) | Light |
 | **First release** | 2013 | 2022 (v2 GA Oct 2024) | 2024 | 2019 | 2020 | 2017 (desktop GA Flutter 3 in 2022) | 2021 | 2017 alpha; 11.0 2023 | 2020 (was SixtyFPS); 1.0 in 2023 | 2019 alpha | 2020 | 2021 | 2022 (.NET 6) | 2018 | Qt 6.0 in 2020 (Qt 1.0 in 1995) | GTK 4.0 Dec 2020 (GTK 1.0 in 1998) | 2018 | 2019 | 2014 (Swift) · 2019 (SwiftUI) | WPF 2006; WinUI 3 GA 2021 | 2011 | 2020 | ~2006 |
 
 > † Qt and GTK GitHub repos are read-only mirrors; canonical development happens on code.qt.io and gitlab.gnome.org respectively. The mirror star counts (Qt qtbase ~3k, GTK ~1.7k) are not representative of community size — both projects have multi-decade community footprints.
@@ -642,6 +652,185 @@ Specific to system-webview frameworks (Tauri / Wails / Electrobun / Dioxus):
 
 **Verdict:** if you ship to corporate Windows fleets that block runtime downloads, the bootstrapper-embed option is the right one (1.8 MB is still tiny). If you ship to consumer Windows where users may be offline at install, embed the runtime or document the prerequisite.
 
+### Build & compile times, boilerplate, code overhead
+
+The third dimension nobody mentions in the framework pitch and everybody pays in their day-to-day loop. Three sub-axes:
+
+- **First / cold build time** — fresh checkout to a runnable hello-world binary. Toolchain download + native-dependency compile. Pays once per machine, but onboarding pain is real.
+- **Incremental / dev-loop time** — saving a file to seeing the change. Hot-reload (Flutter, Compose Hot Reload, Avalonia XAML Hot Reload, Phoenix LiveView for the web cousin) vs full recompile vs partial recompile.
+- **Boilerplate / code overhead** — lines of code (or files, or annotations) you write that aren't your product. Worst offenders: XAML namespaces, ObjC-style `@external` bridges, Tauri IPC command declarations duplicated front- and back-end, Qt `moc` registration.
+
+| Framework | Cold build (hello-world) | Hot-reload / incremental | Boilerplate density | Code-overhead red flags |
+| --- | --- | --- | --- | --- |
+| **[Electron](#electron)** | ~30 s (npm install dominates) | sub-second renderer reload (Vite/webpack HMR) · main-process change = restart | **Light** — one `package.json`, an `index.html`, a `main.js`. | Main / renderer / preload split + IPC contracts; secure-by-default `contextIsolation` adds a preload-bridge layer. |
+| **[Tauri 2](#tauri-2)** | **5–15 min first release build** (whole Rust toolchain + ~600 Rust crates compile) · ~2 min subsequent | sub-second on JS frontend · Rust backend change = 10-30 s recompile | Medium — JS frontend + `src-tauri/` Rust commands + `tauri.conf.json`. | Every IPC call is a Rust `#[command]` + JS `invoke()` pair — must be declared in both languages and kept in sync. |
+| **[Electrobun](#electrobun)** | ~30 s (Bun is fast) | sub-second | Light | Pre-1.0 API churn is its own overhead tax. |
+| **[Wails](#wails)** | ~1–2 min first build (Go modules + frontend) | sub-second JS · Go change = ~1–5 s rebuild | Light-Medium | Go struct ↔ TS type bindings autogenerated; out-of-date generated code is a known foot-gun. |
+| **[Neutralinojs](#neutralinojs)** | ~10 s | sub-second | Lightest | Cross-process bridge is HTTP/WebSocket, so anything stateful is your problem. |
+| **[Flutter Desktop](#flutter-desktop)** | ~2–5 min first build (Flutter SDK + engine pre-built; Dart pub-get fast) | **sub-500 ms stateful hot-reload** (gold standard alongside Phoenix LiveView) | Medium — every `StatefulWidget` is class + state class + `build()`. | Widget trees nest deeply; `const` constructors and `Key` boilerplate; release builds 2-5 min. |
+| **[Compose MP](#compose-multiplatform-for-desktop)** | **5–15 min first Gradle build** (Kotlin/JVM cold sync is slow) | Compose Hot Reload (2024) is sub-second for many edits · JVM cold-start each run = 1–2 s | Medium — Kotlin DSL is concise; Gradle config sprawls. | Gradle Kotlin-DSL noise; `expect`/`actual` declarations for KMP source-sets. |
+| **[Avalonia](#avalonia)** | ~1–2 min first `dotnet restore` + build | XAML Hot Reload is sub-second · C# change = ~1–3 s | Medium-Heavy — XAML namespaces; codebehind partial classes; MVVM scaffolding. | XAML namespace declarations balloon files; `INotifyPropertyChanged` boilerplate without ReactiveUI / CommunityToolkit. |
+| **[Slint](#slint)** | ~3–8 min first Rust+Slint compiler build | Slint Live-Preview in VS Code is sub-second · Rust change = 10-30 s | Medium — `.slint` DSL is concise; Rust glue under it. | Two-language project (DSL + host language); generated bindings can lag the DSL. |
+| **[iced](#iced)** | ~5–10 min first build (wgpu + dependencies) | ~5–15 s on incremental Rust build · no hot-reload | Medium — Elm `Message` enum + `update` + `view` triplet repeats per screen. | `Message` enum balloons as the app grows; refactor-driven type churn is the norm. |
+| **[egui](#egui)** | ~3–8 min first build | ~3–10 s incremental Rust · no hot-reload (immediate-mode means edit-restart loop) | **Lightest** — immediate-mode means UI lives inline with logic. | No retained tree means complex stateful widgets (multi-line editor, sortable table) are awkward; you reimplement state every frame. |
+| **[Dioxus Desktop](#dioxus-desktop)** | ~5–10 min first build (Rust + wry) | `dx serve --hot-reload` reloads RSX edits in ~100 ms | Medium — RSX is JSX-shaped, server-fn declarations are the IPC equivalent. | Pre-1.0 — RSX macro errors are sharp; Rust compile dominates first build. |
+| **[.NET MAUI](#net-maui-desktop)** | ~2–5 min first build (workloads + SDK install adds ~10 min one-time) | XAML Hot Reload + .NET Hot Reload — sub-second when it works (known instability vs Avalonia) | Heavy — XAML + handlers + cross-platform shims. | `Handler` pattern + per-platform conditional compilation; XAML noise. |
+| **[Uno Platform](#uno-platform)** | ~2–5 min first build (similar to MAUI) | Hot Reload C# and XAML; Hot Design (visual designer) | Heavy — WinUI XAML + Uno targets sprawl. | Per-target conditional XAML; UWP-era legacy patterns surface. |
+| **[Qt 6](#qt-6)** | ~10–30 min first build if building Qt from source (most use prebuilt installer; with installer, ~1 min first project) | QML reload is sub-second · C++ change = ~5–30 s (depending on `moc` invalidation) | **Heavy** — `moc` registrations, signal/slot declarations, `.pro` or CMake plumbing. | `Q_OBJECT` + `signals:` / `slots:` + `moc` is the cultural baseline; QML side is lighter. |
+| **[GTK 4](#gtk-4)** | ~30 s on Linux (system lib); ~3-5 min on Win/mac (must build deps) | C compiles in seconds; gtk-rs incremental ~5-10 s | Medium-Heavy — `GObject` boilerplate in C; `glib-mkenums`, `g_signal_connect` strings. | GObject in C is verbose; Vala / Rust bindings hide most of it. |
+| **[RN Windows / macOS](#react-native-desktop)** | ~2-5 min first build (CocoaPods / NuGet warm-up) | Metro bundler hot-reload is sub-second | Light JS side · Heavy native bridges | Microsoft-fork tracking RN core means upstream bumps are merge work. |
+| **[Native Swift](#native-macos-swift--swiftui--appkit)** | ~30 s with Xcode caches warm; ~3-5 min cold | Xcode Previews ~1-3 s per render · simulator launch 5-15 s | Light (SwiftUI) · Medium (AppKit) | AppKit document-based apps still carry `.xib` / storyboard patterns. |
+| **[WinUI 3 / WPF](#native-windows-winui-3--wpf)** | ~1-2 min first build | XAML Hot Reload · C# Hot Reload | Medium-Heavy XAML | Project Reunion era churn (renames, packaging modes) is per-project overhead. |
+| **[NW.js](#nwjs)** | ~30 s (npm install dominates) | sub-second | Light | Single context = security/typing footgun; less guard-railed than Electron. |
+| **[WebUI](#webui)** | seconds | full reload each run | **Smallest** — link a 1 MB library and call `webui_show()`. | UI is a separate browser process you don't control deeply. |
+
+**Verdict — pick by your dev loop, not just runtime cost:**
+
+- **Need fastest dev loop on a productivity app?** Flutter / Compose MP / Avalonia Hot Reload / Phoenix LiveView (web cousin). Electron + Vite / Wails / Tauri (frontend-only hot reload) are second tier.
+- **Tolerate slow first build for runtime smallness?** Tauri / Slint / iced / egui — pay a 5-15 min Rust toolchain warm-up to get sub-10 MB binaries. CI cache (`sccache`, GitHub Actions cache) flattens this for everyone except the first contributor.
+- **Boilerplate-allergic, prototyping or one-person shop?** egui (immediate-mode = no state plumbing) · Electron (one HTML + JS file) · WebUI (10 lines of C).
+- **Boilerplate-tolerant, enterprise tooling?** WinUI 3 / WPF / .NET MAUI / Qt 6 — XAML / `moc` / `Handler` noise is the cost of admission; rich tooling pays it back.
+
+**CI implication:** Rust-based frameworks (Tauri / Slint / iced / egui / Dioxus) are the most CI-cache-sensitive in this list. Without a working `target/` cache between runs you'll burn 5-15 min on every PR build. Plan for `Swatinem/rust-cache` (GitHub Actions) or equivalent from day one.
+
+## Bundling external binaries — sidecar processes, executable permissions, code signing
+
+Many desktop apps ship a *second* program alongside the UI: a packaged Erlang/Elixir backend, a downloaded `yt-dlp`, an `ffmpeg` shipped beside the renderer, a `node`/`python` sidecar for plugin support. The framework-level pitch ("just put the binary in `resources/`") hides a real per-platform compliance story — executable permissions, code signing, sandbox carve-outs, and update-path implications.
+
+### Three deployment shapes
+
+1. **Bundle at build time** — copy the binary into the app package; ship one signed artifact. Best for fixed-version dependencies (`ffmpeg`, a packaged BEAM release, a Rust CLI you control).
+2. **Download at first launch** — small app, fetch the heavy dep into a user-data dir on first run. Best for fast-moving deps (`yt-dlp` updates weekly; bundling makes the app stale in days).
+3. **System-PATH detection** — call out to whatever the user already has installed. Cheapest for the developer, most fragile for the user (version skew, missing tools, PATH not set in macOS GUI apps).
+
+Most production apps do **a hybrid**: bundle the stable deps, download the fast-moving ones, fall back to PATH only with an explicit "use system binary" toggle.
+
+### Per-framework bundling APIs
+
+| Framework | Bundle binary at build | Notes |
+| --- | --- | --- |
+| **[Electron](#electron)** | `extraResources` in [`electron-builder`](https://www.electron.build/configuration/contents#extraresources) | Path resolved via `process.resourcesPath`. Most-trodden path; see [Electron docs on bundling binaries](https://www.electronjs.org/docs/latest/api/process). |
+| **[Tauri 2](#tauri-2)** | [`tauri.bundle.externalBin`](https://v2.tauri.app/develop/sidecar/) ("sidecar") | Tauri renames the binary per-target (`-x86_64-pc-windows-msvc.exe`, `-aarch64-apple-darwin`, etc.) and you ship one per target triple. Invoked via `Command::new_sidecar`. Permission allowlist in `tauri.conf.json` required. |
+| **[Wails](#wails)** | `embed` directive (Go 1.16+) | Use Go's `//go:embed` to ship the binary inside the executable; extract to temp dir at runtime. No first-class "sidecar" concept. |
+| **[Flutter Desktop](#flutter-desktop)** | `assets:` in `pubspec.yaml` + [`process_run`](https://pub.dev/packages/process_run) to invoke | No first-class sidecar; copy from asset to `getApplicationSupportDirectory()` then `chmod +x` and run. |
+| **[Compose MP](#compose-multiplatform-for-desktop)** | `jpackage` `--input` flag bundles arbitrary files into the app image | JVM apps use `Runtime.exec()` or `ProcessBuilder` to invoke; classpath-aware lookup is your code. |
+| **[Native Swift](#native-macos-swift--swiftui--appkit)** | Add the binary to Xcode "Copy Files" build phase, destination "Frameworks" or "Resources" | Use `Bundle.main.url(forAuxiliaryExecutable:)` to find it; respect macOS hardened-runtime carve-outs (see signing below). |
+| **[WinUI 3 / .NET MAUI](#native-windows-winui-3--wpf)** | `Content` items in `.csproj` (`CopyToOutputDirectory=PreserveNewest`) | Spawned via `Process.Start`. MSIX adds `<uap:Extension>` entries for declaring background tasks if the sidecar is long-running. |
+| **[Qt 6](#qt-6)** | Qt Resource System (`.qrc`) embeds; or copy to install layout | `QProcess` to invoke. |
+| **[GTK 4](#gtk-4)** | `data` dir in install layout; `g_subprocess_new()` to invoke | Flatpak manifests have an explicit `cleanup` and `extra-data` story for downloaded deps. |
+| **[Rust toolkits (iced / egui / Slint / Dioxus)](#iced)** | `cargo` build script + `include_bytes!` for in-binary, or `build.rs` copying to `target/` | Spawn via `std::process::Command`. No framework-level sidecar API; you wire the per-platform install paths yourself. |
+
+### Erlang / Elixir applications via Burrito
+
+**[Burrito](https://github.com/burrito-elixir/burrito)** is the most-used path for packaging an Elixir/Erlang release into a single self-extracting cross-platform executable. The output is a binary you can drop into any of the desktop frameworks above as a sidecar.
+
+```elixir
+# mix.exs (excerpt)
+def project do
+  [
+    app: :my_app,
+    releases: [
+      my_app: [
+        steps: [:assemble, &Burrito.wrap/1],
+        burrito: [
+          targets: [
+            macos_arm: [os: :darwin, cpu: :aarch64],
+            macos_x86: [os: :darwin, cpu: :x86_64],
+            linux: [os: :linux, cpu: :x86_64],
+            windows: [os: :windows, cpu: :x86_64]
+          ]
+        ]
+      ]
+    ]
+  ]
+end
+```
+
+Run `MIX_ENV=prod mix release` and Burrito produces `burrito_out/my_app_macos_arm`, etc. Each is a Zig-based self-extracting wrapper around the Erlang Runtime System (ERTS) + your release. **First launch unpacks ERTS to `~/.local/share/.burrito` (Linux/mac) or `%LOCALAPPDATA%\.burrito` (Win)** — subsequent launches reuse the unpacked dir, so the first launch is noticeably slower (1-3 s).
+
+Burrito sits in the sidecar slot for Electron / Tauri / Wails / Flutter Desktop — your UI calls into it over stdio, HTTP, or a Unix domain socket. Same packaging story as `yt-dlp` / `ffmpeg` from a desktop framework's point of view: it's an opaque executable.
+
+Production users: **Tria** (an Elixir desktop game engine), **Livebook Desktop** (uses an Electron + Elixir release pattern), various indie Elixir+Tauri apps.
+
+**Picks for Burrito over alternatives:**
+- *vs `mix release` alone*: Burrito ships ERTS inside the binary so users don't need Erlang installed. Plain `mix release` needs ERTS present.
+- *vs Docker*: a desktop app shipping Docker as a runtime dependency is a discoverability and install-friction nightmare.
+- *vs `escript`*: `escript` produces a small file but still needs the Erlang VM on the user's machine.
+
+### Downloading at first launch — `yt-dlp`, `ffmpeg`, model files
+
+When the dep is fast-moving (`yt-dlp` updates weekly) or large (a Whisper / Llama model weight is 1-10 GB), shipping it inside the bundle is the wrong call.
+
+**Pattern: download to a user-data dir on first launch, verify with checksum, mark executable, cache by version.**
+
+- **Macros for "where to put it":**
+  - macOS: `~/Library/Application Support/<bundle-id>/bin/`
+  - Linux: `~/.local/share/<app-name>/bin/` (XDG Base Directory)
+  - Windows: `%LOCALAPPDATA%\<App Name>\bin\`
+- **Don't drop it in `/usr/local/bin` or `Program Files` from a user-mode installer** — both require elevation and pollute the system PATH.
+- **Verify before exec:** SHA-256 against a known-good hash; ideally cosign / Sigstore-style signature if the upstream offers one.
+
+```typescript
+// Electron / Tauri-style TypeScript snippet
+import { app } from "electron";
+import { join } from "node:path";
+import { chmod, mkdir, writeFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
+
+const binDir = join(app.getPath("userData"), "bin");
+await mkdir(binDir, { recursive: true });
+
+const target = join(binDir, "yt-dlp");
+const buf = Buffer.from(await (await fetch(YT_DLP_URL)).arrayBuffer());
+if (createHash("sha256").update(buf).digest("hex") !== EXPECTED_SHA256) {
+  throw new Error("yt-dlp hash mismatch — refusing to run unverified binary");
+}
+await writeFile(target, buf);
+await chmod(target, 0o755); // POSIX only — Windows ignores this
+```
+
+### Executable permissions — the per-OS reality
+
+- **macOS / Linux:** files need `+x`. If you ship inside a `.zip` / `.tar.gz`, the bit usually survives. If you reconstruct from a JS download, you must `chmod 0o755` (Node `fs.chmod`, Rust `std::os::unix::fs::PermissionsExt`, Go `os.Chmod`). **macOS additionally applies the quarantine attribute (`com.apple.quarantine`)** to downloads — see signing/notarisation below.
+- **Windows:** no execute-bit concept at the filesystem level. **Mark-of-the-Web (`Zone.Identifier` ADS)** is the equivalent — a binary marked as "downloaded from the internet" triggers SmartScreen. Strip with PowerShell `Unblock-File`, or sign the binary so SmartScreen trusts it.
+- **POSIX in containers / Flatpak:** Flatpak sandboxes filesystem writes; a downloaded sidecar must go to `~/.var/app/<bundle-id>/data/`, not `~/.local/share/`.
+
+### Code signing & notarisation for sidecar binaries — the trap
+
+This is the single most-skipped step for first-time desktop authors.
+
+**macOS:**
+- macOS Gatekeeper checks *every* executable in your `.app` bundle, **not just the main one**. An unsigned `ffmpeg` inside `MyApp.app/Contents/Resources/bin/` will fail notarisation and Gatekeeper will refuse to launch the parent app on first run.
+- Sign each sidecar binary separately with `codesign --force --options runtime --sign "Developer ID Application: …"`. The `--options runtime` flag enables the hardened runtime, which is **required for notarisation**.
+- **Hardened runtime restricts dynamic-library loading.** A Python interpreter shipped as a sidecar that `dlopen`s C extensions needs the `com.apple.security.cs.allow-unsigned-executable-memory` or `…allow-dyld-environment-variables` entitlement carve-out, or it crashes immediately on macOS 10.14+.
+- The Tauri sidecar docs and the Electron [`afterSign` recipe](https://github.com/electron-userland/electron-builder/issues/2509) both walk the `codesign` step explicitly. Skipping it is the most common reason a "works on my machine" build fails when shipped.
+
+**Windows:**
+- An EV-signed installer that drops an unsigned sidecar (e.g., a downloaded `yt-dlp`) will pass the installer SmartScreen check, but the sidecar itself triggers SmartScreen / AV on launch. Sign the sidecar too — same EV cert.
+- AV vendors (Defender, CrowdStrike, etc.) heuristically flag unsigned EXEs that spawn child processes. An unsigned `ffmpeg` inside a signed installer is a common false-positive driver.
+
+**Linux:**
+- No mandatory signing. AppImage runs from a temp mount and the bundled binaries inherit its mount options; check `noexec` mount semantics on hardened distros (some `/tmp` configurations are `noexec`).
+- Flatpak sandboxes by default; spawning a sidecar requires `--filesystem=…` and `--talk-name=…` entries in the manifest, or the sidecar will fail to launch.
+
+### Auto-update implications
+
+If the sidecar is bundled, your app's auto-updater handles it for free — the new release ships a new `ffmpeg` next to the new `app.exe`. If the sidecar is downloaded on first launch, **your update path must include a "rotate the downloaded binary when its hash changes upstream" step** — otherwise users sit on an old `yt-dlp` that quietly breaks against current YouTube changes.
+
+A common production pattern: store the version + SHA in `userData/bin/manifest.json`, check it at app start, re-download if upstream `latest-version.json` reports a newer SHA. This adds ~50-200 ms to cold launch; cache the check on a 24-hour TTL.
+
+### Per-OS sidecar discovery summary
+
+| Concern | macOS | Windows | Linux |
+| --- | --- | --- | --- |
+| Executable bit | `chmod +x` required | n/a (no exec bit) | `chmod +x` required |
+| Quarantine / Mark-of-the-Web | `xattr -d com.apple.quarantine` or sign + notarise | Sign or `Unblock-File` | n/a |
+| Required signing | Yes (hardened runtime, each binary) | Recommended (EV cert reduces SmartScreen) | No (Flatpak / Snap sign in store) |
+| Permitted install dir | `~/Library/Application Support/<bundle-id>/` | `%LOCALAPPDATA%\<App>\` | `~/.local/share/<app>/` (XDG) |
+| Sandbox carve-outs | Hardened-runtime entitlements | MSIX capabilities | Flatpak `--filesystem` / `--talk-name` |
+
+**Verdict:** the bundling story is straightforward at the framework API level (every framework supports it). The compliance story is **the same across frameworks** — your `ffmpeg` / `yt-dlp` / Burrito-wrapped Erlang release inherits macOS Gatekeeper, Windows SmartScreen, and Linux sandboxing constraints regardless of which UI shell you picked. Budget a day per platform the first time; the recipes above are the well-trodden paths.
+
 ## Disregarded / EOL / niche
 
 These are real options but explicitly **not recommended for new 2026 projects** — included so the corner is auditable.
@@ -662,92 +851,165 @@ The 7-dim score is comparable within an archetype, not across. These leaderboard
 
 ### Maximum native feel (every platform pixel + every new SDK on day 0)
 
-1. 🥇 **Native (Swift + SwiftUI / WinUI 3 / GTK or Qt)** — by definition. New Apple / Microsoft / GNOME APIs land here first.
-2. 🥈 **Qt 6** — the strongest single-codebase native-toolkit answer; downside is the license model.
-3. 🥉 **GTK 4** — native on Linux first-class; ports on Win/mac lag.
-4. **React Native Desktop (Windows + macOS)** — native widgets via JS bridge; the React-to-real-AppKit / WinUI 3 story is real.
-5. **.NET MAUI** — native widgets via abstraction, but macOS-via-Catalyst is a real limit and Linux is "via Avalonia partnership."
+1. 🥇 **Native ([Swift + SwiftUI](#native-macos-swift--swiftui--appkit) / [WinUI 3](#native-windows-winui-3--wpf) / [GTK](#gtk-4) or [Qt](#qt-6))** — by definition. New Apple / Microsoft / GNOME APIs land here first.
+2. 🥈 **[Qt 6](#qt-6)** — the strongest single-codebase native-toolkit answer; downside is the license model.
+3. 🥉 **[GTK 4](#gtk-4)** — native on Linux first-class; ports on Win/mac lag.
+4. **[React Native Desktop](#react-native-desktop) (Windows + macOS)** — native widgets via JS bridge; the React-to-real-AppKit / WinUI 3 story is real.
+5. **[.NET MAUI](#net-maui-desktop)** — native widgets via abstraction, but macOS-via-Catalyst is a real limit and Linux is "via [Avalonia](#avalonia) partnership."
 
 ### Smallest binary / lightest install
 
-1. 🥇 **Neutralinojs** — <2 MB. The literal smallest.
-2. 🥈 **WebUI** — <1 MB binary, but you're depending on the user having a browser.
-3. 🥉 **Tauri 2** — ~3–10 MB. The most-mature small option.
-4. **Slint / Wails / Electrobun** — ~5–15 MB tier.
-5. **iced / egui / Dioxus Desktop** — ~5–15 MB.
+1. 🥇 **[Neutralinojs](#neutralinojs)** — <2 MB. The literal smallest.
+2. 🥈 **[WebUI](#webui)** — <1 MB binary, but you're depending on the user having a browser.
+3. 🥉 **[Tauri 2](#tauri-2)** — ~3–10 MB. The most-mature small option.
+4. **[Slint](#slint) / [Wails](#wails) / [Electrobun](#electrobun)** — ~5–15 MB tier.
+5. **[iced](#iced) / [egui](#egui) / [Dioxus Desktop](#dioxus-desktop)** — ~5–15 MB.
 
 ### Maximum code reuse with an existing web team
 
-1. 🥇 **Electron** — your existing React/Vue/Svelte/Solid app is the desktop app, plus full Node API for native integration.
-2. 🥈 **Tauri 2** — same code-reuse story with a Rust backend instead of Node, smaller binary, system webview's risks attached.
-3. 🥉 **Wails** — same idea, Go backend.
-4. **Electrobun** — same idea, Bun-as-Node.
-5. **Neutralinojs** — barest possible C++ shell; works if you want minimal native surface.
+1. 🥇 **[Electron](#electron)** — your existing [React](https://react.dev) / [Vue](https://vuejs.org) / [Svelte](https://svelte.dev) / [Solid](https://www.solidjs.com) app is the desktop app, plus full Node API for native integration.
+2. 🥈 **[Tauri 2](#tauri-2)** — same code-reuse story with a Rust backend instead of Node, smaller binary, system webview's risks attached.
+3. 🥉 **[Wails](#wails)** — same idea, Go backend.
+4. **[Electrobun](#electrobun)** — same idea, [Bun](https://bun.sh)-as-Node.
+5. **[Neutralinojs](#neutralinojs)** — barest possible C++ shell; works if you want minimal native surface.
 
 ### Best developer experience for fast iteration / solo / small team
 
-1. 🥇 **Electron** — the deepest community (Stack Overflow / blog posts), the most npm packages, electron-builder, electron-updater, the most production examples.
-2. 🥈 **Tauri 2** — second-deepest community among cross-platform options; great docs at v2.tauri.app; the Rust learning curve is the tax.
-3. 🥉 **Flutter Desktop** — `flutter create` and you're on `flutter run`; stateful hot reload is gold-standard.
-4. **Compose Multiplatform** — JetBrains tooling is excellent; JVM cold-start is the friction.
-5. **Avalonia** — Visual Studio + Rider tooling; XAML Hot Reload; the most polished .NET cross-platform DX.
+1. 🥇 **[Electron](#electron)** — the deepest community (Stack Overflow / blog posts), the most npm packages, [electron-builder](https://www.electron.build), [electron-updater](https://github.com/electron-userland/electron-builder/tree/master/packages/electron-updater), the most production examples.
+2. 🥈 **[Tauri 2](#tauri-2)** — second-deepest community among cross-platform options; great docs at [v2.tauri.app](https://v2.tauri.app); the Rust learning curve is the tax.
+3. 🥉 **[Flutter Desktop](#flutter-desktop)** — `flutter create` and you're on `flutter run`; stateful hot reload is gold-standard.
+4. **[Compose Multiplatform](#compose-multiplatform-for-desktop)** — JetBrains tooling is excellent; JVM cold-start is the friction.
+5. **[Avalonia](#avalonia)** — [Visual Studio](https://visualstudio.microsoft.com) + [Rider](https://www.jetbrains.com/rider/) tooling; XAML Hot Reload; the most polished .NET cross-platform DX.
 
 ### Performance-sensitive / animation-heavy / data-visualisation
 
-1. 🥇 **Native (Swift + Metal / DirectX)** — uncontested on raw frame budgets and GPU access.
-2. 🥈 **Flutter Desktop (Impeller)** — 90–120 fps stable on Impeller; precompiled shaders mean no runtime jank.
-3. 🥉 **Slint / iced / egui** — wgpu-based Rust toolkits; the lightest-overhead cross-platform options.
-4. **Qt 6 with QML Scene Graph** — Qt's QML rendering is GPU-accelerated and battle-tested in production (Maya, Krita, OBS).
-5. **Compose Multiplatform** — Skia is competitive; JVM cold-start hurts perception.
-6. **Electron / Tauri / Wails / web-view-based** — WebView ceiling. Fine for line-of-business UI; not for 60+ fps custom animation.
+1. 🥇 **Native ([Swift](#native-macos-swift--swiftui--appkit) + [Metal](https://developer.apple.com/metal/) / [DirectX](https://learn.microsoft.com/en-us/windows/win32/directx))** — uncontested on raw frame budgets and GPU access.
+2. 🥈 **[Flutter Desktop](#flutter-desktop) ([Impeller](https://docs.flutter.dev/perf/impeller))** — 90–120 fps stable on Impeller; precompiled shaders mean no runtime jank.
+3. 🥉 **[Slint](#slint) / [iced](#iced) / [egui](#egui)** — [wgpu](https://wgpu.rs)-based Rust toolkits; the lightest-overhead cross-platform options.
+4. **[Qt 6](#qt-6) with QML Scene Graph** — Qt's QML rendering is GPU-accelerated and battle-tested in production ([Maya](https://www.autodesk.com/products/maya), [Krita](https://krita.org), [OBS](https://obsproject.com)).
+5. **[Compose Multiplatform](#compose-multiplatform-for-desktop)** — [Skia](https://skia.org) is competitive; JVM cold-start hurts perception.
+6. **[Electron](#electron) / [Tauri](#tauri-2) / [Wails](#wails) / web-view-based** — WebView ceiling. Fine for line-of-business UI; not for 60+ fps custom animation.
 
 ### Drag files OUT of the window (the export-to-Finder workflow)
 
-1. 🥇 **Electron** — one-line API, first-class.
-2. 🥈 **Native (Swift+AppKit / WinUI / Qt / GTK)** — first-class via the platform's drag APIs; you write per-platform code anyway.
-3. 🥉 **Tauri + [drag-rs](https://github.com/crabnebula-dev/drag-rs)** — community plugin works, rough edges on platform parity.
-4. **Wails / Electrobun / Dioxus** — same gap as Tauri, same community workarounds.
-5. **Flutter / Compose MP / Avalonia / Slint / iced / egui** — possible with platform code; no built-in cross-platform API.
+1. 🥇 **[Electron](#electron)** — one-line API, first-class.
+2. 🥈 **Native ([Swift+AppKit](#native-macos-swift--swiftui--appkit) / [WinUI](#native-windows-winui-3--wpf) / [Qt](#qt-6) / [GTK](#gtk-4))** — first-class via the platform's drag APIs; you write per-platform code anyway.
+3. 🥉 **[Tauri](#tauri-2) + [drag-rs](https://github.com/crabnebula-dev/drag-rs)** — community plugin works, rough edges on platform parity.
+4. **[Wails](#wails) / [Electrobun](#electrobun) / [Dioxus](#dioxus-desktop)** — same gap as Tauri, same community workarounds.
+5. **[Flutter](#flutter-desktop) / [Compose MP](#compose-multiplatform-for-desktop) / [Avalonia](#avalonia) / [Slint](#slint) / [iced](#iced) / [egui](#egui)** — possible with platform code; no built-in cross-platform API.
 
 ### Headless / scripting / "I want a CLI tool that opens a window"
 
-1. 🥇 **WebUI** — designed for exactly this. <1 MB, multi-language bindings.
-2. 🥈 **Neutralinojs** — tiny, language-agnostic, system webview.
-3. 🥉 **Tauri 2** — heavier than WebUI but with a proper plugin / API surface.
+1. 🥇 **[WebUI](#webui)** — designed for exactly this. <1 MB, multi-language bindings.
+2. 🥈 **[Neutralinojs](#neutralinojs)** — tiny, language-agnostic, system webview.
+3. 🥉 **[Tauri 2](#tauri-2)** — heavier than WebUI but with a proper plugin / API surface.
 
 ### Best Linux story (where Linux is the primary target)
 
-1. 🥇 **GTK 4** — native on Linux; Wayland-first; the GNOME default.
-2. 🥈 **Qt 6** — native on KDE Plasma and beyond; license caveats attached.
-3. 🥉 **Electron** — bundles its own Chromium, so distros can't break rendering; large but consistent.
-4. **Flutter Desktop** — GTK backend; canvas-based so distro variance doesn't break visual output (though native integration is lighter).
-5. **iced** — System76 COSMIC's official toolkit; the Rust-native answer for Linux DEs.
+1. 🥇 **[GTK 4](#gtk-4)** — native on Linux; Wayland-first; the [GNOME](https://www.gnome.org) default.
+2. 🥈 **[Qt 6](#qt-6)** — native on [KDE Plasma](https://kde.org/plasma-desktop/) and beyond; license caveats attached.
+3. 🥉 **[Electron](#electron)** — bundles its own Chromium, so distros can't break rendering; large but consistent.
+4. **[Flutter Desktop](#flutter-desktop)** — GTK backend; canvas-based so distro variance doesn't break visual output (though native integration is lighter).
+5. **[iced](#iced)** — [System76 COSMIC](https://system76.com/cosmic/)'s official toolkit; the Rust-native answer for Linux DEs.
 
-Tauri / Wails / Electrobun / Dioxus / Neutralinojs are all on the **avoid for headline Linux apps** list due to [WebKitGTK fragmentation](#linux-webkitgtk-fragmentation).
+[Tauri](#tauri-2) / [Wails](#wails) / [Electrobun](#electrobun) / [Dioxus](#dioxus-desktop) / [Neutralinojs](#neutralinojs) are all on the **avoid for headline Linux apps** list due to [WebKitGTK fragmentation](#linux-webkitgtk-fragmentation).
 
 ### Existing Rust / .NET / Go / Kotlin shop wanting desktop
 
 | Existing skill | Best fit | Reasoning |
 | --- | --- | --- |
-| **Rust** | Tauri 2 (web frontend) / Slint or iced (native canvas) / Dioxus (React-shaped) | Only major options that put Rust at the application core. |
-| **.NET / C#** | Avalonia (cross-platform Skia) / .NET MAUI (Win + mobile + future Linux via Avalonia) / WPF (Win-only legacy) / WinUI 3 (Win-only modern) | Avalonia is the strongest pure cross-platform option for new .NET projects in 2026. |
-| **Go** | Wails | The only mainstream Go-native desktop framework. |
-| **Kotlin / Android team** | Compose Multiplatform Desktop | Share code with Android Compose; JVM cold-start is the tax. |
-| **TypeScript / React** | Electron (mature) / Tauri 2 (small) / Electrobun (smaller Bun-native) | Pick by bundle-size tolerance and willingness to take on Rust (Tauri) or Bun (Electrobun). |
-| **Swift / Apple-only shop** | Native Swift + SwiftUI / AppKit | The native answer; ship to Mac App Store and direct download with Sparkle. |
-| **C++** | Qt 6 (license-aware) / native Win32 + Cocoa + GTK in parallel | Qt is the historical default; native triple-stack is the highest-fidelity option for AAA-quality desktop. |
+| **Rust** | [Tauri 2](#tauri-2) (web frontend) / [Slint](#slint) or [iced](#iced) (native canvas) / [Dioxus](#dioxus-desktop) (React-shaped) | Only major options that put Rust at the application core. |
+| **.NET / C#** | [Avalonia](#avalonia) (cross-platform Skia) / [.NET MAUI](#net-maui-desktop) (Win + mobile + future Linux via Avalonia) / [WPF](#native-windows-winui-3--wpf) (Win-only legacy) / [WinUI 3](#native-windows-winui-3--wpf) (Win-only modern) | Avalonia is the strongest pure cross-platform option for new .NET projects in 2026. |
+| **Go** | [Wails](#wails) | The only mainstream Go-native desktop framework. |
+| **Kotlin / Android team** | [Compose Multiplatform Desktop](#compose-multiplatform-for-desktop) | Share code with [Android Compose](https://developer.android.com/jetpack/compose); JVM cold-start is the tax. |
+| **TypeScript / React** | [Electron](#electron) (mature) / [Tauri 2](#tauri-2) (small) / [Electrobun](#electrobun) (smaller Bun-native) | Pick by bundle-size tolerance and willingness to take on Rust (Tauri) or [Bun](https://bun.sh) (Electrobun). |
+| **Swift / Apple-only shop** | [Native Swift + SwiftUI / AppKit](#native-macos-swift--swiftui--appkit) | The native answer; ship to Mac App Store and direct download with [Sparkle](https://sparkle-project.org). |
+| **C++** | [Qt 6](#qt-6) (license-aware) / native Win32 + Cocoa + [GTK](#gtk-4) in parallel | Qt is the historical default; native triple-stack is the highest-fidelity option for AAA-quality desktop. |
+
+## Recipe — Gleam + Lustre + Burrito + Electron (DIY stack)
+
+> [!NOTE]
+> This is a **build recipe**, not a competing framework — it composes existing tools (Electron for the shell, [Lustre](https://github.com/lustre-labs/lustre) for the UI, [Burrito](https://github.com/burrito-elixir/burrito) for the BEAM sidecar) into a Gleam-only desktop app. Not scored on the 7-dim rubric; the underlying archetype is [Electron](#electron), and the sidecar packaging follows the [Bundling external binaries](#bundling-external-binaries--sidecar-processes-executable-permissions-code-signing) section.
+
+**Goal:** ship a single-file desktop app powered by [Gleam](../gleam/README.md) on both ends of the wire — a Gleam-authored UI rendered by Electron, a Gleam-authored backend packaged as a BEAM sidecar. One language, two runtimes, one installer.
+
+### Stack diagram
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│  Electron app (packaged with electron-builder)                   │
+│                                                                  │
+│  ┌────────────────────────────┐   ┌───────────────────────────┐  │
+│  │  Renderer process          │   │  Main process (Node.js)   │  │
+│  │  ─ Chromium webview        │   │  ─ main.js / preload.js   │  │
+│  │  ─ Lustre UI               │   │  ─ spawns sidecar,        │  │
+│  │    (Gleam → JS bundle)     │◄─►│    proxies IPC to it      │  │
+│  └────────────────────────────┘   └─────────────┬─────────────┘  │
+│                                                 │ stdio /        │
+│                                                 │ unix socket /  │
+│                                                 │ localhost HTTP │
+│                                                 ▼                │
+│  ┌────────────────────────────────────────────────────────────┐  │
+│  │  Burrito-wrapped BEAM sidecar (one binary per target OS)   │  │
+│  │  ─ Gleam backend module (Gleam → Erlang)                   │  │
+│  │  ─ ERTS unpacked to ~/.local/share/.burrito on first run   │  │
+│  └────────────────────────────────────────────────────────────┘  │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+### Why this combo
+
+- **One language across the wire.** Gleam types on the UI and the backend; the IPC boundary carries JSON (or an equivalent codec — see [serialization](../gleam/serialization/README.md)) that both sides know the shape of.
+- **Standard sidecar pattern.** Electron is used exactly as documented in [Bundling external binaries](#bundling-external-binaries--sidecar-processes-executable-permissions-code-signing) — a Burrito binary is just another `extraResources` executable.
+- **Reuses production infra.** Electron ships to millions of users daily (VS Code, Slack, Discord); Burrito is the standard Elixir-desktop packaging path (used by Livebook Desktop). Nothing here is bespoke — the novelty is only that both endpoints are written in Gleam.
+- **Type-safe frontend + backend.** [Lustre](https://github.com/lustre-labs/lustre) is Elm-shaped MVU on Gleam-to-JS; the BEAM sidecar compiles Gleam to Erlang. Same language semantics on both runtimes.
+
+### Build steps
+
+1. **Author the UI.** `gleam add lustre` in a new project; write a Lustre app (`view` / `update` / `init`).
+2. **Build the JS bundle.** `gleam build --target javascript` produces JS output under `build/dev/javascript/`. Bundle with [esbuild](https://esbuild.github.io) or [Vite](https://vitejs.dev) into a single `renderer.js` for Electron.
+3. **Wire into Electron.** Create the standard Electron scaffolding — `main.js` (creates the `BrowserWindow`), `preload.js` (exposes an IPC surface via `contextBridge`), `index.html` (loads `renderer.js`). Point `webPreferences.preload` at the preload script.
+4. **Author the backend.** Separate Gleam project (or a sub-target of the same one) targeting Erlang: `gleam build --target erlang`. Expose a small entry point (e.g., a `main` function that starts an HTTP or stdio-JSON responder).
+5. **Package with Burrito.** Wrap the Erlang release with [Burrito](https://github.com/burrito-elixir/burrito) — see the [`mix.exs` example](#erlang--elixir-applications-via-burrito) in the sidecar section. Emit one binary per target triple (`macos_arm`, `macos_x86`, `linux`, `windows`).
+6. **Spawn as sidecar.** In Electron's main process, resolve the Burrito binary via `process.resourcesPath`, `chmod +x` it on POSIX, spawn with `child_process.spawn`, and pipe its stdio (or open a Unix domain socket / localhost HTTP loop for structured IPC). Renderer talks to backend through the preload's `contextBridge` surface.
+7. **Package for shipping.** Use [`electron-builder`](https://www.electron.build) with `extraResources` pointing at the per-target Burrito binary; produce `.dmg` (mac), `.exe`/`.msi` (Win), `.AppImage`/`.deb` (Linux).
+
+### Trade-offs
+
+- **Bundle size.** Electron ships ~150 MB of Chromium + Node.js; the Burrito-wrapped BEAM release adds ~30–50 MB of ERTS + your Gleam code. **Expect a 180–200 MB installer** — larger than plain Electron, much larger than [Tauri 2](#tauri-2). If bundle size drives adoption, this is not the stack.
+- **Cold-start cost — two runtimes.** Chromium boots (~500 ms – 1 s) *and* Burrito unpacks ERTS on first launch (~1–3 s the very first time, then cached). Subsequent launches are dominated by Chromium; the BEAM cold-start is 200–400 ms.
+- **Cross-compilation for Burrito.** Burrito uses Zig as its bootstrap; cross-target builds work on Linux hosts but macOS → Windows (and vice versa) is brittle in practice. **Use per-target CI runners** (GitHub Actions has macOS/Windows/Linux hosted runners) or a container-based builder. The sidecar section documents this in more detail.
+- **Two things to code-sign on macOS.** The Electron app AND the Burrito binary need separate `codesign` invocations with `--options runtime`; both must be notarised. See [Code signing & notarisation for sidecar binaries](#code-signing--notarisation-for-sidecar-binaries--the-trap) — same story as the generic sidecar case, applied twice.
+- **No native menus / notifications / tray from Gleam.** The Gleam side of the stack is a *frontend framework* (Lustre) and a *backend runtime* (BEAM). Native OS integration (menus, notifications, dock badges, global hotkeys, drag-out-of-window) goes through Electron's Node API — call it from `preload.js` and expose it to Lustre via `contextBridge`. No first-class Gleam bindings to Electron's Node API today; you write the IPC glue by hand.
+- **IPC shape is your problem.** No opinionated framework layer sits between Lustre and Burrito. Pick a codec (JSON via [`gleam_json`](../gleam/serialization/README.md), CBOR via [gleebor](../gleam/serialization/other-formats.md#gleebor), or MessagePack via [gmsg](../gleam/serialization/other-formats.md#gmsg)) and define your own message schema.
+- **Two build pipelines to maintain.** `gleam build --target javascript` for the UI, `gleam build --target erlang` + `mix release` + Burrito for the backend, plus `electron-builder`. Reproducibility takes upfront work; document the exact toolchain versions in the repo README.
+
+### When to pick this vs alternatives
+
+- **Pick this if:** you want a Gleam-only codebase across UI and backend, you're OK with Electron's size and cold-start cost, and you already have production experience with Node-side IPC and Electron packaging.
+- **Pick [Tauri 2](#tauri-2) if:** bundle size and startup time matter more than "one language everywhere." You'll take on Rust for the backend; the frontend can still be Lustre (Tauri hosts any HTML/JS payload).
+- **Pick [Electron](#electron) with a Node/TS backend if:** the Gleam-BEAM backend is not earning its keep — a plain Node process avoids the second runtime, the second sign step, and the ~40 MB of ERTS.
+- **Pick a native archetype** ([Swift](#native-macos-swift--swiftui--appkit) / [WinUI](#native-windows-winui-3--wpf) / [Compose MP](#compose-multiplatform-for-desktop)) **if:** OS-integration fidelity is the top-line requirement. Nothing in the Electron family competes with native menus, accessibility, and platform look-and-feel.
+- **Do NOT pick this if:** you want zero JavaScript in your stack — Chromium runs your Lustre-emitted JS bundle. The Gleam-to-JS compile hides the JS from your source tree, but the runtime is still V8.
+
+### Cross-links
+
+- [Bundling external binaries — sidecar processes, executable permissions, code signing](#bundling-external-binaries--sidecar-processes-executable-permissions-code-signing) — the shared compliance story for the Burrito binary (signing, notarisation, exec bit, Mark-of-the-Web).
+- [Erlang / Elixir applications via Burrito](#erlang--elixir-applications-via-burrito) — the concrete `mix.exs` snippet the backend build step uses.
+- [Electron](#electron) — the underlying archetype review; everything about Electron's bundle size, auto-update story, and OS-integration story applies here.
+- [Gleam ecosystem overview](../gleam/README.md) — for the Lustre section and the broader picture of what's available on the Gleam side.
 
 ## Cross-link
 
-> See also: **[Application types — what kind of thing are you building?](application-types.md)** — the orientation step *before* picking a desktop framework. If you're not 100 % sure you need a desktop binary at all, read that first; the [Desktop app section](application-types.md#desktop-app--native-and-cross-platform) has the "when desktop earns its keep vs PWA" analysis.
+> See also: **[Application types — what kind of thing are you building?](README.md)** — the orientation step *before* picking a desktop framework. If you're not 100 % sure you need a desktop binary at all, read that first; the [Desktop app section](README.md#desktop-app--native-and-cross-platform) has the "when desktop earns its keep vs PWA" analysis.
 
-> See also: **[Building Mobile Apps — Cross-Ecosystem Survey](building-mobile-apps.md)** — the sister article for mobile. Many of the same frameworks appear (Flutter, .NET MAUI, Compose Multiplatform, Tauri 2, Capacitor) with different per-platform trade-offs.
+> See also: **[Building Mobile Apps — Cross-Ecosystem Survey](mobile.md)** — the sister article for mobile. Many of the same frameworks appear (Flutter, .NET MAUI, Compose Multiplatform, Tauri 2, Capacitor) with different per-platform trade-offs.
 
 Other adjacent ecosystem reviews:
 
-- [Web apps in Gleam](gleam/web-and-http/web-apps.md) — full-stack frameworks, the input side of a "JS-compile-then-shell" desktop pipeline.
-- [Authentication on the web](authentication.md) — cross-cutting; OS keychain integration is a desktop-specific extension of the same primer.
-- [Diagramming tools](diagramming.md) — sister cross-ecosystem survey under a top-level dir, same style.
+- [Web apps in Gleam](../gleam/web-and-http/web-apps.md) — full-stack frameworks, the input side of a "JS-compile-then-shell" desktop pipeline.
+- [Authentication on the web](../authentication.md) — cross-cutting; OS keychain integration is a desktop-specific extension of the same primer.
+- [Diagramming tools](../design/diagramming.md) — sister cross-ecosystem survey under a top-level dir, same style.
 
 ## Discovery — search queries
 
@@ -786,6 +1048,6 @@ Frameworks intentionally excluded from this snapshot (out-of-scope, not "disrega
 
 - **Game engines** (Unity, Unreal, Godot, Cocos, defold, Bevy as a UI framework) — different design intent.
 - **TUI / terminal UI** (Ratatui, Textual, Bubble Tea, Charm, ncurses) — terminal target, not desktop window.
-- **Mobile-first frameworks treated as mobile-only here** — covered in [Building Mobile Apps](building-mobile-apps.md): Expo, Capacitor (on mobile), Lynx, NativeScript, Solito, KMP without Compose Multiplatform Desktop, Quasar (mobile build target).
+- **Mobile-first frameworks treated as mobile-only here** — covered in [Building Mobile Apps](mobile.md): Expo, Capacitor (on mobile), Lynx, NativeScript, Solito, KMP without Compose Multiplatform Desktop, Quasar (mobile build target).
 - **In-IDE plugin frameworks** (VS Code extensions, JetBrains plugin SDK) — extend an existing host, not a standalone desktop product.
 - **Backend-as-a-service / desktop sync engines** (Replicache, ElectricSQL, Couchbase Lite, Realm) — orthogonal layer; can pair with any framework above for local-first apps.

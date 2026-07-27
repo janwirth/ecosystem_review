@@ -35,7 +35,7 @@ Three words that get used interchangeably and shouldn't be:
 | **Authentication (AuthN)** | *"Can you prove it?"* | A password, a passkey, a one-time code, a signed token. |
 | **Authorization (AuthZ)** | *"What are you allowed to do?"* | "Alice can read her own orders, but not Bob's." |
 
-The slogan: **identification claims, authentication proves, authorization gates**. They are independent layers — you can authenticate without authorizing (a logged-in user with no roles), or authorize without authenticating (an anonymous public endpoint). Conflating them is the root cause of a [surprising number of CVEs](recent-incidents-in-major-technologies.md) — *e.g.* CVE-2025-29927 in Next.js, where authorization checks were placed in middleware that could be skipped via a header, and the underlying mistake was treating "the request reached this code" as proof of authentication.
+The slogan: **identification claims, authentication proves, authorization gates**. They are independent layers — you can authenticate without authorizing (a logged-in user with no roles), or authorize without authenticating (an anonymous public endpoint). Conflating them is the root cause of a [surprising number of CVEs](industry-watch/recent-incidents.md) — *e.g.* CVE-2025-29927 in Next.js, where authorization checks were placed in middleware that could be skipped via a header, and the underlying mistake was treating "the request reached this code" as proof of authentication.
 
 **OAuth 2.0 is an authorization framework, not an authentication protocol.** [RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749) is explicit on this — it concerns *what a token bearer is allowed to access*, not *who they are*. Authentication-by-OAuth is what **OpenID Connect (OIDC)** adds on top: an `id_token` (a signed JWT carrying user identity claims) layered over the OAuth2 grant. If your "Sign in with Google" flow only consumes the access token and never validates the `id_token`, you've authorized an API call but not authenticated a user.
 
@@ -238,7 +238,7 @@ When in doubt, prefer **opaque bearer tokens** with server-side lookup (or [Fern
 
 ## Common pitfalls
 
-The same handful of mistakes have powered most of the last decade's [authentication CVEs](recent-incidents-in-major-technologies.md). The OWASP top items in [A07:2021 Identification and Authentication Failures](https://owasp.org/Top10/2021/A07_2021-Identification_and_Authentication_Failures/) list them; here they are in concrete form.
+The same handful of mistakes have powered most of the last decade's [authentication CVEs](industry-watch/recent-incidents.md). The OWASP top items in [A07:2021 Identification and Authentication Failures](https://owasp.org/Top10/2021/A07_2021-Identification_and_Authentication_Failures/) list them; here they are in concrete form.
 
 ### Storing passwords in plaintext, or with a fast hash
 
@@ -304,7 +304,7 @@ If your login form is reachable over HTTP, an attacker on the path can MitM the 
 
 ### Trusting "internal" headers from the network
 
-[CVE-2025-29927 in Next.js](recent-incidents-in-major-technologies.md#nextjs) is the textbook example: a header (`x-middleware-subrequest`) meant for internal use, when sent from the network, was honoured. Ingress/proxy must strip any internal-only header before traffic enters your app, and your app should never trust a header *as proof of internal-source* unless it is signed.
+[CVE-2025-29927 in Next.js](industry-watch/recent-incidents.md#nextjs) is the textbook example: a header (`x-middleware-subrequest`) meant for internal use, when sent from the network, was honoured. Ingress/proxy must strip any internal-only header before traffic enters your app, and your app should never trust a header *as proof of internal-source* unless it is signed.
 
 ### Auth-by-IP-allowlist as the only check
 
@@ -413,5 +413,5 @@ Standards bodies and OWASP cheat sheets, all verified at snapshot.
 **Cross-references in this repo**
 
 - [Authentication in Gleam](gleam/authentication.md) — Gleam-specific implementation review (Argon2 / JOSE / OAuth2 / TOTP / WebAuthn / IDaaS clients).
-- [Recent security incidents in major technologies](recent-incidents-in-major-technologies.md) — concrete CVEs across Next.js, WordPress, npm, PyPI, etc., many of them authentication or session-management failures.
-- [Navigating software ecosystems](navigating-ecosystems.md) — meta-review of how to evaluate libraries (relevant when picking an auth library).
+- [Recent security incidents in major technologies](industry-watch/recent-incidents.md) — concrete CVEs across Next.js, WordPress, npm, PyPI, etc., many of them authentication or session-management failures.
+- [Navigating software ecosystems](industry-watch/navigating-ecosystems.md) — meta-review of how to evaluate libraries (relevant when picking an auth library).

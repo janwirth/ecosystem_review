@@ -225,7 +225,7 @@ PostHog occupies the **"open-source, all-in-one, developer-marketed"** corner. T
 
 ## Connection to Gherkin / BDD
 
-> **Cross-link:** [BDD with Gherkin across ecosystems](bdd-with-gherkin.md) — full review of Cucumber-family tooling per language.
+> **Cross-link:** [BDD with Gherkin across ecosystems](../practices/bdd-with-gherkin.md) — full review of Cucumber-family tooling per language.
 
 There is a real, often-missed link between Behaviour-Driven Development and UX flow specification. A Gherkin scenario:
 
@@ -271,7 +271,7 @@ This is the loop that closes "we designed it and shipped it" → "we know whethe
 
 A complete UX practice uses these pieces in sequence:
 
-1. **Discovery & spec** — talk to users (NN/g methodology), build a flow, write [Gherkin scenarios](bdd-with-gherkin.md) for the load-bearing behaviours.
+1. **Discovery & spec** — talk to users (NN/g methodology), build a flow, write [Gherkin scenarios](../practices/bdd-with-gherkin.md) for the load-bearing behaviours.
 2. **Design pass** — apply [Laws of UX](#laws-of-ux) (Hick, Fitts, Jakob, Aesthetic-Usability) to the proposed UI; argue with the vocabulary, not with vibes.
 3. **Heuristic review pre-ship** — walk the [10 NN/g heuristics](#the-10-usability-heuristics) against the build. 15 minutes; finds more issues than most demos.
 4. **Ship + dogfood** — the team uses the feature in normal work for at least one full cycle. Note the friction; do not yet act on it.

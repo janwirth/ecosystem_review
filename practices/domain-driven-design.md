@@ -206,4 +206,4 @@ A useful diagnostic: ask whether the alignment problem is real. *Have we, in the
 **Cross-references in this repo**
 
 - [BDD with Gherkin](bdd-with-gherkin.md) — `Given/When/Then` scenarios are the executable proof of Ubiquitous Language consistency.
-- [Programming language popularity & desire](programming-languages-popularity-and-desire.md) — context for why the Java/.NET DDD lineage matters less in 2026 than the FP-flavoured derivatives.
+- [Programming language popularity & desire](../industry-watch/language-popularity.md) — context for why the Java/.NET DDD lineage matters less in 2026 than the FP-flavoured derivatives.

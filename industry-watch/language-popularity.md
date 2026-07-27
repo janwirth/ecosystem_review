@@ -7,7 +7,7 @@
 
 Two numbers matter when you pick a language: how many people *use* it (how easy will it be to hire for, find libraries for, and get answers on Stack Overflow) and how many people who have used it *want to keep using it* (how likely is it that your team enjoys the tool a year in). The Stack Overflow Developer Survey publishes both once a year.
 
-This article is a companion to the [security incidents review](recent-incidents-in-major-technologies.md) — both inform the question "which tech do we pick and commit to". Nothing here is a recommendation to switch stacks; these are decision inputs.
+This article is a companion to the [security incidents review](recent-incidents.md) — both inform the question "which tech do we pick and commit to". Nothing here is a recommendation to switch stacks; these are decision inputs.
 
 **Terminology note.** Stack Overflow renamed the old "loved" question to **"admired"** in 2024. An *admired* language is one a respondent has used in the past year *and* wants to use again in the next year — retention, not hype. A *desired* language is one any respondent wants to use in the next year, whether or not they have used it — interest, including from non-users. Both are asked on the same survey screen.
 
@@ -152,7 +152,7 @@ The survey numbers above place Elixir at #3 admired (65.9%) but well below the p
 
 **Scalability.** Elixir runs on the BEAM — Erlang's VM, built at Ericsson for telecom switches that needed five-nines uptime, millions of concurrent lightweight processes per node, hot code upgrades, and supervision trees that survive partial failure. That foundation is unusually well suited to chat, presence, soft-realtime collaboration, IoT message brokers, and any system where "graceful degradation under load" matters more than raw single-thread throughput.
 
-**Security.** Phoenix and core Elixir have *no recent zero-days or unpatched critical CVEs* in the public record. By contrast, Next.js has accumulated several notable CVEs over the 2021–2026 window — middleware authorization bypass, RCE, DoS — patched quickly by Vercel but real. The smaller language ecosystem also means a much smaller supply-chain attack surface than npm or PyPI, both of which see ongoing typosquatting and credential-exfiltration campaigns. (See the companion [security incidents review](recent-incidents-in-major-technologies.md) for the broader pattern.)
+**Security.** Phoenix and core Elixir have *no recent zero-days or unpatched critical CVEs* in the public record. By contrast, Next.js has accumulated several notable CVEs over the 2021–2026 window — middleware authorization bypass, RCE, DoS — patched quickly by Vercel but real. The smaller language ecosystem also means a much smaller supply-chain attack surface than npm or PyPI, both of which see ongoing typosquatting and credential-exfiltration campaigns. (See the companion [security incidents review](recent-incidents.md) for the broader pattern.)
 
 **Ecosystem coherence.** Where Python and JS stitch together dozens of partial libraries, the Elixir world ships fewer but more complete frameworks: Phoenix (web + LiveView), Ash (declarative resource framework with first-class money types and policies), Oban (background jobs), Broadway (data ingestion). Phoenix LiveView in particular collapses the frontend/backend split — server-rendered diffs over a WebSocket — so a small team can keep one language across the entire stack.
 

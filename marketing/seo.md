@@ -1,15 +1,15 @@
-# SEO & Analytics — A Curated Review
+# SEO — A Curated Review
 
 > [!NOTE]
 > **Status:** DRAFT · **Authoring:** AI-assisted, human-reviewed.
 
-> **Two disciplines, one feedback loop.** This article covers both **SEO** (how you get found by people who don't already know you exist) and **web/product analytics** (how you measure what they do once they arrive). They are different jobs with different tools — but neither works without the other. SEO without analytics is faith. Analytics without acquisition is a clipboard with nothing to count.
+> **SEO is about the impressions and clicks you haven't earned yet.** This article covers the acquisition side: technical SEO, keyword research, competitor analysis, backlinks, content, GEO (Generative Engine Optimization), and the paid/free tool landscape you'd actually pick from. See [analytics.md](analytics.md) for the measurement side.
 
-**Snapshot 2026-06-14** — pricing, tool feature sets, and database sizes pulled from logged-out marketing pages and public docs at snapshot date. Tool pricing in particular fluctuates monthly; treat exact numbers as a point-in-time reading.
+**Snapshot 2026-07-02** — pricing, tool feature sets, and index sizes pulled from logged-out marketing pages and public docs at snapshot date. Tool pricing in particular fluctuates monthly; treat exact numbers as a point-in-time reading.
 
 ## Table of Contents
 
-1. [The SEO vs analytics line](#the-seo-vs-analytics-line)
+1. [Quick start — 80/20 SEO for non-marketers](#quick-start--8020-seo-for-non-marketers)
 2. [SEO fundamentals — the four pillars](#seo-fundamentals--the-four-pillars)
 3. [Keyword research — the load-bearing skill](#keyword-research--the-load-bearing-skill)
 4. [Competitor analysis — how marketers actually do it](#competitor-analysis--how-marketers-actually-do-it)
@@ -17,24 +17,89 @@
 6. [On-page SEO and content optimization](#on-page-seo-and-content-optimization)
 7. [Off-page SEO — backlinks, mentions, authority](#off-page-seo--backlinks-mentions-authority)
 8. [The AI-era shift — Generative Engine Optimization (GEO)](#the-ai-era-shift--generative-engine-optimization-geo)
-9. [SEO tools by tier and price](#seo-tools-by-tier-and-price)
-10. [Free SEO tools that punch above their weight](#free-seo-tools-that-punch-above-their-weight)
-11. [Web analytics — measuring the traffic](#web-analytics--measuring-the-traffic)
+9. [Feature comparison matrix — which tool does what](#feature-comparison-matrix--which-tool-does-what)
+   - [Full-platform SEO suites](#full-platform-seo-suites)
+   - [Technical SEO specialists](#technical-seo-specialists)
+   - [First-party & free tools](#first-party--free-tools-google-bing-ahrefs-webmaster-tools)
+   - [Content optimization & AI writers](#content-optimization--ai-writers)
+   - [Backlink specialists & outreach](#backlink-specialists--outreach)
+   - [Local SEO specialists](#local-seo-specialists)
+   - [GEO / AI-search visibility](#geo--ai-search-visibility)
+   - [Brand mention / social listening](#brand-mention--social-listening)
+   - [Which tool for which job — decision table](#which-tool-for-which-job--decision-table)
+10. [SEO tools by tier and price](#seo-tools-by-tier-and-price)
+11. [Free SEO tools that punch above their weight](#free-seo-tools-that-punch-above-their-weight)
 12. [The full marketer playbook](#the-full-marketer-playbook)
-13. [Leaderboard — SEO + analytics tools at a glance](#leaderboard--seo--analytics-tools-at-a-glance)
+13. [Leaderboard — SEO tools at a glance](#leaderboard--seo-tools-at-a-glance)
 14. [Cross-links](#cross-links)
 
-## The SEO vs analytics line
+## Quick start — 80/20 SEO for non-marketers
 
-When someone says "we need to improve our marketing", they usually mean one of three things:
+> [!TIP]
+> **Technical-founder routine to replace an SEO agency.** Setup is ~2 hours one-time. Then a keyword run (~1 hour/month) + a Claude-drafted post (~2 hours each) + a Monday GSC check (~30 min/week). The 80% of SEO value most agencies bill for, captured by someone who's never marketed before.
 
-1. **Nobody finds us.** Direct traffic is flat, search impressions are low, the site doesn't rank for terms the team thinks it should. *This is SEO.*
-2. **People find us but don't convert.** Traffic is fine, but visitors bounce, the funnel leaks, the activation event never fires. *This is analytics + UX, not SEO.* (See [UX resources & tools](ux-resources-and-tools.md).)
-3. **We don't know what's happening.** No instrumentation, no dashboards, no source attribution. *This is the analytics setup phase — prerequisite to both of the above.*
+### Setup — one time, ~2 hours
 
-This article covers **(1)** and **(3)**. The (2)-shaped problem is downstream — you need to know who's arriving (analytics) and from where (SEO attribution) before you can ask why they're leaving.
+1. **[Google Search Console](https://search.google.com/search-console)** + **[Bing Webmaster Tools](https://www.bing.com/webmasters)** — both free, both first-party. Verify your domain, submit your sitemap. GSC is the single most valuable SEO tool, period. Bing's bundled free **Keyword Research** tool is also unexpectedly competitive with paid tools at SMB scale.
+2. **[Ahrefs Webmaster Tools (AWT)](https://ahrefs.com/webmaster-tools)** — *free*, but massively underused: gives you paid-tier Site Audit, Domain Rating, and your backlink profile for any domain you can verify ownership of. Most technical founders have never heard of it because Ahrefs doesn't market it well. Sign up day 1.
+3. **[Microsoft Clarity](https://clarity.microsoft.com)** — free unlimited session replay + heatmaps + scrollmaps. Drop the snippet in. It's a real Hotjar alternative at $0. (This is analytics — see [analytics.md](analytics.md) — but bundled here because it's part of the initial setup.)
+4. **Pick a keyword tool** depending on budget:
+   - **$0**: GSC + Bing's free Keyword Research + [Google Trends](https://trends.google.com) + [AnswerThePublic](https://answerthepublic.com) (3 free/day) + [AlsoAsked](https://alsoasked.com) (3 free/day).
+   - **~$29/mo (recommended for non-marketers)**: **[Mangools KWFinder](https://kwfinder.com)** — cleanest beginner UI in the category; designed specifically to surface low-difficulty keywords.
+   - **Pay-per-search (cheap & specific)**: **[Lowfruits](https://lowfruits.io)** — from $0.075/check, specialised in finding weak-competition keywords forums and small sites rank for. Right for a one-off blitz, not a monthly routine.
 
-The operational distinction: **SEO is about the impressions and clicks you haven't earned yet**. Analytics is about the sessions you already have. SEO tools forecast — they tell you what searches happen, how hard it is to rank for them, who currently ranks. Analytics tools observe — they tell you what real users did. The two perspectives correct each other: SEO without analytics over-invests in keywords that don't convert; analytics without SEO optimises a leaky funnel without ever growing the top.
+### Monthly keyword research — ~1 hour
+
+1. **Seed list (15 min)** — write 10 phrases describing what your product does. Ask Claude to *"expand these into 50 buyer-intent queries someone googling for [X problem] would type"*. Skim your support tickets / sales-call notes for verbatim user phrasing.
+2. **Run seeds through KWFinder / Bing / AWT (20 min)** — filter for **Difficulty under 30** and **Volume ≥ 50/mo**. Export the list.
+3. **Check SERP intent for the top 5 (20 min)** — search each in an incognito tab. **Look at what's actually ranking.** If page 1 is all listicles, you need a listicle. If it's all product pages, a blog post will lose. *Mismatching SERP intent is the #1 reason "good content" fails.*
+4. **Pick 1-3 per month (5 min)** to actually write. Better to ship 2 good pieces than 20 thin ones.
+
+### Drafting with Claude — ~2 hours per post
+
+1. **Brief**: paste the keyword + top-3 ranking page URLs (or their text) into Claude, then ask: *"draft a 1,500-word article targeting `[keyword]`, with H2s covering at least the People Also Ask topics for this query, that beats the median of these top-3 pages on completeness, and gives a unique angle from `[your expertise]`. Target search intent is `[informational/commercial/transactional]`."*
+2. **Title + meta**: *"5 title-tag options, 50-60 chars, keyword near the start, that hook on `[curiosity/specificity/numbers]`. Then a 155-char meta description with a click-trigger."*
+3. **Schema markup**: *"Generate the JSON-LD `Article` schema (or `FAQPage` / `HowTo` if it fits). Use my domain as the publisher."* Validate at [Rich Results Test](https://search.google.com/test/rich-results).
+4. **Internal links**: paste your sitemap (or top-20 URLs). *"Suggest 5-10 existing pages on this site that should link to / be linked from the new article, with anchor-text recommendations."*
+
+### Weekly maintenance — ~30 min, Monday morning
+
+1. **GSC Performance report**, sort by impressions descending, last 7 days. Look for **pages with impressions but low CTR (<3%)** — rewrite the title tag.
+2. **Pages ranked 5-15 for a target keyword** — they need a 200-word section added, or one internal link from a higher-authority page. These are your easy wins; rank 11→8 doubles clicks.
+3. **Drops > 20%** — investigate. Did the SERP change (new AI Overview, new competitor)? Did Google Update the algorithm (check [searchengineroundtable.com](https://www.searchengineroundtable.com))?
+
+### Lesser-known wins — what SEO agencies bill for that technical founders miss
+
+| Tactic | Why it works | How to do it | Effort |
+|---|---|---|:---:|
+| **Refresh + republish old content quarterly** | Google rewards freshness for many query types; the URL keeps all its backlinks. Often a bigger ranking lift than writing new content. | Each quarter, pick your top-10 traffic posts. Add a 200-word "Updated [year]" section. Bump the `dateModified` schema. Re-share. | 🟩 Low |
+| **Topic clusters** (pillar + supporting pages) | Modern Google rewards *topical depth*, not single-page targeting. Internal links from supporting pages compound the pillar's authority. | Pick 3-5 pillar topics. Write one long pillar (3,000+ words) + 5-10 supporting articles per pillar, all internally linked. | 🟥 High |
+| **Internal linking from your top pages** | Authority flows through internal links. Adding one link from your highest-traffic page accelerates a new page's ranking by weeks. | Quarterly audit: identify your top-5 traffic pages in GSC. Add one contextual link from each to your newest target page. | 🟩 Low |
+| **FAQ + HowTo schema markup** | Rich results (FAQ accordion, HowTo step list) inflate your SERP real estate and raise CTR 30-50% over a plain blue link. | Add `FAQPage` JSON-LD to any page with a Q&A section. `HowTo` to any step-by-step guide. Validate. Claude can generate the JSON-LD. | 🟩 Low |
+| **Featured Snippet / Position Zero targeting** | The "position zero" answer box wins the click before the blue links. Often easier than ranking #1 organically. | For queries you rank 2-10 on that already show a snippet: add a 40-60 word definition paragraph (no fluff) directly answering the query. | 🟩 Low |
+| **Brand entity for LLM citation** | ChatGPT, Claude, AI Overviews cite *entities they can reliably identify*. Wikidata + consistent name/about across the web = entity. | Create a [Wikidata](https://www.wikidata.org) entry. Standardise your brand name + about-paragraph + key links across LinkedIn, Crunchbase, G2, Capterra, Product Hunt, AngelList. | 🟨 Medium |
+| **HARO / Connectively / [Featured.com](https://featured.com) / [Qwoted](https://www.qwoted.com)** | Journalists need expert quotes daily. You reply with 2-3 sentences; your name + a backlink lands in a DR-70+ news article. | Sign up. Reply to 5-10 relevant queries per week with original insight (NOT promotion). One landed quote per month is a strong run rate. | 🟨 Medium |
+| **Unlinked brand mentions** | Sites that mention your brand without linking are a 30-second polite-email win. ~30% conversion rate. | Set up [Google Alerts](https://www.google.com/alerts) for your brand. Set up Ahrefs Alerts (free with AWT). Email asking nicely for the link. | 🟩 Low |
+| **Page speed (Core Web Vitals)** | Tie-breaker in rankings. INP < 200ms, LCP < 2.5s, CLS < 0.1. | Run [PageSpeed Insights](https://pagespeed.web.dev) on your top-10 pages. Fix the top 2 actionable items per page. If you use Vercel / Cloudflare / Next.js / Astro, you're probably already fine — *don't over-invest*. | 🟨 Medium |
+| **Brand search volume as the north-star metric** | Branded search ("yourcompany pricing", "yourcompany vs X") is the cleanest proxy for overall brand-building ROI. Compounds over time. | Track monthly in GSC: filter Queries → contains brand name. Plot impressions over time. | 🟩 Low |
+| **Awesome lists, Reddit, Hacker News (organic, not promotion)** | LLMs and Google index these heavily. A landed mention compounds for years. | Find the relevant `awesome-X` list on GitHub → submit a PR. Answer questions on r/[yourniche] without linking. Comment substantively on HN posts in your domain. | 🟨 Medium |
+
+### Things to ignore (most SEO advice is noise)
+
+- **Keyword density / exact-match repetition** — Google moved past this in ~2013. Write naturally.
+- **Meta keywords tag** — ignored by every major search engine since ~2009.
+- **Submitting your URL to 500 directories** — penalty risk; ~zero rankings benefit.
+- **Buying backlinks** — Google detects link networks; manual penalty is months-long to recover.
+- **Obsessing over Domain Rating / Authority** — they're proxies, not ranking factors. Focus on shipping content + earning real links.
+- **Hiring an SEO agency before you have ≥10 published pages** — they will run a "technical audit" and produce a spreadsheet. Save the $2-5k/mo until you have content for them to actually optimise.
+
+### When to actually hire an agency
+
+When (a) you're spending >40 hr/month on SEO yourself and your time is more valuable than $5-10k/mo, (b) you need **international expansion** — hreflang is genuinely hard and easy to misconfigure, (c) you're in a **YMYL** vertical (health, finance, legal) where EEAT requires credentialed-author signals that take real outreach, (d) you've outgrown the keyword tool tier and need an agency-licensed enterprise platform. Otherwise: this routine + 4 hours/week beats most SMB-tier SEO agency engagements.
+
+---
+
+*For the deep version of every section here, read on. The rest of this article is the long-form reference; the Quick Start above is the routine.*
 
 ## SEO fundamentals — the four pillars
 
@@ -234,7 +299,7 @@ Link-building is the slowest, most expensive, and most determinative part of SEO
 1. **Digital PR / data studies** — original research + outreach to journalists. Most consistent path to high-DR editorial links. Long lead time.
 2. **Guest posting** — declining but still works on relevant industry sites. Avoid networks (Google penalises pattern detection).
 3. **Broken link building** — find a broken external link on a high-DR page; offer your equivalent resource. Slow but high quality when it lands.
-4. **Resource pages / awesome lists** — get included in curated lists in your niche. (See [Navigating ecosystems](navigating-ecosystems.md) on awesome lists.)
+4. **Resource pages / awesome lists** — get included in curated lists in your niche. (See [Navigating ecosystems](../industry-watch/navigating-ecosystems.md) on awesome lists.)
 5. **HARO / Connectively / Qwoted / Featured.com** — respond to journalist queries; expert quotes become citations.
 6. **Unlinked brand mentions** — find articles mentioning your brand without a link; ask politely for a link.
 7. **Product Hunt / launch sites** — single-day traffic spikes + a handful of links; great for new SaaS.
@@ -278,7 +343,7 @@ Google's generative-AI search experience rolled out widely in **May 2024** (US f
 
 ### Tracking GEO
 
-A new category of tools tracks how often a brand or URL appears in LLM responses. As of snapshot 2026-06-14:
+A new category of tools tracks how often a brand or URL appears in LLM responses. As of snapshot 2026-07-02:
 
 | Tool | Position | Pricing |
 |---|---|---|
@@ -301,7 +366,167 @@ The market is brand-new and consolidating fast. Most independent GEO trackers la
 5. **Brand mentions, not just links.** LLMs weight brand co-occurrence with topic keywords; unlinked mentions in authoritative content matter more than they did for traditional SEO.
 6. **Up-to-date content.** Many LLMs prefer recent sources. Date-stamped, regularly updated pages get cited more.
 
-The discipline is young enough that consensus on best practice is shifting monthly. The above is the snapshot 2026-06-14 view; revisit quarterly.
+The discipline is young enough that consensus on best practice is shifting monthly. The above is the snapshot 2026-07-02 view; revisit quarterly.
+
+## Feature comparison matrix — which tool does what
+
+The category is dominated by a handful of "all-in-one" platforms (Ahrefs, Semrush, Moz, SE Ranking, Sistrix, Serpstat) that each claim full-stack coverage, plus a long tail of **specialists** (Screaming Frog for crawling, Majestic for backlinks, LocalFalcon for grid rank tracking, Pitchbox for outreach, Profound for GEO, etc.). The trap: every all-in-one platform reads down its own marketing page as if it covers every capability equally, but in practice each has 2-4 capabilities where it's category-leading and 3-5 where it's a checkbox — usable but visibly behind a specialist.
+
+**How to use this matrix.** Read **across a row** to see what one tool covers end-to-end (useful for "if I only buy X, what am I giving up?"). Read **down a column** to see who competes on a capability (useful for "I need the best-in-class GEO tracker; who are my 3 candidates?"). Use this matrix *before* signing up for a trial: short-list 2-3 tools whose "first-class" ✅ coverage aligns with the capabilities you need, then trial *those* rather than trying every platform in turn.
+
+**Legend:** ✅ = first-class coverage (this is what the tool is known for, or a full-featured module) · 🟨 = has it but limited, second-tier, or shallow (usable for casual work, not for daily agency-grade work) · ⬜ = not offered.
+
+**Columns (capabilities).**
+
+- **KW Res.** — Keyword research (volume, difficulty, SERP data).
+- **KW Gap** — Keyword-gap analysis against competitors.
+- **Backlink** — Backlink analysis (index size, freshness, referring domains).
+- **BL Prosp.** — Backlink prospecting and outreach (find + email link targets, sequences).
+- **Rank Trk.** — Rank tracking (daily/weekly SERP positions per keyword).
+- **Site Audit** — Technical SEO / site audit (crawler, Core Web Vitals, schema, indexation).
+- **Compet.** — Competitor analysis (organic competitors, share of voice).
+- **Content Opt.** — Content optimization / SERP-informed content briefs.
+- **AI Writer** — Built-in AI content generation.
+- **Local** — Local SEO (Google Business Profile, citations, local pack).
+- **GEO** — Generative Engine Optimization / LLM citation tracking.
+- **PPC** — PPC / paid intel (competitor ads, CPC, ad copy history).
+- **Logs** — Server log-file analysis (Googlebot crawl budget).
+- **Intl.** — International / hreflang / multi-region rank tracking.
+- **Mentions** — Social / brand mentions / unlinked mention tracking.
+
+### Full-platform SEO suites
+
+| Tool | KW Res. | KW Gap | Backlink | BL Prosp. | Rank Trk. | Site Audit | Compet. | Content Opt. | AI Writer | Local | GEO | PPC | Logs | Intl. | Mentions |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **[Ahrefs](https://ahrefs.com)** | ✅ | ✅ | ✅ | 🟨 | ✅ | ✅ | ✅ | ✅ | 🟨 | 🟨 | 🟨 | 🟨 | ⬜ | ✅ | 🟨 |
+| **[Semrush](https://www.semrush.com)** | ✅ | ✅ | ✅ | 🟨 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | 🟨 | ✅ | ✅ | ✅ | ✅ |
+| **[Moz Pro](https://moz.com/products/pro)** | ✅ | ✅ | ✅ | ⬜ | ✅ | ✅ | 🟨 | 🟨 | ⬜ | ✅ | ⬜ | ⬜ | ⬜ | 🟨 | ⬜ |
+| **[Sistrix](https://www.sistrix.com)** | ✅ | ✅ | ✅ | ⬜ | ✅ | ✅ | ✅ | 🟨 | 🟨 | 🟨 | 🟨 | 🟨 | ⬜ | ✅ | ⬜ |
+| **[SE Ranking](https://seranking.com)** | ✅ | ✅ | ✅ | ⬜ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | 🟨 | 🟨 | ⬜ | ✅ | ⬜ |
+| **[Serpstat](https://serpstat.com)** | ✅ | ✅ | ✅ | ⬜ | ✅ | ✅ | ✅ | ✅ | 🟨 | 🟨 | 🟨 | 🟨 | ⬜ | ✅ | ⬜ |
+| **[Mangools](https://mangools.com)** | ✅ | 🟨 | 🟨 | ⬜ | ✅ | 🟨 | 🟨 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 🟨 | ⬜ |
+| **[SpyFu](https://www.spyfu.com)** | ✅ | ✅ | 🟨 | ⬜ | ✅ | ⬜ | ✅ | 🟨 | ⬜ | ⬜ | 🟨 | ✅ | ⬜ | ⬜ | ⬜ |
+| **[Ubersuggest](https://neilpatel.com/ubersuggest)** | ✅ | 🟨 | 🟨 | ⬜ | ✅ | 🟨 | 🟨 | 🟨 | 🟨 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| **[Keysearch](https://www.keysearch.co)** | ✅ | 🟨 | 🟨 | ⬜ | ✅ | 🟨 | 🟨 | 🟨 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| **[Sitechecker](https://sitechecker.pro)** | 🟨 | ⬜ | 🟨 | ⬜ | ✅ | ✅ | 🟨 | 🟨 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 🟨 | ⬜ |
+| **[Lowfruits](https://lowfruits.io)** | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 🟨 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+
+> [!NOTE]
+> **Ahrefs vs Semrush — where they actually diverge.** Ahrefs wins on backlink freshness (~15 min index refresh vs Semrush 2-4 weeks) and content-gap workflow. Semrush wins on breadth — it's the only major all-in-one with **first-class** PPC toolkit (competitor ad-copy history + campaign planner), **first-class** local SEO (GBP management + Map Rank Tracker + review AI), and integrated log-file analysis (via *Log File Analyzer*). If you need PPC/local/logs alongside SEO in one platform, Semrush is the answer; if you're pure organic, Ahrefs.
+
+### Technical SEO specialists
+
+| Tool | KW Res. | KW Gap | Backlink | BL Prosp. | Rank Trk. | Site Audit | Compet. | Content Opt. | AI Writer | Local | GEO | PPC | Logs | Intl. | Mentions |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **[Screaming Frog](https://www.screamingfrog.co.uk/seo-spider/)** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ✅ | ✅ | ⬜ |
+| **[Sitebulb](https://sitebulb.com)** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 🟨 | ✅ | ⬜ |
+| **[Lighthouse](https://developer.chrome.com/docs/lighthouse)** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| **[PageSpeed Insights](https://pagespeed.web.dev)** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| **[JetOctopus](https://jetoctopus.com)** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | 🟨 | ⬜ | ✅ | ✅ | ⬜ |
+| **[Botify](https://www.botify.com)** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ✅ | ⬜ | 🟨 | ⬜ | ⬜ | 🟨 | ⬜ | ✅ | ✅ | ⬜ |
+| **[OnCrawl](https://www.oncrawl.com)** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ✅ | ✅ | ⬜ |
+| **[Lumar](https://www.lumar.io)** (formerly DeepCrawl) | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ✅ | ✅ | ⬜ |
+| **[Yoast SEO](https://yoast.com/wordpress/plugins/seo/)** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 🟨 | ⬜ | ✅ | ⬜ | 🟨 | ⬜ | ⬜ | ⬜ | 🟨 | ⬜ |
+| **[RankMath](https://rankmath.com)** | 🟨 | ⬜ | ⬜ | ⬜ | 🟨 | 🟨 | ⬜ | ✅ | ⬜ | 🟨 | ⬜ | ⬜ | ⬜ | 🟨 | ⬜ |
+
+### First-party & free tools (Google, Bing, Ahrefs Webmaster Tools)
+
+| Tool | KW Res. | KW Gap | Backlink | BL Prosp. | Rank Trk. | Site Audit | Compet. | Content Opt. | AI Writer | Local | GEO | PPC | Logs | Intl. | Mentions |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **[Google Search Console](https://search.google.com/search-console)** | 🟨 | ⬜ | 🟨 | ⬜ | ✅ | 🟨 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ✅ | ⬜ |
+| **[Bing Webmaster Tools](https://www.bing.com/webmasters)** | ✅ | ⬜ | 🟨 | ⬜ | 🟨 | 🟨 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 🟨 | ⬜ |
+| **[Ahrefs Webmaster Tools](https://ahrefs.com/webmaster-tools)** | ⬜ | ⬜ | ✅ | ⬜ | ⬜ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 🟨 |
+| **[Google Trends](https://trends.google.com)** | 🟨 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ✅ | ⬜ |
+| **[Google Keyword Planner](https://ads.google.com/intl/en/home/tools/keyword-planner/)** | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ✅ | ⬜ | 🟨 | ⬜ |
+
+### Content optimization & AI writers
+
+| Tool | KW Res. | KW Gap | Backlink | BL Prosp. | Rank Trk. | Site Audit | Compet. | Content Opt. | AI Writer | Local | GEO | PPC | Logs | Intl. | Mentions |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **[Clearscope](https://www.clearscope.io)** | 🟨 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 🟨 | ✅ | 🟨 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| **[Surfer SEO](https://surferseo.com)** | 🟨 | ⬜ | ⬜ | ⬜ | ⬜ | 🟨 | 🟨 | ✅ | ✅ | ⬜ | 🟨 | ⬜ | ⬜ | ⬜ | ⬜ |
+| **[MarketMuse](https://www.marketmuse.com)** | 🟨 | 🟨 | ⬜ | ⬜ | ⬜ | ⬜ | 🟨 | ✅ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| **[Frase](https://www.frase.io)** | 🟨 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 🟨 | ✅ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| **[NeuronWriter](https://www.neuronwriter.com)** | 🟨 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 🟨 | ✅ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| **[Page Optimizer Pro](https://pageoptimizer.pro)** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 🟨 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+
+### Backlink specialists & outreach
+
+| Tool | KW Res. | KW Gap | Backlink | BL Prosp. | Rank Trk. | Site Audit | Compet. | Content Opt. | AI Writer | Local | GEO | PPC | Logs | Intl. | Mentions |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **[Majestic](https://majestic.com)** | ⬜ | ⬜ | ✅ | 🟨 | ⬜ | ⬜ | 🟨 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 🟨 | ⬜ |
+| **[LinkResearchTools](https://www.linkresearchtools.com)** | ⬜ | ⬜ | ✅ | ✅ | ⬜ | ⬜ | 🟨 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| **[Pitchbox](https://pitchbox.com)** | ⬜ | ⬜ | 🟨 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | 🟨 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| **[Respona](https://respona.com)** | ⬜ | ⬜ | 🟨 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | 🟨 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| **[BuzzStream](https://www.buzzstream.com)** | ⬜ | ⬜ | 🟨 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 🟨 |
+| **[HARO / Featured.com](https://featured.com)** | ⬜ | ⬜ | ⬜ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| **[Qwoted](https://www.qwoted.com)** | ⬜ | ⬜ | ⬜ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+
+### Local SEO specialists
+
+| Tool | KW Res. | KW Gap | Backlink | BL Prosp. | Rank Trk. | Site Audit | Compet. | Content Opt. | AI Writer | Local | GEO | PPC | Logs | Intl. | Mentions |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **[LocalFalcon](https://www.localfalcon.com)** | ⬜ | ⬜ | ⬜ | ⬜ | ✅ | ⬜ | 🟨 | ⬜ | ⬜ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| **[BrightLocal](https://www.brightlocal.com)** | ⬜ | ⬜ | ⬜ | ⬜ | ✅ | 🟨 | 🟨 | ⬜ | ⬜ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ✅ |
+| **[Whitespark](https://whitespark.ca)** | ⬜ | ⬜ | ⬜ | ⬜ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | 🟨 |
+| **[Places Scout](https://placesscout.com)** | ⬜ | ⬜ | ⬜ | ⬜ | ✅ | ⬜ | 🟨 | ⬜ | ⬜ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+
+### GEO / AI-search visibility
+
+| Tool | KW Res. | KW Gap | Backlink | BL Prosp. | Rank Trk. | Site Audit | Compet. | Content Opt. | AI Writer | Local | GEO | PPC | Logs | Intl. | Mentions |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **[Profound](https://www.tryprofound.com)** | ⬜ | 🟨 | ⬜ | ⬜ | 🟨 | ⬜ | ✅ | 🟨 | ⬜ | ⬜ | ✅ | ⬜ | ⬜ | 🟨 | ✅ |
+| **[Otterly.AI](https://otterly.ai)** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 🟨 | ⬜ | ⬜ | ⬜ | ✅ | ⬜ | ⬜ | ⬜ | ✅ |
+| **[Peec AI](https://peec.ai)** | ⬜ | 🟨 | ⬜ | ⬜ | ⬜ | ⬜ | ✅ | ⬜ | ⬜ | ⬜ | ✅ | ⬜ | ⬜ | ⬜ | ✅ |
+| **[AthenaHQ](https://athenahq.ai)** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 🟨 | ✅ | 🟨 | ⬜ | ⬜ | ✅ | ⬜ | ⬜ | ⬜ | ✅ |
+| **[BrightEdge](https://www.brightedge.com)** | ✅ | ✅ | 🟨 | ⬜ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⬜ | ⬜ | ✅ | ⬜ |
+| **[seoClarity](https://www.seoclarity.net)** | ✅ | ✅ | ✅ | ⬜ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⬜ | 🟨 | ✅ | ⬜ |
+| **[Conductor](https://www.conductor.com)** | ✅ | ✅ | 🟨 | ⬜ | ✅ | ✅ | ✅ | ✅ | ✅ | 🟨 | ✅ | ⬜ | ⬜ | ✅ | ⬜ |
+| **[Searchmetrics](https://www.searchmetrics.com)** | ✅ | ✅ | 🟨 | ⬜ | ✅ | ✅ | ✅ | ✅ | 🟨 | 🟨 | ✅ | ⬜ | ⬜ | ✅ | ⬜ |
+
+### Brand mention / social listening
+
+| Tool | KW Res. | KW Gap | Backlink | BL Prosp. | Rank Trk. | Site Audit | Compet. | Content Opt. | AI Writer | Local | GEO | PPC | Logs | Intl. | Mentions |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **[Brand24](https://brand24.com)** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 🟨 | ⬜ | ⬜ | ⬜ | ✅ |
+| **[Mention](https://mention.com)** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ✅ |
+| **[Awario](https://awario.com)** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 🟨 | ⬜ | ⬜ | ⬜ | ✅ |
+| **[Google Alerts](https://www.google.com/alerts)** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 🟨 |
+
+> [!IMPORTANT]
+> **"All-in-one" is a spectrum.** BrightEdge / seoClarity / Conductor / Searchmetrics are enterprise-only "cover every capability" platforms priced at $2-5k+/mo — they earn ✅ across most columns not because they beat specialists head-to-head, but because they *bundle every specialist's job into one contract with white-glove onboarding*. For an SMB or growth-stage SaaS, the specialists-plus-one-mid-tier-platform combo beats the enterprise bundle on both cost and depth. The enterprise bundle only wins when the buying criterion is "one vendor, one procurement cycle."
+
+### Which tool for which job — decision table
+
+If you already know what you need, jump here. Rows are jobs-to-be-done; the "pick" column names the best-value tool for that job in isolation.
+
+| Your job | Pick | Why (one line) |
+|---|---|---|
+| **I only need keyword research (volume + difficulty + SERP)** | **Mangools KWFinder** ($29/mo) or **Bing WT** (free) | Cleanest UX in the paid category; Bing's free tool is genuinely competitive at SMB scale. |
+| **I need aggressive keyword-gap analysis vs 3-5 named competitors** | **Ahrefs** ($129/mo, Lite) | *Content Gap* is the fastest and most complete diff report in the category. |
+| **I only need to audit Core Web Vitals + technical health** | **Lighthouse + PageSpeed Insights + GSC** (free) | For sites under ~10k URLs, first-party data covers 95% of what a paid audit surfaces. |
+| **I need to crawl a 500k-URL site to find broken links / redirect chains** | **Screaming Frog** (£199/yr) | Desktop crawler; industry-standard; unlimited URLs on the paid tier. |
+| **I need log-file analysis (which pages Googlebot actually fetches)** | **JetOctopus** (from €383/mo) or **Semrush Log File Analyzer** (bundled) | JetOctopus is the cheapest cloud log analyzer; Semrush bundles a lighter version. |
+| **I need daily local-pack grid rank tracking** | **LocalFalcon** ($29/mo) | The GeoGrid heatmap invented the category; the specialist that all-in-ones haven't matched. |
+| **I need to manage GBP + citations + reviews across many locations** | **BrightLocal** ($39/mo) or **Semrush Local** ($20-45/mo add-on) | BrightLocal for multi-location agency work; Semrush Local if you're already on Semrush. |
+| **I need citation building specifically** | **Whitespark** (from $37/mo) | The niche leader for local citation finding + manual building services. |
+| **I need to track how often my brand is cited by ChatGPT / Perplexity / AI Overviews** | **Peec AI** (€89/mo) or **Otterly.AI** ($29/mo) | Both entry-level GEO trackers; Peec has cleaner competitor gap analysis; Otterly is fastest to time-to-value. |
+| **I need enterprise GEO across 10+ AI engines with agency workflows** | **Profound** (custom) | Broadest engine coverage; the funded category leader. |
+| **I need competitor PPC intel (their Ads keywords, ad copy history, spend)** | **SpyFu** ($39/mo) or **Semrush** ($139/mo) | SpyFu is cheaper and has deeper historical ad archives; Semrush is the answer if you also want SEO in the same suite. |
+| **I need to run link outreach at scale (find prospects + send sequences)** | **Pitchbox** ($210/mo) or **Respona** ($100/mo) or **BuzzStream** ($49/mo) | Pitchbox = agency-grade, Respona = mid-market, BuzzStream = solo/founder. |
+| **I need pure backlink analysis without the platform bundle** | **Majestic** (from $50/mo) or **Ahrefs Webmaster Tools** (free for verified domains) | Majestic's Trust Flow / Citation Flow / Clique Hunter are the specialist's toolkit; AWT is free but only for domains you own. |
+| **I need content briefs to hand to writers** | **Clearscope** ($189/mo) or **Frase** ($15/mo) | Clearscope is the agency standard; Frase covers 80% at 8% the price. |
+| **I need AI-generated blog posts scored against the SERP** | **Surfer SEO** ($69/mo) or **NeuronWriter** ($19/mo) | Both bundle SERP-informed AI writing; Surfer has broader integrations, Neuron often on lifetime deal. |
+| **I need international rank tracking (multi-country, multi-language, hreflang)** | **Ahrefs** ($129/mo) or **Sistrix** (€99/mo for Europe) | Ahrefs supports 170+ countries; Sistrix is the European Visibility Index reference. |
+| **I need social & unlinked brand mention monitoring** | **Brand24** ($99/mo) or **Google Alerts** (free) | Brand24 covers 25M+ sources with sentiment + AI summaries; Google Alerts is the free floor. |
+| **I have a $30/mo total budget — pick one paid tool** | **Mangools** ($29/mo) | Cleanest UX; covers keyword + rank + light backlink + light audit. Pair with free GSC + AWT for the gaps. |
+| **I have a $200/mo total budget** | **Ahrefs Lite ($129) + Frase ($15) + Peec AI (€89)** | Covers organic SEO end-to-end + content briefs + GEO. Skip PPC / local / logs at this budget. |
+| **I have a $500/mo total budget** | **Ahrefs Standard ($249) + Surfer ($69) + Otterly ($29) + Screaming Frog (£17/mo amortised) + LocalFalcon ($29)** | Full-stack organic + content + GEO + technical + local. The "professional solo" bundle. |
+| **I need everything in one contract (enterprise procurement)** | **BrightEdge** or **seoClarity** or **Semrush Business** | Enterprise bundles trade specialist depth for one-vendor simplicity. Justified when procurement cost > $50k/yr in specialist stack complexity. |
+| **I'm a WordPress-only publisher, no marketing team** | **RankMath ($7/mo) + GSC + AWT** | On-page SEO + schema + redirects handled inside the CMS; free tier of everything else. |
+
+> [!TIP]
+> **The technical-founder anti-pattern.** Do not sign up for Ahrefs *and* Semrush "to compare." You will pay $270/mo for six months, use 15% of each, and cancel. Pick one from the "which tool for which job" decision table above, live with it for 3 months, and only add a specialist when a specific job in the table above is bottlenecking you.
 
 ## SEO tools by tier and price
 
@@ -375,87 +600,14 @@ The free tier is more useful than most realise. A determined solo founder can ru
 | **[AlsoAsked](https://alsoasked.com)** | Maps the "People Also Ask" tree from Google for a seed query | Free 3 searches/day; useful for topic clusters |
 | **[Keyword Surfer](https://surferseo.com/keyword-surfer-extension/)** | Free Chrome extension showing search volumes inline in Google SERP | Free; the Surfer SEO entry point |
 | **[Ubersuggest free](https://neilpatel.com/ubersuggest)** | 3 free searches/day; full data with paid plan | Decent at the free tier; quality is competitive at the lower paid tier |
-| **[Microsoft Clarity](https://clarity.microsoft.com)** | Session replay + heatmaps + scrollmaps; unlimited free | Free, no quota — a real Hotjar alternative |
 | **[Schema.org](https://schema.org)** + **[Rich Results Test](https://search.google.com/test/rich-results)** | Schema vocabulary + Google's validator | Free; canonical |
 | **[Wayback Machine](https://web.archive.org)** | Historical snapshots of any page or domain | Free; useful for competitor history and link-recovery investigations |
 
-The realistic free-tier programme: **GSC + Bing WT + Google Trends + Ahrefs Webmaster Tools + Google Search Console Insights + Microsoft Clarity** runs an SMB site for a year before you genuinely need to upgrade. Add a paid keyword tool (KWFinder, Mangools Basic) at the point you outgrow Bing's free keyword search.
-
-## Web analytics — measuring the traffic
-
-The other half of the loop: once you have traffic, what are visitors doing?
-
-### Platform landscape
-
-| Tool | Position | Pricing |
-|---|---|---|
-| **[Google Analytics 4 (GA4)](https://analytics.google.com)** | The default; event-based model replacing Universal Analytics (sunset 2023-07-01) | Free up to 10M events/month; GA4 360 enterprise from ~$50k/yr |
-| **[Plausible](https://plausible.io)** | Privacy-first, cookieless, EU-based, GDPR-compliant by design | From $9/mo; self-hostable (open-source AGPL) |
-| **[Fathom Analytics](https://usefathom.com)** | Privacy-first, simple UI, no cookies | From $15/mo |
-| **[Umami](https://umami.is)** | Open-source, self-hostable, privacy-focused | Free self-host; $9/mo cloud |
-| **[Matomo (Piwik)](https://matomo.org)** | Open-source GA replacement; full-featured | Free self-host; €19/mo (Matomo Cloud) |
-| **[PostHog](https://posthog.com)** | Product analytics + session replay + flags + experiments + surveys | Free tier 1M events/mo; usage-based after. Open-source. (See [UX article](ux-resources-and-tools.md#posthog--instrumentation-that-complements-dogfooding) for deep review.) |
-| **[Mixpanel](https://mixpanel.com)** | Product analytics; deeper cohorts and funnels than GA4 | Free tier 1M events/mo; paid from $24/mo |
-| **[Amplitude](https://amplitude.com)** | Enterprise product analytics; deep analyst tooling | Free tier 1M events/mo (Plus); enterprise from $49k+/yr |
-| **[Heap](https://heap.io)** | Autocapture (all events tracked automatically); lighter setup | Free tier; paid from custom |
-| **[FullStory](https://fullstory.com)** | Session replay first; heatmaps + frustration signals | Custom pricing |
-| **[Hotjar](https://www.hotjar.com)** | Heatmaps + session replay + surveys | Free Basic; $32/mo Plus → $171/mo Scale |
-| **[Microsoft Clarity](https://clarity.microsoft.com)** | Free heatmaps + session replay; surprisingly capable | Free, unlimited |
-| **[Mouseflow](https://mouseflow.com)** | Heatmaps + replays + form analytics | From $39/mo |
-| **[Adobe Analytics](https://business.adobe.com/products/analytics/adobe-analytics.html)** | Enterprise analytics; deepest customisation; CMP integration | Custom (typically $50k+/yr) |
-| **[Pirsch](https://pirsch.io)** | EU-based, privacy-friendly, cookieless, lightweight | From $6/mo |
-| **[GoatCounter](https://www.goatcounter.com)** | Open-source, free for small sites | Free <100k pageviews/mo |
-| **[Simple Analytics](https://www.simpleanalytics.com)** | Privacy-first, beautifully minimal | From $9/mo |
-
-### Web vs product analytics — which to pick
-
-The categories overlap but aren't identical:
-
-| If you want to know… | Use |
-|---|---|
-| Where my traffic comes from, what's growing/shrinking, which pages perform | Web analytics (GA4, Plausible, Fathom, Matomo) |
-| What users do *inside* my product (event funnels, retention, cohorts) | Product analytics (PostHog, Mixpanel, Amplitude) |
-| Why users are dropping off (replay, heatmap, frustration signal) | Session replay / heatmap (Clarity, Hotjar, FullStory, PostHog) |
-| Which version of a UI converts better | Experimentation (PostHog, GrowthBook, Optimizely, VWO) |
-| Are real visitors hitting our Core Web Vitals targets | Real-User Monitoring (Sentry, Datadog, SpeedCurve, Cloudflare Web Analytics) |
-
-For a typical SaaS website + product combo: **Plausible (or GA4) for marketing-site web analytics + PostHog for product analytics + Microsoft Clarity for free replay**. Total cost: ~$9/mo Plausible + free tiers of PostHog/Clarity = ~$108/yr until you exceed the PostHog free tier.
-
-### GA4 — the inescapable default
-
-Google sunset Universal Analytics on **2023-07-01**. GA4 is the replacement. Notable shifts from UA:
-
-| UA → GA4 change | Impact |
-|---|---|
-| Sessions → Events | Everything is an event; sessions are derived |
-| Bounce rate → Engagement rate | "Engagement" = session ≥10s OR conversion OR ≥2 pageviews; replaces the much-maligned UA bounce rate |
-| Data retention defaults to 2 months | Must be manually extended to 14 months max (per GDPR concerns) |
-| BigQuery export | Free in GA4 (was paid-only in UA); huge improvement for analytics teams |
-| Predictive metrics | Purchase probability, churn probability built-in |
-| Reporting interface | Less mature than UA; many marketers still find it harder |
-| Cross-platform unified | Web + app events in one property |
-
-The complaints about GA4 are real (UI churn, missing reports, data-thresholding hiding low-volume queries). The reasons to use it anyway: it's free, it integrates with Google Ads / Search Console / Looker Studio, and the entire SEO/PPC industry assumes you have it. Most teams run GA4 alongside a privacy-friendly alternative for the cleaner UI.
-
-### Privacy and cookie-consent shifts
-
-The major shift since 2018: privacy regulations (GDPR 2018, CCPA/CPRA 2020-2023, DSA 2024, EU Cookie Consent / ePrivacy) have changed what you can track, how, and after what user action.
-
-| Concern | Practical effect |
-|---|---|
-| **Cookie consent** | EU users must explicitly opt in to non-essential cookies; default analytics with cookies requires a CMP (Consent Management Platform) |
-| **Server-side tracking** | First-party server-side tagging via Google Tag Manager Server-Side or **[Stape](https://stape.io)** moves cookie creation server-side; bypasses many ad-blockers |
-| **First-party vs third-party data** | Walled gardens (Apple Mail open-detection, Safari ITP, iOS 14.5 ATT) have neutered cross-site tracking; first-party data is the new strategic asset |
-| **Cookieless analytics** | Plausible, Fathom, Umami, Pirsch all skip cookies — no consent banner required in most jurisdictions |
-| **EU vs US data residency** | Schrems II + EU-US Data Privacy Framework: GA4 on EU users now requires care; some EU regulators have ruled GA4 non-compliant |
-| **AdBlocker prevalence** | ~30-40% of technical-audience traffic blocks analytics scripts; under-counting is systemic — server-side or first-party-domain-served scripts mitigate but don't eliminate |
-| **Apple Mail Privacy Protection (2021)** | Pre-loads email images, breaking email open-rate tracking; affects email-marketing analytics, not web |
-
-The pragmatic stack for a privacy-conscious SaaS in 2026: **Plausible/Fathom (cookieless, no banner) for marketing-site + PostHog (event-based, consent-gated for tracked users) for product + server-side tagging for paid-ad attribution**.
+The realistic free-tier programme: **GSC + Bing WT + Google Trends + Ahrefs Webmaster Tools + Google Search Console Insights** runs an SMB site for a year before you genuinely need to upgrade. Add a paid keyword tool (KWFinder, Mangools Basic) at the point you outgrow Bing's free keyword search.
 
 ## The full marketer playbook
 
-How a senior SEO + analytics practitioner actually drives and measures traffic. This is the loop.
+How a senior SEO practitioner actually drives traffic. This is the loop.
 
 ### Weekly rhythm
 
@@ -498,7 +650,7 @@ How a senior SEO + analytics practitioner actually drives and measures traffic. 
 
 The single most important KPI for most growth-stage companies: **organic clicks to high-intent commercial pages**, measured in GSC, filtered to pricing / signup / comparison pages. This number ties acquisition spend forecasts directly to SEO work.
 
-## Leaderboard — SEO + analytics tools at a glance
+## Leaderboard — SEO tools at a glance
 
 Five-dimension scoring across the tools reviewed in this article. The dimensions:
 
@@ -545,22 +697,6 @@ Five-dimension scoring across the tools reviewed in this article. The dimensions
 | **[NeuronWriter](#content-optimization-tools)** | 🟨 | 🟩 | 🟩 | 🟩🟩 | 🟨 | AppSumo lifetime-deal favourite. |
 | **[MarketMuse](#content-optimization-tools)** | 🟩 | 🟨 | 🟩🟩 | 🟩🟩 | 🟥 | Topical authority focus; enterprise. |
 
-### Web analytics
-
-| Tool | Authority | Accessibility | Depth | Currency | Cost | Verdict |
-|---|:---:|:---:|:---:|:---:|:---:|---|
-| **[GA4](#ga4--the-inescapable-default)** | 🟩🟩 | 🟨 | 🟩🟩 | 🟩🟩 | 🟩🟩 | The default. Imperfect, free, integrates with everything Google. |
-| **[Plausible](#platform-landscape)** | 🟩 | 🟩🟩 | 🟩 | 🟩🟩 | 🟨 | Cookieless, privacy-friendly, no consent banner. Self-hostable. |
-| **[Fathom](#platform-landscape)** | 🟩 | 🟩🟩 | 🟩 | 🟩🟩 | 🟨 | Plausible's closest competitor; cleaner UI; closed-source. |
-| **[Matomo](#platform-landscape)** | 🟩 | 🟨 | 🟩🟩 | 🟩🟩 | 🟩 | Most feature-complete open-source GA replacement. |
-| **[Umami](#platform-landscape)** | 🟩 | 🟩🟩 | 🟩 | 🟩🟩 | 🟩🟩 | Open-source, lightweight, self-host free. |
-| **[PostHog](#platform-landscape)** | 🟩 | 🟩 | 🟩🟩 | 🟩🟩 | 🟩 | Product analytics + replay + flags. Open-source. Deep review in [UX article](ux-resources-and-tools.md#posthog--instrumentation-that-complements-dogfooding). |
-| **[Mixpanel](#platform-landscape)** | 🟩🟩 | 🟩 | 🟩🟩 | 🟩🟩 | 🟩 | Closed-source; stronger BI / cohort UX than GA4. |
-| **[Amplitude](#platform-landscape)** | 🟩🟩 | 🟨 | 🟩🟩 | 🟩🟩 | 🟥 | Enterprise product analytics; deepest analyst tooling. |
-| **[Microsoft Clarity](#free-seo-tools-that-punch-above-their-weight)** | 🟩 | 🟩🟩 | 🟩 | 🟩🟩 | 🟩🟩 | Free unlimited replay + heatmap. Real Hotjar alternative. |
-| **[Hotjar](#platform-landscape)** | 🟩🟩 | 🟩🟩 | 🟩 | 🟩🟩 | 🟨 | Heatmaps + replay + surveys. Clarity is the free alternative. |
-| **[FullStory](#platform-landscape)** | 🟩 | 🟩 | 🟩🟩 | 🟩🟩 | 🟥 | Replay + frustration signals; enterprise. |
-
 ### Generative Engine Optimization (GEO)
 
 | Tool | Authority | Accessibility | Depth | Currency | Cost | Verdict |
@@ -583,13 +719,12 @@ Five-dimension scoring across the tools reviewed in this article. The dimensions
 
 ## Cross-links
 
-This article touches several adjacent topics covered elsewhere in the repo:
-
-- **[UX resources & tools](ux-resources-and-tools.md)** — the conversion-side of acquisition. Once SEO drives traffic, UX determines whether they convert. PostHog is reviewed in depth there.
-- **[BDD with Gherkin](bdd-with-gherkin.md)** — encoding marketer/PM expectations about user flows as executable specs; downstream of acquisition.
-- **[Navigating ecosystems](navigating-ecosystems.md)** — discovery techniques (awesome lists, comparison pages, ossinsight) overlap with how SEO researchers find ranking-opportunity gaps.
-- **[Recent incidents in major technologies](recent-incidents-in-major-technologies.md)** — analytics tools handle PII; supply-chain and privacy incidents directly affect tool choice.
+- **[Analytics](analytics.md)** — the measurement side. Once SEO drives traffic, analytics tells you what happens next.
+- **[UX resources & tools](../design/ux.md)** — the conversion-side of acquisition. PostHog is reviewed in depth there.
+- **[BDD with Gherkin](../practices/bdd-with-gherkin.md)** — encoding marketer/PM expectations about user flows as executable specs; downstream of acquisition.
+- **[Navigating ecosystems](../industry-watch/navigating-ecosystems.md)** — discovery techniques (awesome lists, comparison pages, ossinsight) overlap with how SEO researchers find ranking-opportunity gaps.
+- **[Recent incidents in major technologies](../industry-watch/recent-incidents.md)** — supply-chain and privacy incidents directly affect tool choice.
 
 ---
 
-**Snapshot 2026-06-14.** Submit issues for missing tools, repo updates, or corrections.
+**Snapshot 2026-07-02.** Submit issues for missing tools, repo updates, or corrections.
