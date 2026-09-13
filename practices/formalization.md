@@ -8,7 +8,7 @@ Criteria, discovery methods, and tooling plan extracted from existing articles i
 |---|---|---|
 | **Stars** | GitHub API `stargazers_count` | 🟩🟩 ≥200, 🟩 ≥100, 🟨 ≥10, 🟥 <10 |
 | **License** | GitHub API `license.spdx_id` | 🟩 MIT/Apache/BSD/Unlicense, 🟥 GPL/AGPL/none |
-| **Gleam compat** | `gleam.toml` `[dependencies].gleam_stdlib` | 🟩 `>= X and < Y`, 🟥 `~>` pin or non-range |
+| **Gleam compat** | `gleam.toml` `[dependencies].gleam_stdlib` | 🟩 `>= X and < Y`, 🟥 `~>` pin or non-range, 🟥 any `< 1.0.0` cap on `gleam_stdlib` (pre-1.0 stdlib — breaks on current toolchains; reproduce the install) |
 | **Maintenance** | `pushed_at` + issue/PR timeline | `max(recency, responsiveness)`. Recency: <1mo 🟩🟩 / <6mo 🟩 / <1yr 🟨 / else 🟥. Responsiveness: owner reply <2d 🟩🟩 / <1wk 🟩 / <1mo 🟨 / else 🟥. 0 open = 🟩🟩 |
 | **Age** | `created_at` → first commit | ≥3yr 🟩🟩 / ≥1yr 🟩 / ≥3mo 🟨 / <3mo 🟥 |
 | **README maturity** | `README.md` length + section heuristics | 🟩🟩 guide+examples+feature docs, 🟩 tagline+usage, 🟥 minimal/broken. Batteries-included → 🟩🟩; adapter/example → 🟩 |

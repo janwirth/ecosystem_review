@@ -20,12 +20,13 @@ Coverage starts where the author's own projects demand answers, then widens outw
 ├── gleam/                  per-language ecosystem (20+ articles)
 ├── application-types/      what kind of thing are you building? (website builders, desktop, mobile, terminals)
 ├── design/                 UX, typography, diagramming, charts
-├── practices/              methodologies: BDD, DDD, formalization rubric
+├── practices/              methodologies: BDD, DDD, declarative infrastructure, formalization rubric
 ├── industry-watch/         ecosystem-meta: discovery, language popularity, incidents
 ├── authentication.md       cross-cutting auth primer (loner)
 ├── marketing/              SEO + analytics
 ├── postman-to-openapi-converters.md  format-converter review (loner)
-└── workflows/              the review process itself (for contributors / agents)
+├── workflows/              the review process itself (for contributors / agents)
+└── tools/                  repo-health-metrics — Gleam CLI that fetches the scored metrics (run it before any review)
 ```
 
 Each topic folder has a `README.md` that orients the reader and links to sibling articles. Loners that don't have siblings yet stay at the root.
@@ -103,6 +104,7 @@ Folder [`practices/`](practices/README.md).
 
 - [BDD with Gherkin](practices/bdd-with-gherkin.md) — cross-ecosystem Cucumber-family survey across Ruby, JS, JVM, Python, .NET, Go, Rust, PHP, Elixir, Gleam, Haskell.
 - [Domain-Driven Design](practices/domain-driven-design.md) — opinionated orientation: why DDD is hard, where it earns its keep (Ubiquitous Language + Bounded Contexts), how it maps onto Ash (Elixir).
+- [Declarative infrastructure](practices/declarative-infrastructure.md) — research concept: one repo for Hetzner + Cloudflare + Headscale + Caddy. IaC landscape (OpenTofu / Terraform / Pulumi / Ansible / Chef / Puppet / Salt / Nix / Kamal), the licensing exits (Terraform → BUSL/IBM, Chef EULA binaries, Puppet → private packages + OpenVox fork), SOPS + age secrets in git, blast-radius and 2FA-on-apply, and the Hetzner auction-dedicated vs cloud-VPS break-even after the 2026-06-15 price increase.
 - [Formalization](practices/formalization.md) — the scoring rubric (stars, license, lang-compat, maintenance, age, README, idiomaticity, feature completeness, ease, output quality) and discovery pipeline used across all reviews.
 
 ### Industry watch — observing the broader ecosystem

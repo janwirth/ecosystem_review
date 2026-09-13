@@ -16,14 +16,18 @@ User provides:
 
 ## Process
 
+### 0. Fetch mechanical metrics
+- Run `cd tools/repo-health-metrics && gleam run -- <url1> <url2> ... --snapshot <DATE>` (add `--json` for machine use). Accepts GitHub, GitLab, Codeberg/Forgejo/Gitea and sr.ht URLs.
+- Keep the emitted `| Criterion | repo |` tables verbatim; only the ⬜ cells and the README maturity / Idiomaticity rows are yours to fill.
+
 ### 1. Setup
 - Print category, goal, snapshot date
-- Note: "Data source: public GitHub web UI only (no clone, no API)"
+- Note: "Data source: `repo-health-metrics` (provider APIs) + public web UI for judgement rows (no clone)"
 - Define legend (🟩🟩 strong · 🟩 OK · ⬜ unknown · 🟥 negative)
 
 ### 2. For Each Repo
 
-Visit in this order (web browser, logged out or public view):
+For rows the tool left ⬜ and for the judgement rows, visit in this order (web browser, logged out or public view):
 
 1. **Repo homepage**
    - Read tagline/description
@@ -100,7 +104,7 @@ N. **[Repo Name](https://github.com/owner/repo)**
 ```
 # [Category] Review
 
-**Snapshot [DATE]** — data from **public GitHub web pages only** (no clone, no API).
+**Snapshot [DATE]** — metrics from **`tools/repo-health-metrics`** (provider APIs) + public web pages for judgement rows (no clone).
 
 **Legend:** [emoji definitions]
 
@@ -120,7 +124,7 @@ N. **[Repo Name](https://github.com/owner/repo)**
 
 ## Constraints
 
-- Use ONLY what public pages show (no API, no git clone, no private data)
+- Use ONLY what `repo-health-metrics` output and public pages show (no git clone, no private data)
 - If a page fails to load or is private, mark cell as ⬜ and note the reason
 - Do not infer from prior knowledge or memory
 - ISO date format (YYYY-MM-DD)
@@ -141,5 +145,5 @@ N. **[Repo Name](https://github.com/owner/repo)**
 - ✅ Table complete with all repos and dimensions
 - ✅ All ⬜ cells explained in notes
 - ✅ Ranking is justified (tie-break logic shown)
-- ✅ No API calls, no git clones, no non-public data used
+- ✅ Mechanical rows come from `repo-health-metrics`; no git clones, no non-public data used
 - ✅ Emoji consistent with legend

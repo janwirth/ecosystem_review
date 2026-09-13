@@ -7,11 +7,12 @@ Quick reference for running a systematic review.
 - [ ] Define category/goal
 - [ ] List all repos to review
 - [ ] Note snapshot date (today's date)
-- [ ] Confirm: "public web UI only" (no clone, no API)
+- [ ] Run `tools/repo-health-metrics` on the full repo list with `--snapshot <date>`; paste one table per repo
+- [ ] Confirm: judgement rows from public web UI only (no clone)
 
 ## Per-Repo Steps
 
-For each repo in list:
+For each repo in list (fill ⬜ cells and judgement rows; do not re-type what the tool already emitted):
 
 ### Homepage
 - [ ] Record star count from header
@@ -73,5 +74,5 @@ For each repo in list:
 - [ ] Table complete (no blank cells unless ⬜)
 - [ ] All ⬜ explained in notes
 - [ ] Emoji usage matches legend throughout
-- [ ] No API calls or private data mentioned
+- [ ] Mechanical rows match `repo-health-metrics` output; no private data
 - [ ] No inference from prior knowledge or memory

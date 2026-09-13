@@ -102,7 +102,7 @@ Insights worth codifying:
 When adding to existing articles or creating new ones:
 1. Use current date as snapshot (not article creation date).
 2. Follow AGENTIC_REVIEW_AGENT.md process exactly.
-3. Capture exact metrics from live GitHub UI.
+3. **Run `tools/repo-health-metrics` first** for every repo (`cd tools/repo-health-metrics && gleam run -- <repo-url> [...] --snapshot YYYY-MM-DD`). It emits the `| Criterion | repo |` table with stars, license, target, deps, gleam compat, open issues, latest release, maintenance and age already scored per `practices/formalization.md`. Paste its output; then fill the two human-judged rows (README maturity, Idiomaticity) from the rendered README. Fall back to the live web UI only for cells the tool marks ⬜ (Anubis-gated hosts, sr.ht stars, GitLab unauth issue counts).
 4. If new repo type or pattern emerges, note in workflows immediately.
 5. Re-rank all repos when adding new ones (don't append to old ranking).
 6. Update Notes section with summary of any new repos or edge cases.
@@ -288,3 +288,16 @@ Insights worth codifying:
 - **Deprecations can invalidate the standard recipe for a whole tier.** "Deploy Decap to Netlify, enable Identity + Git Gateway, invite the client by email" was *the* way to give a non-technical editor a git-CMS login. **Netlify now documents Git Gateway as deprecated with no recommended replacement.** Any tutorial written earlier still appears to work while building on deprecated infra. The current honest paths (Keystatic Cloud, Decap + DecapBridge) had to be surfaced with a `[!CAUTION]`. **When researching a well-known recipe, check the deprecation status of each moving part — the recipe outlives the infrastructure in blog posts.**
 - **Cost-model divergence beats cost comparison.** For an identical 1M-pageview static site: **$0–5/mo on Cloudflare** (no egress metering at all), **~$85–105 on Vercel**, **~$195+ on Netlify**. Label derived arithmetic as derived. And name the real driver of bill shock — for Vercel it is **page count × revalidation frequency × function invocations**, not traffic, which is why a $200 estimate became $2,800 in a community report. **"Your bill is a function of your architecture, not your audience" is the transferable sentence.**
 - **Migration difficulty belongs in its own table, and it changes the recommendation.** Rating each tier-to-tier move (1→3 is a rebuild because there's no export; 3→4 is trivial because content is already Markdown in git) produces the article's strongest single piece of advice: **Tier 3 is the best hedge, because it is both the cheapest to run and the cheapest to leave.** A survey that only compares capabilities cannot reach that conclusion.
+
+### Example: Declarative infrastructure article + repo-health-metrics tool (2026-09-13)
+
+Created `practices/declarative-infrastructure.md` (research concept: Hetzner + Cloudflare + Headscale + Caddy, IaC landscape, two guides on a common OpenTofu baseline, SOPS + age secrets in git, blast radius, 2FA-on-apply, auction-dedicated vs cloud-VPS break-even) and `tools/repo-health-metrics/` (Gleam CLI that fetches the mechanical rubric dims from GitHub / GitLab / Codeberg-Forgejo-Gitea / sr.ht and emits the `| Criterion | repo |` table).
+
+Insights worth codifying:
+
+- **Run the tool first, then judge.** `workflows/` now say: run `tools/repo-health-metrics` on the whole repo list, paste its tables, and fill only the ⬜ cells plus the two human rows (README maturity, Idiomaticity) from the rendered web UI. The old "no API" rule is retired; the "no clone, no private data, no fabrication" rules stay. The "no ranking" line in `workflows/` was also reconciled with `practices/formalization.md` (per-category leaderboards are the practice).
+- **Anubis gates browsers, not always APIs.** `git.liten.app` serves its Gitea API anonymously even though the web UI is Anubis-gated; `git.ahlcode.fi` gates both. Probe `/api/v1/version` before writing ⬜. The `mork` entry in `parse-and-generate-other-languages.md` can now be filled from the tool (not yet done).
+- **sr.ht ⬜s are structural.** No star feature; tickets live on todo.sr.ht keyed by tracker; GraphQL needs a token. Say "⬜ by construction" rather than "access denied".
+- **`< 1.0.0` stdlib cap is now an explicit 🟥 in `formalization.md`** — the rubric previously scored any `>= X and < Y` range 🟩, contradicting four CLAUDE.md examples. The tool flags; reproducing the install stays manual.
+- **A truncated todo sentence gets an explicit interpretation box, not a silent guess.** "Prod should not" was read as "prod carries neither the dev toolchain nor ad-hoc Caddy holes" and stated in an `[!IMPORTANT]` box at the top of the article; the question was also posted back to the user.
+- **Price-list research must record the date of the last price change.** Hetzner raised cloud prices 2026-06-15 (auction excluded), halving the dedicated-vs-VPS break-even in one step. A cost section without that date is wrong within a quarter.
