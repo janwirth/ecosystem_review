@@ -72,3 +72,11 @@ Judgement dimensions (README maturity, idiomaticity, feature matrix) still come 
 - **Criteria:** Core dimensions above; add domain-specific rows if needed (e.g., "TypeScript support", "WebAssembly binding")
 - **Legend:** Reuse 🟩🟩 / 🟩 / ⬜ / 🟥 unless domain-specific scoring makes sense
 - **Ranking:** Per-category leaderboards (tools in one category are substitutable; across categories they are not).
+
+## Application and hosted-tool evidence boundaries
+
+For application or hosted-tool reviews, separate documented capability, observed local checks, and proposed deployment acceptance tests. Do not present a planned benchmark as a measured result. Record the installed version or API model ID; distinguish stable, preview, early access, and nightly channels. An aggregator name does not identify its underlying model.
+
+Use the product's official distribution channel when repository release metadata is stale. Keep raw mechanical output auditable and explain corrections such as API `NOASSERTION` resolved by a rendered licence file. Repository activity does not establish stable-release recency or operational reliability. API open-item counts may include pull requests.
+
+For visual or agent reviews, evaluate the domain boundary explicitly: saved geometry versus generative character similarity; runtime hosting versus state hosting versus model inference; successful execution versus successful external delivery. Attribute screenshots to their source and displayed version, and distinguish official examples from locally reproduced output. For agent side effects, document restart reconciliation and duplicate-event tests rather than assuming exactly-once execution from a scheduler feature list.
