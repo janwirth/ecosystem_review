@@ -76,3 +76,7 @@ OpenAI's current API guide recommends `gpt-image-2.5-sunburst` for precise editi
 Claude Code is a coding tool, not an image-model name. Anthropic announced Opus 5.5 on 2026-09-22; record the resolved model rather than a moving `opus` alias. Claude Design's April launch described brand systems, iterative editing, and HTML/PDF/PPTX/Canva exports, with handoff to Claude Code. That launch's Opus 4.7 description is historical, not the current Code model baseline. [Opus 5.5 announcement](https://www.anthropic.com/claude-opus-5-5), [Code model configuration](https://code.claude.com/docs/en/model-config), [Claude Design launch](https://www.anthropic.com/news/claude-design-anthropic-labs).
 
 The named-provider comparison and its research trail are expanded in subsequent sections. Prices and commercial-use terms need checking for the exact plan before purchase; account access was not tested.
+
+## Research trail
+
+[Primary-source register, discovery queries, and evidence limits](ai-mascot-research.md).
