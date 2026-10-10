@@ -87,6 +87,7 @@ Folder [`application-types/`](application-types/README.md). The orientation step
 - [Website builders](application-types/website-builders.md) — ~60 hosted and self-hostable platforms across six families: mainstream all-in-one (Wix, Squarespace, Duda, GoDaddy, Hostinger, IONOS…), designer-first (Webflow, Framer, Webstudio), portfolio (Readymag, Cargo, Semplice, Pixpa…), WordPress + Elementor/Divi/Bricks/Beaver and the open-source corner, AI-first (Lovable, Bolt, v0, 10Web…), and Notion-as-CMS. Pricing-gotcha taxonomy, caps, lock-in/export table, SEO-by-construction, EAA accessibility, GDPR residency, Core Web Vitals. Plus ecommerce platforms and no-code app builders, reviewed to draw the boundary.
 - [Building desktop apps](application-types/desktop.md) — Electron, Tauri 2, Electrobun, Wails, Flutter Desktop, Compose MP, Avalonia, Slint, iced, egui, .NET MAUI, Qt 6, GTK 4, native. 22 frameworks reviewed + 7 disregarded. Dedicated pitfalls section.
 - [Building mobile apps](application-types/mobile.md) — native (Kotlin/Swift), Flutter, RN/Expo, Capacitor, Tauri Mobile, KMP, .NET MAUI, NativeScript, Lynx, Quasar, Solito, PWA. 14 frameworks reviewed + 7 disregarded/EOL.
+- [Self-hosted personal agents](application-types/personal-agents.md) — Hermes, OpenClaw, and Letta; Empress parity, reliability trials, email triage, and UI screenshots.
 - [Browser-based SSH terminals](application-types/browser-ssh-terminals.md) — embeddable web SSH clients for iframe / Notion use.
 
 ### Design — UX, UI, diagrams

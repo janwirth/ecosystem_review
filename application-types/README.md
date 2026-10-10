@@ -327,6 +327,8 @@ Some properties cut across all five types and deserve their own articles or sect
 - **Build / signing / release.** Each type has a different release artifact and a different signing story. Conflating them is the most common reason teams underestimate mobile or desktop projects.
 - **Domain modelling.** Independent of artifact type. See [Domain-Driven Design](../practices/domain-driven-design.md).
 
+- [Self-hosted personal agents](personal-agents.md) — Hermes, OpenClaw, and Letta evaluated for reliable task execution and email triage.
+
 ## Related reading
 
 - [Choosing a web-presence stack](choosing-a-web-presence-stack.md) — the tier decision for the website archetype: off-the-shelf builder vs visual development platform vs SSG + git CMS vs framework + headless CMS vs custom application. Pick-by-organizational-capacity grid (capacity × requirement shape), the "no technical staff doesn't mean Wix" case, the plugin-cost break-even with real prices, and a one-way-doors migration table.
