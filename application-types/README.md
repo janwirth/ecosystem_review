@@ -329,6 +329,8 @@ Some properties cut across all five types and deserve their own articles or sect
 
 - [Self-hosted personal agents](personal-agents.md) — Hermes, OpenClaw, and Letta evaluated for reliable task execution and email triage.
 
+- [macOS terminals](macos-terminals.md) and [configuration recovery](macos-terminal-recovery.md) — emulator choice, shell startup, and recoverable settings.
+
 ## Related reading
 
 - [Choosing a web-presence stack](choosing-a-web-presence-stack.md) — the tier decision for the website archetype: off-the-shelf builder vs visual development platform vs SSG + git CMS vs framework + headless CMS vs custom application. Pick-by-organizational-capacity grid (capacity × requirement shape), the "no technical staff doesn't mean Wix" case, the plugin-cost break-even with real prices, and a one-way-doors migration table.

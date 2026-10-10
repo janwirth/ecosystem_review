@@ -88,6 +88,7 @@ Folder [`application-types/`](application-types/README.md). The orientation step
 - [Building desktop apps](application-types/desktop.md) — Electron, Tauri 2, Electrobun, Wails, Flutter Desktop, Compose MP, Avalonia, Slint, iced, egui, .NET MAUI, Qt 6, GTK 4, native. 22 frameworks reviewed + 7 disregarded. Dedicated pitfalls section.
 - [Building mobile apps](application-types/mobile.md) — native (Kotlin/Swift), Flutter, RN/Expo, Capacitor, Tauri Mobile, KMP, .NET MAUI, NativeScript, Lynx, Quasar, Solito, PWA. 14 frameworks reviewed + 7 disregarded/EOL.
 - [Self-hosted personal agents](application-types/personal-agents.md) — Hermes, OpenClaw, and Letta; Empress parity, reliability trials, email triage, and UI screenshots.
+- [macOS terminals](application-types/macos-terminals.md) — configuration ownership and terminal selection; [recovery guide](application-types/macos-terminal-recovery.md) separates emulator settings from shell startup.
 - [Browser-based SSH terminals](application-types/browser-ssh-terminals.md) — embeddable web SSH clients for iframe / Notion use.
 
 ### Design — UX, UI, diagrams
