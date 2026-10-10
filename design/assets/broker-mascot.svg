@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="360" viewBox="0 0 960 360" role="img" aria-labelledby="title desc">
+<title id="title">Three insurance broker mascot concepts</title>
+<desc id="desc">An owl adviser, a turtle protector, and a dog companion in navy, teal, and cream. These are original editable vector concepts, not vendor model outputs.</desc>
+<rect stroke="none" width="960" height="360" fill="#fffaf0"/>
+<g stroke="#17324d" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+<g id="owl" transform="translate(160 145)">
+<path stroke="#17324d" stroke-width="7" d="M-70-65 -38-92 0-65 38-92 70-65 64 72 Q0 112-64 72Z" fill="#168b87"/>
+<circle stroke="#17324d" stroke-width="7" cx="-30" cy="-14" r="28" fill="#fffaf0"/><circle stroke="#17324d" stroke-width="7" cx="30" cy="-14" r="28" fill="#fffaf0"/>
+<circle stroke="#17324d" stroke-width="7" cx="-30" cy="-14" r="5" fill="#17324d"/><circle stroke="#17324d" stroke-width="7" cx="30" cy="-14" r="5" fill="#17324d"/>
+<path stroke="#17324d" stroke-width="7" d="M-12 15 0 30 12 15Z" fill="#f3b544"/><path stroke="#17324d" stroke-width="7" d="M-29 60H29"/>
+</g>
+<g id="turtle" transform="translate(480 155)">
+<ellipse stroke="#17324d" stroke-width="7" cy="20" rx="76" ry="57" fill="#168b87"/><path stroke="#17324d" stroke-width="7" d="M-45-19 0-37 45-19 32 52H-32Z" fill="#fffaf0"/>
+<circle stroke="#17324d" stroke-width="7" cx="80" cy="-7" r="27" fill="#168b87"/><circle stroke="#17324d" stroke-width="7" cx="87" cy="-14" r="4" fill="#17324d"/>
+<path stroke="#17324d" stroke-width="7" d="M-47 64-57 80M43 64 53 80M-75 12-89 3"/>
+</g>
+<g id="dog" transform="translate(800 145)">
+<path stroke="#17324d" stroke-width="7" d="M-47-43-75-12-77 41-44 16M47-43 75-12 77 41 44 16" fill="#168b87"/>
+<rect stroke="#17324d" stroke-width="7" x="-47" y="-54" width="94" height="123" rx="40" fill="#fffaf0"/>
+<circle stroke="#17324d" stroke-width="7" cx="-20" cy="-7" r="5" fill="#17324d"/><circle stroke="#17324d" stroke-width="7" cx="20" cy="-7" r="5" fill="#17324d"/>
+<path stroke="#17324d" stroke-width="7" d="M-10 13H10L0 24Z" fill="#17324d"/><path stroke="#17324d" stroke-width="7" d="M0 24V37M-20 37Q0 51 20 37" fill="none"/>
+<path stroke="#17324d" stroke-width="7" d="M-43 70H43L27 99H-27Z" fill="#168b87"/>
+</g></g>
+<g fill="#17324d" font-family="sans-serif" font-size="22" text-anchor="middle">
+<text x="160" y="295">Owl: clear advice</text><text x="480" y="295">Turtle: protection</text><text x="800" y="295">Dog: ongoing support</text>
+</g></svg>
