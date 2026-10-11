@@ -72,3 +72,9 @@ Judgement dimensions (README maturity, idiomaticity, feature matrix) still come 
 - **Criteria:** Core dimensions above; add domain-specific rows if needed (e.g., "TypeScript support", "WebAssembly binding")
 - **Legend:** Reuse 🟩🟩 / 🟩 / ⬜ / 🟥 unless domain-specific scoring makes sense
 - **Ranking:** Per-category leaderboards (tools in one category are substitutable; across categories they are not).
+
+## Hosted visual-model reviews
+
+Repository-health metrics do not measure the visual quality of hosted models or creative platforms. Agree on a domain rubric before replacing repository scoring. For the 2026-10-11 mascot review, the user approved visual quality 50%, consistency 30%, ease 15%, and cost 5%; the scale and calculation are defined in [the tool article](../design/ai-mascot-tools.md#approved-scoring-rubric-and-ranking-limits).
+
+Separate models, creative platforms, coding agents, and animation handoffs. Rank within substitutable categories. Public previews must identify their source, source date when known, and retrieval date; clearly label material older than three months and undated material whose freshness cannot be established. A vendor gallery or documented reference feature does not establish repeated-output reliability. Unknown scores remain unknown, and a performance ranking stays unresolved when the evidence cannot support it. Keep research trails inside the requested articles unless a separate research deliverable is requested.
