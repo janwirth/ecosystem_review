@@ -93,6 +93,7 @@ Folder [`application-types/`](application-types/README.md). The orientation step
 
 Folder [`design/`](design/README.md).
 
+- [Brand concept / mascot development](design/brand-concept-mascot-development.md) and [website-asset workflow](design/ai-mascot-workflows.md) — public design examples, shared-budget platforms, and brief flows from exploration to website images, SVG or 3D; no grading.
 - [UX resources & tools](design/ux.md) — Laws of UX, NN/g heuristics + training, dogfooding practice, PostHog instrumentation, BDD/Gherkin connection.
 - [Diagramming tools](design/diagramming.md) — Mermaid, PlantUML, D2, Graphviz/DOT, LaTeX/TikZ, Kroki, mingrammer/diagrams, Structurizr, WaveDrom, Excalidraw, + 20 ASCII renderers and terminal-chart tools. ~40 tools reviewed.
 - [Typography](design/typography.md) — vertical rhythm (`lh`/`rlh`, `.flow`), type scales across 18 design systems, fluid `clamp()` type (Utopia, fluid-tailwind, RFS) + WCAG 1.4.4, Capsize vs `text-box-trim`, metric-matched fallbacks (fontaine, `next/font`), "vertical rhythm reset" decoded. ~45 tools.
