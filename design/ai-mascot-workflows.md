@@ -4,7 +4,7 @@
 
 ## Start with the look you like
 
-The [Google dog](ai-mascot-tools.md#the-google-dog-where-it-comes-from) is your preferred reference so far. It is a **Nano Banana Pro image**, not a 3D model. Its tactile appearance can work as a website image immediately; SVG conversion and 3D conversion are optional routes.
+The [Google dog](brand-concept-mascot-development.md#the-google-dog-where-it-comes-from) is your preferred reference so far. It is a **Nano Banana Pro image**, not a 3D model. Its tactile appearance can work as a website image immediately; SVG conversion and 3D conversion are optional routes.
 
 ## The full flow
 
@@ -43,4 +43,4 @@ A ship can rotate as one object. A mascot that walks or gestures needs usable jo
 
 GLB is a practical web handoff; [Three.js GLTFLoader](https://threejs.org/docs/pages/GLTFLoader.html) loads glTF assets. That loader is a possible implementation route, not evidence that Sanjaya used Three.js.
 
-**Next:** review the [tool list and examples](ai-mascot-tools.md), then choose which website uses need images, SVG or 3D. No grading or forced five-tool selection.
+**Next:** review the [tool list and examples](brand-concept-mascot-development.md), then choose which website uses need images, SVG or 3D. No grading or forced five-tool selection.
