@@ -72,3 +72,9 @@ Judgement dimensions (README maturity, idiomaticity, feature matrix) still come 
 - **Criteria:** Core dimensions above; add domain-specific rows if needed (e.g., "TypeScript support", "WebAssembly binding")
 - **Legend:** Reuse 🟩🟩 / 🟩 / ⬜ / 🟥 unless domain-specific scoring makes sense
 - **Ranking:** Per-category leaderboards (tools in one category are substitutable; across categories they are not).
+
+## Installed application reviews
+
+For app-use decisions, keep repository-health observations separate from user-fit scores. Gleam compatibility, source idiomaticity and permissive-only license penalties do not rank an installed terminal. Record unknown reliability explicitly; stars, source size and issue counts are not crash-rate measurements. Use the user's stated criterion rather than inventing additional weighted preferences. Preserve partial rubric output without manufacturing a complete total.
+
+Verify current app versions against the official distribution channel: GitHub latest-release metadata can be stale even when the app ships regularly (iTerm2). Distinguish stable, nightly and future-version documentation (Ghostty SSH features). Record API `pushed_at` as push activity, not a verified latest commit. Check issue intake policies before comparing counts, and read why an issue closed before calling it fixed.
