@@ -1,0 +1,88 @@
+[
+  {
+    "name": "hermes",
+    "repo": "NousResearch/hermes-agent",
+    "url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/e8c8e464715d11bfb7b3006edabff6b719a29b8b/website/static/img/dashboard/admin-channels.png",
+    "path": "hermes.png",
+    "bytes": 521851,
+    "sha256": "11a4dbbbc2fb6b4f24a136c820dddb07cd380abe5a8aff7e37268c2d80d4417d",
+    "retrieved": "2026-10-14",
+    "source_date": "unknown"
+  },
+  {
+    "name": "moltis",
+    "repo": "moltis-org/moltis",
+    "url": "https://raw.githubusercontent.com/moltis-org/moltis/1f6d28ea750d6654d52d5899b8be67727ebf7a19/website/screenshots/1.png",
+    "path": "moltis.png",
+    "bytes": 854173,
+    "sha256": "485260e5bc5e0e860551f7dc54f59aed98d969a6ffb056f65dd1c587faadd46d",
+    "retrieved": "2026-10-14",
+    "source_date": "unknown"
+  },
+  {
+    "name": "nanobot",
+    "repo": "HKUDS/nanobot",
+    "url": "https://raw.githubusercontent.com/HKUDS/nanobot/3a28b9e6ce5e514d4dee9d964056d876a69a6cdc/images/nanobot_webui.png",
+    "path": "nanobot.png",
+    "bytes": 46593,
+    "sha256": "d7d6c419d34f104050e97616033ea529e9abde89b6ef8cee8284951476c10bef",
+    "retrieved": "2026-10-14",
+    "source_date": "unknown"
+  },
+  {
+    "name": "agent-zero",
+    "repo": "agent0ai/agent-zero",
+    "url": "https://raw.githubusercontent.com/agent0ai/agent-zero/ff2a5b9c9c4e490ba38dd7c313e779510bb2071a/docs/res/usage/plugins/plugin-hub-browse.png",
+    "path": "agent-zero.png",
+    "bytes": 202957,
+    "sha256": "410e36f37328bc9d2ee15b9d38234c730a4ac493e49906b206ade8b83fafc80d",
+    "retrieved": "2026-10-14",
+    "source_date": "unknown"
+  },
+  {
+    "name": "tinyagi",
+    "repo": "TinyAGI/tinyagi",
+    "url": "https://raw.githubusercontent.com/TinyAGI/tinyagi/2db3a03a891b302c460f624d6c5a0523b8aa3528/docs/images/tinyoffice.png",
+    "path": "tinyagi.png",
+    "bytes": 732795,
+    "sha256": "66d9d4342a6027455f67936161d36c22e4d2c3d19fe930ff8b30eb073bd426e6",
+    "retrieved": "2026-10-14",
+    "source_date": "unknown"
+  },
+  {
+    "name": "n8n",
+    "repo": "n8n-io/n8n",
+    "url": "https://raw.githubusercontent.com/n8n-io/n8n/50c4ced2241430e13fa7042e976ed33f07bf5009/assets/n8n-screenshot-readme.png",
+    "path": "n8n.png",
+    "bytes": 100776,
+    "sha256": "0e7b351afc2f520b686effff33be5be5be7482ef1fbeb6936c11b90d5b741083",
+    "retrieved": "2026-10-14",
+    "source_date": "unknown"
+  },
+  {
+    "name": "activepieces",
+    "repo": "activepieces/activepieces",
+    "url": "https://raw.githubusercontent.com/activepieces/activepieces/8d8a1b466efacce86e13423e04ed09083d6c37e1/docs/resources/templates.gif",
+    "path": "activepieces.png",
+    "bytes": 70957,
+    "sha256": "6511f9c82d7b3748aa5846e07f5a52329b4bfa64731bf42716fcec72b1e34224",
+    "retrieved": "2026-10-14",
+    "source_date": "unknown",
+    "source_sha256": "74324fae38cf70f8e7481a4bd5d783467ce275d579982d2da3f6aff32cac73f5",
+    "source_bytes": 2776730,
+    "transformation": "First GIF frame exported to PNG with ImageMagick; no generated content."
+  },
+  {
+    "name": "khoj",
+    "repo": "khoj-ai/khoj",
+    "url": "https://raw.githubusercontent.com/khoj-ai/khoj/ae229ca894c0b80ad84664afcfdde523b5e87057/documentation/assets/img/quadratic_equation_khoj_web.gif",
+    "path": "khoj.png",
+    "bytes": 114483,
+    "sha256": "7169f878eb2d9f587c6df4e8c0ba1d9ea36f199f9c20cf9f7d4970c1517d6884",
+    "retrieved": "2026-10-14",
+    "source_date": "unknown",
+    "source_sha256": "4456eba20eb972b000e84cca374a3e1d9d2880bdfe351eaf8691c134b904ccd9",
+    "source_bytes": 19703397,
+    "transformation": "First GIF frame exported to PNG with ImageMagick; no generated content."
+  }
+]

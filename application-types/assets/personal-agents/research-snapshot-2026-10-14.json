@@ -1,0 +1,1443 @@
+{
+  "snapshot": "2026-10-14",
+  "raw_tool_runs": [
+    {
+      "snapshot": "2026-10-14",
+      "repos": [
+        {
+          "provider": "github",
+          "host": "github.com",
+          "slug": "NousResearch/hermes-agent",
+          "url": "https://github.com/NousResearch/hermes-agent",
+          "stars": 253752,
+          "license": "MIT",
+          "created_at": "2025-07-22",
+          "pushed_at": "2026-10-14",
+          "open_issues": 48793,
+          "default_branch": "main",
+          "latest_release": "v0.22.0",
+          "archived": false,
+          "gleam_stdlib": null,
+          "target": null,
+          "dep_count": null,
+          "readme_bytes": 16924,
+          "grades": {
+            "stars": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "license": {
+              "emoji": "\ud83d\udfe9",
+              "points": 1
+            },
+            "gleam_compat": {
+              "emoji": "\u2b1c",
+              "points": 0
+            },
+            "maintenance": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "age": {
+              "emoji": "\ud83d\udfe9",
+              "points": 1
+            },
+            "readme_maturity": null,
+            "idiomaticity": null
+          },
+          "notes": [
+            "no `gleam.toml` reachable \u2014 not a Gleam package, or the default branch could not be resolved"
+          ]
+        },
+        {
+          "provider": "github",
+          "host": "github.com",
+          "slug": "openclaw/openclaw",
+          "url": "https://github.com/openclaw/openclaw",
+          "stars": 392004,
+          "license": "MIT",
+          "created_at": "2025-11-24",
+          "pushed_at": "2026-10-14",
+          "open_issues": 9634,
+          "default_branch": "main",
+          "latest_release": "v2026.10.3",
+          "archived": false,
+          "gleam_stdlib": null,
+          "target": null,
+          "dep_count": null,
+          "readme_bytes": 113171,
+          "grades": {
+            "stars": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "license": {
+              "emoji": "\ud83d\udfe9",
+              "points": 1
+            },
+            "gleam_compat": {
+              "emoji": "\u2b1c",
+              "points": 0
+            },
+            "maintenance": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "age": {
+              "emoji": "\ud83d\udfe8",
+              "points": 0
+            },
+            "readme_maturity": null,
+            "idiomaticity": null
+          },
+          "notes": [
+            "no `gleam.toml` reachable \u2014 not a Gleam package, or the default branch could not be resolved"
+          ]
+        },
+        {
+          "provider": "github",
+          "host": "github.com",
+          "slug": "nanocoai/nanoclaw",
+          "url": "https://github.com/nanocoai/nanoclaw",
+          "stars": 30946,
+          "license": "MIT",
+          "created_at": "2026-01-31",
+          "pushed_at": "2026-10-14",
+          "open_issues": 1048,
+          "default_branch": "main",
+          "latest_release": "v2026.10.0",
+          "archived": false,
+          "gleam_stdlib": null,
+          "target": null,
+          "dep_count": null,
+          "readme_bytes": 18487,
+          "grades": {
+            "stars": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "license": {
+              "emoji": "\ud83d\udfe9",
+              "points": 1
+            },
+            "gleam_compat": {
+              "emoji": "\u2b1c",
+              "points": 0
+            },
+            "maintenance": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "age": {
+              "emoji": "\ud83d\udfe8",
+              "points": 0
+            },
+            "readme_maturity": null,
+            "idiomaticity": null
+          },
+          "notes": [
+            "no `gleam.toml` reachable \u2014 not a Gleam package, or the default branch could not be resolved"
+          ]
+        },
+        {
+          "provider": "github",
+          "host": "github.com",
+          "slug": "HKUDS/nanobot",
+          "url": "https://github.com/HKUDS/nanobot",
+          "stars": 49034,
+          "license": "MIT",
+          "created_at": "2026-02-01",
+          "pushed_at": "2026-10-14",
+          "open_issues": 864,
+          "default_branch": "main",
+          "latest_release": "v0.3.5",
+          "archived": false,
+          "gleam_stdlib": null,
+          "target": null,
+          "dep_count": null,
+          "readme_bytes": 91226,
+          "grades": {
+            "stars": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "license": {
+              "emoji": "\ud83d\udfe9",
+              "points": 1
+            },
+            "gleam_compat": {
+              "emoji": "\u2b1c",
+              "points": 0
+            },
+            "maintenance": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "age": {
+              "emoji": "\ud83d\udfe8",
+              "points": 0
+            },
+            "readme_maturity": null,
+            "idiomaticity": null
+          },
+          "notes": [
+            "no `gleam.toml` reachable \u2014 not a Gleam package, or the default branch could not be resolved"
+          ]
+        },
+        {
+          "provider": "github",
+          "host": "github.com",
+          "slug": "sipeed/picoclaw",
+          "url": "https://github.com/sipeed/picoclaw",
+          "stars": 30019,
+          "license": "MIT",
+          "created_at": "2026-02-04",
+          "pushed_at": "2026-10-09",
+          "open_issues": 41,
+          "default_branch": "main",
+          "latest_release": "v0.3.1",
+          "archived": false,
+          "gleam_stdlib": null,
+          "target": null,
+          "dep_count": null,
+          "readme_bytes": 31221,
+          "grades": {
+            "stars": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "license": {
+              "emoji": "\ud83d\udfe9",
+              "points": 1
+            },
+            "gleam_compat": {
+              "emoji": "\u2b1c",
+              "points": 0
+            },
+            "maintenance": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "age": {
+              "emoji": "\ud83d\udfe8",
+              "points": 0
+            },
+            "readme_maturity": null,
+            "idiomaticity": null
+          },
+          "notes": [
+            "no `gleam.toml` reachable \u2014 not a Gleam package, or the default branch could not be resolved"
+          ]
+        },
+        {
+          "provider": "github",
+          "host": "github.com",
+          "slug": "zeroclaw-labs/zeroclaw",
+          "url": "https://github.com/zeroclaw-labs/zeroclaw",
+          "stars": 32979,
+          "license": "Apache-2.0",
+          "created_at": "2026-02-13",
+          "pushed_at": "2026-10-14",
+          "open_issues": 962,
+          "default_branch": "master",
+          "latest_release": "v0.8.5",
+          "archived": false,
+          "gleam_stdlib": null,
+          "target": null,
+          "dep_count": null,
+          "readme_bytes": 12624,
+          "grades": {
+            "stars": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "license": {
+              "emoji": "\ud83d\udfe9",
+              "points": 1
+            },
+            "gleam_compat": {
+              "emoji": "\u2b1c",
+              "points": 0
+            },
+            "maintenance": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "age": {
+              "emoji": "\ud83d\udfe8",
+              "points": 0
+            },
+            "readme_maturity": null,
+            "idiomaticity": null
+          },
+          "notes": [
+            "no `gleam.toml` reachable \u2014 not a Gleam package, or the default branch could not be resolved"
+          ]
+        },
+        {
+          "provider": "github",
+          "host": "github.com",
+          "slug": "nearai/ironclaw",
+          "url": "https://github.com/nearai/ironclaw",
+          "stars": 12656,
+          "license": "Apache-2.0",
+          "created_at": "2026-02-03",
+          "pushed_at": "2026-10-13",
+          "open_issues": 1550,
+          "default_branch": "main",
+          "latest_release": "ironclaw-v1.4.1",
+          "archived": false,
+          "gleam_stdlib": null,
+          "target": null,
+          "dep_count": null,
+          "readme_bytes": 14644,
+          "grades": {
+            "stars": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "license": {
+              "emoji": "\ud83d\udfe9",
+              "points": 1
+            },
+            "gleam_compat": {
+              "emoji": "\u2b1c",
+              "points": 0
+            },
+            "maintenance": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "age": {
+              "emoji": "\ud83d\udfe8",
+              "points": 0
+            },
+            "readme_maturity": null,
+            "idiomaticity": null
+          },
+          "notes": [
+            "no `gleam.toml` reachable \u2014 not a Gleam package, or the default branch could not be resolved"
+          ]
+        },
+        {
+          "provider": "github",
+          "host": "github.com",
+          "slug": "nullclaw/nullclaw",
+          "url": "https://github.com/nullclaw/nullclaw",
+          "stars": 8125,
+          "license": "MIT",
+          "created_at": "2026-02-16",
+          "pushed_at": "2026-10-08",
+          "open_issues": 76,
+          "default_branch": "main",
+          "latest_release": "v2026.5.29",
+          "archived": false,
+          "gleam_stdlib": null,
+          "target": null,
+          "dep_count": null,
+          "readme_bytes": 42399,
+          "grades": {
+            "stars": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "license": {
+              "emoji": "\ud83d\udfe9",
+              "points": 1
+            },
+            "gleam_compat": {
+              "emoji": "\u2b1c",
+              "points": 0
+            },
+            "maintenance": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "age": {
+              "emoji": "\ud83d\udfe8",
+              "points": 0
+            },
+            "readme_maturity": null,
+            "idiomaticity": null
+          },
+          "notes": [
+            "no `gleam.toml` reachable \u2014 not a Gleam package, or the default branch could not be resolved"
+          ]
+        },
+        {
+          "provider": "github",
+          "host": "github.com",
+          "slug": "RightNow-AI/openfang",
+          "url": "https://github.com/RightNow-AI/openfang",
+          "stars": 18217,
+          "license": "Apache-2.0",
+          "created_at": "2026-02-24",
+          "pushed_at": "2026-07-02",
+          "open_issues": 127,
+          "default_branch": "main",
+          "latest_release": "v0.6.9",
+          "archived": false,
+          "gleam_stdlib": null,
+          "target": null,
+          "dep_count": null,
+          "readme_bytes": 23733,
+          "grades": {
+            "stars": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "license": {
+              "emoji": "\ud83d\udfe9",
+              "points": 1
+            },
+            "gleam_compat": {
+              "emoji": "\u2b1c",
+              "points": 0
+            },
+            "maintenance": {
+              "emoji": "\ud83d\udfe9",
+              "points": 1
+            },
+            "age": {
+              "emoji": "\ud83d\udfe8",
+              "points": 0
+            },
+            "readme_maturity": null,
+            "idiomaticity": null
+          },
+          "notes": [
+            "no `gleam.toml` reachable \u2014 not a Gleam package, or the default branch could not be resolved"
+          ]
+        },
+        {
+          "provider": "github",
+          "host": "github.com",
+          "slug": "moltis-org/moltis",
+          "url": "https://github.com/moltis-org/moltis",
+          "stars": 2888,
+          "license": "MIT",
+          "created_at": "2026-01-29",
+          "pushed_at": "2026-09-22",
+          "open_issues": 114,
+          "default_branch": "main",
+          "latest_release": "20260913.02",
+          "archived": false,
+          "gleam_stdlib": null,
+          "target": null,
+          "dep_count": null,
+          "readme_bytes": 14816,
+          "grades": {
+            "stars": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "license": {
+              "emoji": "\ud83d\udfe9",
+              "points": 1
+            },
+            "gleam_compat": {
+              "emoji": "\u2b1c",
+              "points": 0
+            },
+            "maintenance": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "age": {
+              "emoji": "\ud83d\udfe8",
+              "points": 0
+            },
+            "readme_maturity": null,
+            "idiomaticity": null
+          },
+          "notes": [
+            "no `gleam.toml` reachable \u2014 not a Gleam package, or the default branch could not be resolved"
+          ]
+        },
+        {
+          "provider": "github",
+          "host": "github.com",
+          "slug": "agent0ai/agent-zero",
+          "url": "https://github.com/agent0ai/agent-zero",
+          "stars": 19472,
+          "license": "NOASSERTION",
+          "created_at": "2024-06-10",
+          "pushed_at": "2026-10-14",
+          "open_issues": 134,
+          "default_branch": "main",
+          "latest_release": "v2.14",
+          "archived": false,
+          "gleam_stdlib": null,
+          "target": null,
+          "dep_count": null,
+          "readme_bytes": 19781,
+          "grades": {
+            "stars": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "license": {
+              "emoji": "\ud83d\udfe5",
+              "points": -1
+            },
+            "gleam_compat": {
+              "emoji": "\u2b1c",
+              "points": 0
+            },
+            "maintenance": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "age": {
+              "emoji": "\ud83d\udfe9",
+              "points": 1
+            },
+            "readme_maturity": null,
+            "idiomaticity": null
+          },
+          "notes": [
+            "no `gleam.toml` reachable \u2014 not a Gleam package, or the default branch could not be resolved"
+          ]
+        },
+        {
+          "provider": "github",
+          "host": "github.com",
+          "slug": "agentscope-ai/QwenPaw",
+          "url": "https://github.com/agentscope-ai/QwenPaw",
+          "stars": 35692,
+          "license": "Apache-2.0",
+          "created_at": "2026-02-24",
+          "pushed_at": "2026-10-14",
+          "open_issues": 1084,
+          "default_branch": "main",
+          "latest_release": "v2.2.1",
+          "archived": false,
+          "gleam_stdlib": null,
+          "target": null,
+          "dep_count": null,
+          "readme_bytes": 37455,
+          "grades": {
+            "stars": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "license": {
+              "emoji": "\ud83d\udfe9",
+              "points": 1
+            },
+            "gleam_compat": {
+              "emoji": "\u2b1c",
+              "points": 0
+            },
+            "maintenance": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "age": {
+              "emoji": "\ud83d\udfe8",
+              "points": 0
+            },
+            "readme_maturity": null,
+            "idiomaticity": null
+          },
+          "notes": [
+            "no `gleam.toml` reachable \u2014 not a Gleam package, or the default branch could not be resolved"
+          ]
+        },
+        {
+          "provider": "github",
+          "host": "github.com",
+          "slug": "zhayujie/CowAgent",
+          "url": "https://github.com/zhayujie/CowAgent",
+          "stars": 47403,
+          "license": "MIT",
+          "created_at": "2022-08-07",
+          "pushed_at": "2026-10-14",
+          "open_issues": 80,
+          "default_branch": "master",
+          "latest_release": "2.2.1",
+          "archived": false,
+          "gleam_stdlib": null,
+          "target": null,
+          "dep_count": null,
+          "readme_bytes": 20875,
+          "grades": {
+            "stars": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "license": {
+              "emoji": "\ud83d\udfe9",
+              "points": 1
+            },
+            "gleam_compat": {
+              "emoji": "\u2b1c",
+              "points": 0
+            },
+            "maintenance": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "age": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "readme_maturity": null,
+            "idiomaticity": null
+          },
+          "notes": [
+            "no `gleam.toml` reachable \u2014 not a Gleam package, or the default branch could not be resolved"
+          ]
+        },
+        {
+          "provider": "github",
+          "host": "github.com",
+          "slug": "shansin/whatsapp-leo",
+          "url": "https://github.com/shansin/whatsapp-leo",
+          "stars": 0,
+          "license": "none",
+          "created_at": "2026-01-29",
+          "pushed_at": "2026-10-09",
+          "open_issues": 1,
+          "default_branch": "main",
+          "latest_release": null,
+          "archived": false,
+          "gleam_stdlib": null,
+          "target": null,
+          "dep_count": null,
+          "readme_bytes": 34868,
+          "grades": {
+            "stars": {
+              "emoji": "\ud83d\udfe5",
+              "points": -1
+            },
+            "license": {
+              "emoji": "\ud83d\udfe5",
+              "points": -1
+            },
+            "gleam_compat": {
+              "emoji": "\u2b1c",
+              "points": 0
+            },
+            "maintenance": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "age": {
+              "emoji": "\ud83d\udfe8",
+              "points": 0
+            },
+            "readme_maturity": null,
+            "idiomaticity": null
+          },
+          "notes": [
+            "no `gleam.toml` reachable \u2014 not a Gleam package, or the default branch could not be resolved"
+          ]
+        },
+        {
+          "provider": "github",
+          "host": "github.com",
+          "slug": "codedojokapa/nanoclaw-lite",
+          "url": "https://github.com/codedojokapa/nanoclaw-lite",
+          "stars": 4,
+          "license": "MIT",
+          "created_at": "2026-03-14",
+          "pushed_at": "2026-03-16",
+          "open_issues": 0,
+          "default_branch": "local-master",
+          "latest_release": null,
+          "archived": false,
+          "gleam_stdlib": null,
+          "target": null,
+          "dep_count": null,
+          "readme_bytes": 10582,
+          "grades": {
+            "stars": {
+              "emoji": "\ud83d\udfe5",
+              "points": -1
+            },
+            "license": {
+              "emoji": "\ud83d\udfe9",
+              "points": 1
+            },
+            "gleam_compat": {
+              "emoji": "\u2b1c",
+              "points": 0
+            },
+            "maintenance": {
+              "emoji": "\ud83d\udfe8",
+              "points": 0
+            },
+            "age": {
+              "emoji": "\ud83d\udfe8",
+              "points": 0
+            },
+            "readme_maturity": null,
+            "idiomaticity": null
+          },
+          "notes": [
+            "no `gleam.toml` reachable \u2014 not a Gleam package, or the default branch could not be resolved"
+          ]
+        },
+        {
+          "provider": "github",
+          "host": "github.com",
+          "slug": "TinyAGI/tinyagi",
+          "url": "https://github.com/TinyAGI/tinyagi",
+          "stars": 3621,
+          "license": "MIT",
+          "created_at": "2026-02-09",
+          "pushed_at": "2026-03-30",
+          "open_issues": 72,
+          "default_branch": "main",
+          "latest_release": "v0.0.20",
+          "archived": false,
+          "gleam_stdlib": null,
+          "target": null,
+          "dep_count": null,
+          "readme_bytes": 28746,
+          "grades": {
+            "stars": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "license": {
+              "emoji": "\ud83d\udfe9",
+              "points": 1
+            },
+            "gleam_compat": {
+              "emoji": "\u2b1c",
+              "points": 0
+            },
+            "maintenance": {
+              "emoji": "\ud83d\udfe8",
+              "points": 0
+            },
+            "age": {
+              "emoji": "\ud83d\udfe8",
+              "points": 0
+            },
+            "readme_maturity": null,
+            "idiomaticity": null
+          },
+          "notes": [
+            "no `gleam.toml` reachable \u2014 not a Gleam package, or the default branch could not be resolved"
+          ]
+        },
+        {
+          "provider": "github",
+          "host": "github.com",
+          "slug": "letta-ai/letta",
+          "url": "https://github.com/letta-ai/letta",
+          "stars": 25138,
+          "license": "Apache-2.0",
+          "created_at": "2023-10-11",
+          "pushed_at": "2026-09-10",
+          "open_issues": 0,
+          "default_branch": "main",
+          "latest_release": "0.16.8",
+          "archived": false,
+          "gleam_stdlib": null,
+          "target": null,
+          "dep_count": null,
+          "readme_bytes": 1574,
+          "grades": {
+            "stars": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "license": {
+              "emoji": "\ud83d\udfe9",
+              "points": 1
+            },
+            "gleam_compat": {
+              "emoji": "\u2b1c",
+              "points": 0
+            },
+            "maintenance": {
+              "emoji": "\ud83d\udfe9",
+              "points": 1
+            },
+            "age": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "readme_maturity": null,
+            "idiomaticity": null
+          },
+          "notes": [
+            "no `gleam.toml` reachable \u2014 not a Gleam package, or the default branch could not be resolved"
+          ]
+        },
+        {
+          "provider": "github",
+          "host": "github.com",
+          "slug": "khoj-ai/khoj",
+          "url": "https://github.com/khoj-ai/khoj",
+          "stars": 37685,
+          "license": "AGPL-3.0",
+          "created_at": "2021-08-16",
+          "pushed_at": "2026-08-02",
+          "open_issues": 169,
+          "default_branch": "master",
+          "latest_release": "2.0.0-beta.28",
+          "archived": false,
+          "gleam_stdlib": null,
+          "target": null,
+          "dep_count": null,
+          "readme_bytes": 4701,
+          "grades": {
+            "stars": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "license": {
+              "emoji": "\ud83d\udfe5",
+              "points": -1
+            },
+            "gleam_compat": {
+              "emoji": "\u2b1c",
+              "points": 0
+            },
+            "maintenance": {
+              "emoji": "\ud83d\udfe9",
+              "points": 1
+            },
+            "age": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "readme_maturity": null,
+            "idiomaticity": null
+          },
+          "notes": [
+            "no `gleam.toml` reachable \u2014 not a Gleam package, or the default branch could not be resolved"
+          ]
+        },
+        {
+          "provider": "github",
+          "host": "github.com",
+          "slug": "n8n-io/n8n",
+          "url": "https://github.com/n8n-io/n8n",
+          "stars": 207380,
+          "license": "NOASSERTION",
+          "created_at": "2019-06-22",
+          "pushed_at": "2026-10-14",
+          "open_issues": 1194,
+          "default_branch": "master",
+          "latest_release": "n8n@2.43.5",
+          "archived": false,
+          "gleam_stdlib": null,
+          "target": null,
+          "dep_count": null,
+          "readme_bytes": 4023,
+          "grades": {
+            "stars": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "license": {
+              "emoji": "\ud83d\udfe5",
+              "points": -1
+            },
+            "gleam_compat": {
+              "emoji": "\u2b1c",
+              "points": 0
+            },
+            "maintenance": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "age": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "readme_maturity": null,
+            "idiomaticity": null
+          },
+          "notes": [
+            "no `gleam.toml` reachable \u2014 not a Gleam package, or the default branch could not be resolved"
+          ]
+        },
+        {
+          "provider": "github",
+          "host": "github.com",
+          "slug": "activepieces/activepieces",
+          "url": "https://github.com/activepieces/activepieces",
+          "stars": 25053,
+          "license": "NOASSERTION",
+          "created_at": "2022-12-03",
+          "pushed_at": "2026-10-14",
+          "open_issues": 739,
+          "default_branch": "main",
+          "latest_release": "0.92.3",
+          "archived": false,
+          "gleam_stdlib": null,
+          "target": null,
+          "dep_count": null,
+          "readme_bytes": 92212,
+          "grades": {
+            "stars": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "license": {
+              "emoji": "\ud83d\udfe5",
+              "points": -1
+            },
+            "gleam_compat": {
+              "emoji": "\u2b1c",
+              "points": 0
+            },
+            "maintenance": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "age": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "readme_maturity": null,
+            "idiomaticity": null
+          },
+          "notes": [
+            "no `gleam.toml` reachable \u2014 not a Gleam package, or the default branch could not be resolved"
+          ]
+        }
+      ]
+    },
+    {
+      "snapshot": "2026-10-14",
+      "repos": [
+        {
+          "provider": "github",
+          "host": "github.com",
+          "slug": "letta-ai/letta-code",
+          "url": "https://github.com/letta-ai/letta-code",
+          "stars": 3608,
+          "license": "Apache-2.0",
+          "created_at": "2025-10-25",
+          "pushed_at": "2026-10-14",
+          "open_issues": 521,
+          "default_branch": "main",
+          "latest_release": "v0.34.14",
+          "archived": false,
+          "gleam_stdlib": null,
+          "target": null,
+          "dep_count": null,
+          "readme_bytes": 9696,
+          "grades": {
+            "stars": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "license": {
+              "emoji": "\ud83d\udfe9",
+              "points": 1
+            },
+            "gleam_compat": {
+              "emoji": "\u2b1c",
+              "points": 0
+            },
+            "maintenance": {
+              "emoji": "\ud83d\udfe9\ud83d\udfe9",
+              "points": 2
+            },
+            "age": {
+              "emoji": "\ud83d\udfe8",
+              "points": 0
+            },
+            "readme_maturity": null,
+            "idiomaticity": null
+          },
+          "notes": [
+            "no `gleam.toml` reachable \u2014 not a Gleam package, or the default branch could not be resolved"
+          ]
+        }
+      ]
+    }
+  ],
+  "github_supplement": {
+    "NousResearch/hermes-agent": {
+      "url": "https://github.com/NousResearch/hermes-agent",
+      "fork": false,
+      "parent": null,
+      "archived": false,
+      "license": {
+        "key": "mit",
+        "name": "MIT License",
+        "spdx_id": "MIT",
+        "url": "https://api.github.com/licenses/mit",
+        "node_id": "MDc6TGljZW5zZTEz"
+      },
+      "default_branch": "main",
+      "head_sha": "e8c8e464715d11bfb7b3006edabff6b719a29b8b",
+      "head_committed_at": "2026-10-14T19:30:07Z",
+      "latest_release": {
+        "tag_name": "v0.22.0",
+        "published_at": "2026-10-14T03:21:46Z",
+        "prerelease": false,
+        "html_url": "https://github.com/NousResearch/hermes-agent/releases/tag/v0.22.0"
+      },
+      "errors": []
+    },
+    "openclaw/openclaw": {
+      "url": "https://github.com/openclaw/openclaw",
+      "fork": false,
+      "parent": null,
+      "archived": false,
+      "license": {
+        "key": "mit",
+        "name": "MIT License",
+        "spdx_id": "MIT",
+        "url": "https://api.github.com/licenses/mit",
+        "node_id": "MDc6TGljZW5zZTEz"
+      },
+      "default_branch": "main",
+      "head_sha": "e589d87d7b7e02bccf241fad47b62f0fdab04a2a",
+      "head_committed_at": "2026-10-14T20:12:15Z",
+      "latest_release": {
+        "tag_name": "v2026.10.3",
+        "published_at": "2026-10-13T13:49:25Z",
+        "prerelease": false,
+        "html_url": "https://github.com/openclaw/openclaw/releases/tag/v2026.10.3"
+      },
+      "errors": []
+    },
+    "nanocoai/nanoclaw": {
+      "url": "https://github.com/nanocoai/nanoclaw",
+      "fork": false,
+      "parent": null,
+      "archived": false,
+      "license": {
+        "key": "mit",
+        "name": "MIT License",
+        "spdx_id": "MIT",
+        "url": "https://api.github.com/licenses/mit",
+        "node_id": "MDc6TGljZW5zZTEz"
+      },
+      "default_branch": "main",
+      "head_sha": "8fbacc91b6e2671d53c17fd0c866c0e2eef21715",
+      "head_committed_at": "2026-10-14T13:57:58Z",
+      "latest_release": {
+        "tag_name": "v2026.10.0",
+        "published_at": "2026-10-09T11:26:13Z",
+        "prerelease": false,
+        "html_url": "https://github.com/nanocoai/nanoclaw/releases/tag/v2026.10.0"
+      },
+      "errors": []
+    },
+    "HKUDS/nanobot": {
+      "url": "https://github.com/HKUDS/nanobot",
+      "fork": false,
+      "parent": null,
+      "archived": false,
+      "license": {
+        "key": "mit",
+        "name": "MIT License",
+        "spdx_id": "MIT",
+        "url": "https://api.github.com/licenses/mit",
+        "node_id": "MDc6TGljZW5zZTEz"
+      },
+      "default_branch": "main",
+      "head_sha": "3a28b9e6ce5e514d4dee9d964056d876a69a6cdc",
+      "head_committed_at": "2026-10-14T17:47:06Z",
+      "latest_release": {
+        "tag_name": "v0.3.5",
+        "published_at": "2026-09-15T19:05:37Z",
+        "prerelease": false,
+        "html_url": "https://github.com/HKUDS/nanobot/releases/tag/v0.3.5"
+      },
+      "errors": []
+    },
+    "sipeed/picoclaw": {
+      "url": "https://github.com/sipeed/picoclaw",
+      "fork": false,
+      "parent": null,
+      "archived": false,
+      "license": {
+        "key": "mit",
+        "name": "MIT License",
+        "spdx_id": "MIT",
+        "url": "https://api.github.com/licenses/mit",
+        "node_id": "MDc6TGljZW5zZTEz"
+      },
+      "default_branch": "main",
+      "head_sha": "bbf6893ca7afad27f1d00a0f5a45982a549c6ed6",
+      "head_committed_at": "2026-08-19T09:17:32Z",
+      "latest_release": {
+        "tag_name": "v0.3.1",
+        "published_at": "2026-07-03T07:37:06Z",
+        "prerelease": false,
+        "html_url": "https://github.com/sipeed/picoclaw/releases/tag/v0.3.1"
+      },
+      "errors": []
+    },
+    "zeroclaw-labs/zeroclaw": {
+      "url": "https://github.com/zeroclaw-labs/zeroclaw",
+      "fork": false,
+      "parent": null,
+      "archived": false,
+      "license": {
+        "key": "apache-2.0",
+        "name": "Apache License 2.0",
+        "spdx_id": "Apache-2.0",
+        "url": "https://api.github.com/licenses/apache-2.0",
+        "node_id": "MDc6TGljZW5zZTI="
+      },
+      "default_branch": "master",
+      "head_sha": "329e66f76394b00af9d00b767e00ad298133961e",
+      "head_committed_at": "2026-10-14T12:38:27Z",
+      "latest_release": {
+        "tag_name": "v0.8.5",
+        "published_at": "2026-09-05T07:31:19Z",
+        "prerelease": false,
+        "html_url": "https://github.com/zeroclaw-labs/zeroclaw/releases/tag/v0.8.5"
+      },
+      "errors": []
+    },
+    "nearai/ironclaw": {
+      "url": "https://github.com/nearai/ironclaw",
+      "fork": false,
+      "parent": null,
+      "archived": false,
+      "license": {
+        "key": "apache-2.0",
+        "name": "Apache License 2.0",
+        "spdx_id": "Apache-2.0",
+        "url": "https://api.github.com/licenses/apache-2.0",
+        "node_id": "MDc6TGljZW5zZTI="
+      },
+      "default_branch": "main",
+      "head_sha": "b0b999d96781516ee05e6ba961d6f3ead900da96",
+      "head_committed_at": "2026-09-10T18:55:51Z",
+      "latest_release": {
+        "tag_name": "ironclaw-v1.4.1",
+        "published_at": "2026-09-29T20:40:32Z",
+        "prerelease": false,
+        "html_url": "https://github.com/nearai/ironclaw/releases/tag/ironclaw-v1.4.1"
+      },
+      "errors": []
+    },
+    "nullclaw/nullclaw": {
+      "url": "https://github.com/nullclaw/nullclaw",
+      "fork": false,
+      "parent": null,
+      "archived": false,
+      "license": {
+        "key": "mit",
+        "name": "MIT License",
+        "spdx_id": "MIT",
+        "url": "https://api.github.com/licenses/mit",
+        "node_id": "MDc6TGljZW5zZTEz"
+      },
+      "default_branch": "main",
+      "head_sha": "5f1cade05c19b6ecdfb9565ae3305e892e484da9",
+      "head_committed_at": "2026-10-05T10:42:39Z",
+      "latest_release": {
+        "tag_name": "v2026.5.29",
+        "published_at": "2026-05-29T13:41:10Z",
+        "prerelease": false,
+        "html_url": "https://github.com/nullclaw/nullclaw/releases/tag/v2026.5.29"
+      },
+      "errors": []
+    },
+    "RightNow-AI/openfang": {
+      "url": "https://github.com/RightNow-AI/openfang",
+      "fork": false,
+      "parent": null,
+      "archived": false,
+      "license": {
+        "key": "apache-2.0",
+        "name": "Apache License 2.0",
+        "spdx_id": "Apache-2.0",
+        "url": "https://api.github.com/licenses/apache-2.0",
+        "node_id": "MDc6TGljZW5zZTI="
+      },
+      "default_branch": "main",
+      "head_sha": "acf2587e46be174c10200489c9a2d23a39a98aeb",
+      "head_committed_at": "2026-05-12T18:42:08Z",
+      "latest_release": {
+        "tag_name": "v0.6.9",
+        "published_at": "2026-05-12T18:42:42Z",
+        "prerelease": false,
+        "html_url": "https://github.com/RightNow-AI/openfang/releases/tag/v0.6.9"
+      },
+      "errors": []
+    },
+    "moltis-org/moltis": {
+      "url": "https://github.com/moltis-org/moltis",
+      "fork": false,
+      "parent": null,
+      "archived": false,
+      "license": {
+        "key": "mit",
+        "name": "MIT License",
+        "spdx_id": "MIT",
+        "url": "https://api.github.com/licenses/mit",
+        "node_id": "MDc6TGljZW5zZTEz"
+      },
+      "default_branch": "main",
+      "head_sha": "1f6d28ea750d6654d52d5899b8be67727ebf7a19",
+      "head_committed_at": "2026-09-22T15:38:21Z",
+      "latest_release": {
+        "tag_name": "20260913.02",
+        "published_at": "2026-09-14T00:44:24Z",
+        "prerelease": false,
+        "html_url": "https://github.com/moltis-org/moltis/releases/tag/20260913.02"
+      },
+      "errors": []
+    },
+    "agent0ai/agent-zero": {
+      "url": "https://github.com/agent0ai/agent-zero",
+      "fork": false,
+      "parent": null,
+      "archived": false,
+      "license": {
+        "key": "other",
+        "name": "Other",
+        "spdx_id": "NOASSERTION",
+        "url": null,
+        "node_id": "MDc6TGljZW5zZTA="
+      },
+      "default_branch": "main",
+      "head_sha": "ff2a5b9c9c4e490ba38dd7c313e779510bb2071a",
+      "head_committed_at": "2026-10-13T15:23:11Z",
+      "latest_release": {
+        "tag_name": "v2.14",
+        "published_at": "2026-10-13T16:29:24Z",
+        "prerelease": false,
+        "html_url": "https://github.com/agent0ai/agent-zero/releases/tag/v2.14"
+      },
+      "errors": []
+    },
+    "agentscope-ai/QwenPaw": {
+      "url": "https://github.com/agentscope-ai/QwenPaw",
+      "fork": false,
+      "parent": null,
+      "archived": false,
+      "license": {
+        "key": "apache-2.0",
+        "name": "Apache License 2.0",
+        "spdx_id": "Apache-2.0",
+        "url": "https://api.github.com/licenses/apache-2.0",
+        "node_id": "MDc6TGljZW5zZTI="
+      },
+      "default_branch": "main",
+      "head_sha": "4e7b37a92241ddc043e7057f7e392dd7499e93a7",
+      "head_committed_at": "2026-10-14T09:07:52Z",
+      "latest_release": {
+        "tag_name": "v2.2.1",
+        "published_at": "2026-09-11T04:19:23Z",
+        "prerelease": false,
+        "html_url": "https://github.com/agentscope-ai/QwenPaw/releases/tag/v2.2.1"
+      },
+      "errors": []
+    },
+    "zhayujie/CowAgent": {
+      "url": "https://github.com/zhayujie/CowAgent",
+      "fork": false,
+      "parent": null,
+      "archived": false,
+      "license": {
+        "key": "mit",
+        "name": "MIT License",
+        "spdx_id": "MIT",
+        "url": "https://api.github.com/licenses/mit",
+        "node_id": "MDc6TGljZW5zZTEz"
+      },
+      "default_branch": "master",
+      "head_sha": "396d22618090659480650719cf236c57598a8b82",
+      "head_committed_at": "2026-10-14T12:10:37Z",
+      "latest_release": {
+        "tag_name": "2.2.1",
+        "published_at": "2026-10-14T02:24:35Z",
+        "prerelease": false,
+        "html_url": "https://github.com/zhayujie/CowAgent/releases/tag/2.2.1"
+      },
+      "errors": []
+    },
+    "shansin/whatsapp-leo": {
+      "url": "https://github.com/shansin/whatsapp-leo",
+      "fork": false,
+      "parent": null,
+      "archived": false,
+      "license": null,
+      "default_branch": "main",
+      "head_sha": "2b20ec502e7366b44c52f920e2954a4e75bb754b",
+      "head_committed_at": "2026-10-09T03:32:39Z",
+      "latest_release": {
+        "tag_name": null,
+        "published_at": null,
+        "prerelease": null,
+        "html_url": null
+      },
+      "errors": [
+        "gh: Not Found (HTTP 404)\n"
+      ]
+    },
+    "codedojokapa/nanoclaw-lite": {
+      "url": "https://github.com/codedojokapa/nanoclaw-lite",
+      "fork": false,
+      "parent": null,
+      "archived": false,
+      "license": {
+        "key": "mit",
+        "name": "MIT License",
+        "spdx_id": "MIT",
+        "url": "https://api.github.com/licenses/mit",
+        "node_id": "MDc6TGljZW5zZTEz"
+      },
+      "default_branch": "local-master",
+      "head_sha": "88a6bc935f123728bd899b1302ec48d1e652637d",
+      "head_committed_at": "2026-03-16T06:32:22Z",
+      "latest_release": {
+        "tag_name": null,
+        "published_at": null,
+        "prerelease": null,
+        "html_url": null
+      },
+      "errors": [
+        "gh: Not Found (HTTP 404)\n"
+      ]
+    },
+    "TinyAGI/tinyagi": {
+      "url": "https://github.com/TinyAGI/tinyagi",
+      "fork": false,
+      "parent": null,
+      "archived": false,
+      "license": {
+        "key": "mit",
+        "name": "MIT License",
+        "spdx_id": "MIT",
+        "url": "https://api.github.com/licenses/mit",
+        "node_id": "MDc6TGljZW5zZTEz"
+      },
+      "default_branch": "main",
+      "head_sha": "2db3a03a891b302c460f624d6c5a0523b8aa3528",
+      "head_committed_at": "2026-03-30T12:30:14Z",
+      "latest_release": {
+        "tag_name": "v0.0.20",
+        "published_at": "2026-03-26T17:23:07Z",
+        "prerelease": false,
+        "html_url": "https://github.com/TinyAGI/tinyagi/releases/tag/v0.0.20"
+      },
+      "errors": []
+    },
+    "letta-ai/letta": {
+      "url": "https://github.com/letta-ai/letta",
+      "fork": false,
+      "parent": null,
+      "archived": false,
+      "license": {
+        "key": "apache-2.0",
+        "name": "Apache License 2.0",
+        "spdx_id": "Apache-2.0",
+        "url": "https://api.github.com/licenses/apache-2.0",
+        "node_id": "MDc6TGljZW5zZTI="
+      },
+      "default_branch": "main",
+      "head_sha": "5bcdd177d70fa2b31a754cfcd801e77b2e1ab16a",
+      "head_committed_at": "2026-09-10T17:59:06Z",
+      "latest_release": {
+        "tag_name": "0.16.8",
+        "published_at": "2026-05-14T17:14:24Z",
+        "prerelease": false,
+        "html_url": "https://github.com/letta-ai/letta/releases/tag/0.16.8"
+      },
+      "errors": []
+    },
+    "khoj-ai/khoj": {
+      "url": "https://github.com/khoj-ai/khoj",
+      "fork": false,
+      "parent": null,
+      "archived": false,
+      "license": {
+        "key": "agpl-3.0",
+        "name": "GNU Affero General Public License v3.0",
+        "spdx_id": "AGPL-3.0",
+        "url": "https://api.github.com/licenses/agpl-3.0",
+        "node_id": "MDc6TGljZW5zZTE="
+      },
+      "default_branch": "master",
+      "head_sha": "ae229ca894c0b80ad84664afcfdde523b5e87057",
+      "head_committed_at": "2026-08-02T01:55:40Z",
+      "latest_release": {
+        "tag_name": "2.0.0-beta.28",
+        "published_at": "2026-03-26T03:36:04Z",
+        "prerelease": false,
+        "html_url": "https://github.com/khoj-ai/khoj/releases/tag/2.0.0-beta.28"
+      },
+      "errors": []
+    },
+    "n8n-io/n8n": {
+      "url": "https://github.com/n8n-io/n8n",
+      "fork": false,
+      "parent": null,
+      "archived": false,
+      "license": {
+        "key": "other",
+        "name": "Other",
+        "spdx_id": "NOASSERTION",
+        "url": null,
+        "node_id": "MDc6TGljZW5zZTA="
+      },
+      "default_branch": "master",
+      "head_sha": "50c4ced2241430e13fa7042e976ed33f07bf5009",
+      "head_committed_at": "2026-10-14T16:52:18Z",
+      "latest_release": {
+        "tag_name": "n8n@2.43.5",
+        "published_at": "2026-10-14T08:15:51Z",
+        "prerelease": false,
+        "html_url": "https://github.com/n8n-io/n8n/releases/tag/n8n%402.43.5"
+      },
+      "errors": []
+    },
+    "activepieces/activepieces": {
+      "url": "https://github.com/activepieces/activepieces",
+      "fork": false,
+      "parent": null,
+      "archived": false,
+      "license": {
+        "key": "other",
+        "name": "Other",
+        "spdx_id": "NOASSERTION",
+        "url": null,
+        "node_id": "MDc6TGljZW5zZTA="
+      },
+      "default_branch": "main",
+      "head_sha": "8d8a1b466efacce86e13423e04ed09083d6c37e1",
+      "head_committed_at": "2026-10-14T19:29:40Z",
+      "latest_release": {
+        "tag_name": "0.92.3",
+        "published_at": "2026-10-12T18:43:34Z",
+        "prerelease": false,
+        "html_url": "https://github.com/activepieces/activepieces/releases/tag/0.92.3"
+      },
+      "errors": []
+    },
+    "letta-ai/letta-code": {
+      "url": "https://github.com/letta-ai/letta-code",
+      "fork": false,
+      "parent": null,
+      "archived": false,
+      "license": {
+        "key": "apache-2.0",
+        "name": "Apache License 2.0",
+        "spdx_id": "Apache-2.0",
+        "url": "https://api.github.com/licenses/apache-2.0",
+        "node_id": "MDc6TGljZW5zZTI="
+      },
+      "default_branch": "main",
+      "head_sha": "5333d2060f0719882d622d0f05b1c9feffc987b8",
+      "head_committed_at": "2026-10-14T18:06:20Z",
+      "latest_release": {
+        "tag_name": "v0.34.14",
+        "published_at": "2026-10-14T04:52:03Z",
+        "prerelease": false,
+        "html_url": "https://github.com/letta-ai/letta-code/releases/tag/v0.34.14"
+      },
+      "errors": []
+    }
+  }
+}
