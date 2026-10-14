@@ -72,3 +72,11 @@ Judgement dimensions (README maturity, idiomaticity, feature matrix) still come 
 - **Criteria:** Core dimensions above; add domain-specific rows if needed (e.g., "TypeScript support", "WebAssembly binding")
 - **Legend:** Reuse 🟩🟩 / 🟩 / ⬜ / 🟥 unless domain-specific scoring makes sense
 - **Ranking:** Per-category leaderboards (tools in one category are substitutable; across categories they are not).
+
+## Personal-agent decision guides
+
+Verify canonical ownership, renames and derivative provenance before comparing agents. A GitHub fork flag does not capture every copied derivative; upstream safety claims do not survive removal of sandbox components by implication. Separate personal WhatsApp linked-device bridges, Business API adapters and hosted-service endpoints. Verify build flags, plugins and current documentation rather than treating a channel name as proof of the requested account mode.
+
+Keep repository push activity, actual default-branch HEAD commit date and latest published release date separate. Inspect raw API fields: GitHub open_issues_count includes pull requests; NOASSERTION does not establish an absent license. A partial health sum must name its dimensions and weights, preserve unknowns, and never become an implied security or reliability score. Distinguish documented available controls from enabled defaults and tested enforcement.
+
+For productivity claims, open original user accounts, label anecdotes and vendor curation, include failure reports, and state whether time saved was measured. Record advisory affected/patched versions. Public UI captures need attribution, retrieval dates and unknown original-date labels; screenshot availability is not proof of successful deployment. Never pair accounts, install agents or grant credentials merely to produce documentary research.
