@@ -339,24 +339,22 @@ console.log('BPM:', bpm);
 
 #### realtime-bpm-analyzer
 
-- 🔗 [github.com/dlepaux/realtime-bpm-analyzer](https://github.com/dlepaux/realtime-bpm-analyzer) · 147★ · **Apache-2.0** · last commit 2026-05-28 🟩 · npm v5.0.15 · **~1,280 weekly downloads**
-- **Capability:** BPM, **realtime**. Also handles offline analysis.
-- **Algorithm:** AudioWorklet-based onset detection + peak analysis over a rolling window.
-- **Distribution:** npm (browser only — needs a real `AudioContext` with AudioWorklet).
+- 🔗 [github.com/dlepaux/realtime-bpm-analyzer](https://github.com/dlepaux/realtime-bpm-analyzer) · 337★ · **Apache-2.0** · last commit 2026-11-17 🟩 · npm v6.2.0 · **~2,100 weekly downloads**
+- **Capability:** BPM, **realtime**, plus a live `kick` event on each kick drum. Also handles offline analysis.
+- **Algorithm:** two engines in an AudioWorklet: a tempogram (the default) and the original peak analysis over a rolling window.
+- **Distribution:** npm. Realtime needs a browser `AudioContext` with AudioWorklet; offline analysis also runs in Node (`realtime-bpm-analyzer/node`), from a CLI and an MCP server, and in Python (PyPI) and Java (Maven Central) ports. Docs: [realtime-bpm-analyzer.com](https://www.realtime-bpm-analyzer.com)
 
 ```js
-import { createRealTimeBpmProcessor } from 'realtime-bpm-analyzer';
+import { createRealtimeBpmAnalyzer } from 'realtime-bpm-analyzer';
 
 const audioContext = new AudioContext();
-const realtimeAnalyzer = await createRealTimeBpmProcessor(audioContext);
+const analyzer = await createRealtimeBpmAnalyzer(audioContext);
 
 const mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-const source = audioContext.createMediaStreamSource(mediaStream);
-source.connect(realtimeAnalyzer);
+audioContext.createMediaStreamSource(mediaStream).connect(analyzer.input);
 
-realtimeAnalyzer.port.onmessage = (event) => {
-  if (event.data.message === 'BPM') console.log('BPM:', event.data.data.bpm);
-};
+analyzer.on('reading', (reading) => console.log('BPM:', reading.bpm));
+analyzer.on('kick', ({ contextTime }) => console.log('kick at', contextTime));
 ```
 
 Use case: DJ-mixer-style live monitoring, karaoke apps, dance-training apps. If you don't need realtime, use [web-audio-beat-detector](#web-audio-beat-detector) instead — the offline algorithm is more accurate.
